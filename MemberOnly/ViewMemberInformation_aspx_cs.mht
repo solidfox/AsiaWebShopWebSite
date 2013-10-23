@@ -1,0 +1,168 @@
+From: "Saved by Windows Internet Explorer 10"
+Subject: 
+Date: Mon, 30 Sep 2013 20:07:07 +0800
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://course.cse.ust.hk/comp3111/Tutorials-Labs/Labs/Lab5-Security/LabActivity/ViewMemberInformation.aspx.cs
+X-MimeOLE: Produced By Microsoft MimeOLE V6.1.7601.17609
+
+=EF=BB=BF<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html PUBLIC "" ""><HTML><HEAD><META content=3D"IE=3D10.000"=20
+http-equiv=3D"X-UA-Compatible">
+
+<META http-equiv=3D"Content-Type" content=3D"text/html; =
+charset=3Dutf-8">
+<META name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16686"></HEAD>
+<BODY>
+<PRE>using System;=0A=
+using System.Collections.Generic;=0A=
+using System.Linq;=0A=
+using System.Web;=0A=
+using System.Web.UI;=0A=
+using System.Web.UI.WebControls;=0A=
+using System.Data.SqlClient;=0A=
+using System.Configuration;=0A=
+using System.Data;=0A=
+=0A=
+public partial class MemberOnly_ViewMemberInformation : =
+System.Web.UI.Page=0A=
+{=0A=
+    protected void Page_Load(object sender, EventArgs e)=0A=
+    {=0A=
+        string connectionString =3D "AsiaWebShopDBConnectionString";=0A=
+        string userName =3D User.Identity.Name;=0A=
+        GetMemberData(connectionString, userName);=0A=
+        GetMemberAddress(connectionString, userName);=0A=
+        GetMemberCreditCard(connectionString, userName);=0A=
+    }=0A=
+=0A=
+    private void GetMemberData(string connectionString, string userName)=0A=
+    {=0A=
+        // Define the SELECT query to get the member's personal data.=0A=
+        string query =3D "SELECT [userName], [email], [firstName], =
+[lastName], [phoneNumber], [renewalDate] FROM [Member] WHERE ([username] =
+=3DN'" + userName + "')";=0A=
+=0A=
+        // Create the connection and the SQL command.=0A=
+        using (SqlConnection connection =3D new =
+SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].Co=
+nnectionString))=0A=
+        using (SqlCommand command =3D new SqlCommand(query, connection))=0A=
+        {=0A=
+            // Open the connection.=0A=
+            command.Connection.Open();=0A=
+            // Execute the SELECT query and place the result in a =
+DataReader.=0A=
+            SqlDataReader reader =3D command.ExecuteReader();=0A=
+            // Check if a result was returned.=0A=
+            if (reader.HasRows)=0A=
+            {=0A=
+                // Iterate through the table to get the retrieved values.=0A=
+                while (reader.Read())=0A=
+                {=0A=
+                    // Assign the data values to the web form labels.=0A=
+                    UserName.Text =3D =
+reader["userName"].ToString().Trim();=0A=
+                    Email.Text =3D reader["email"].ToString().Trim();=0A=
+                    FirstName.Text =3D =
+reader["firstName"].ToString().Trim();=0A=
+                    LastName.Text =3D =
+reader["lastName"].ToString().Trim();=0A=
+                    PhoneNumber.Text =3D =
+reader["phoneNumber"].ToString().Trim();=0A=
+                    RenewalDate.Text =3D =
+reader["renewalDate"].ToString().Trim();=0A=
+                }=0A=
+            }=0A=
+=0A=
+            // Close the connection and the DataReader.=0A=
+            command.Connection.Close();=0A=
+            reader.Close();=0A=
+        }=0A=
+    }=0A=
+=0A=
+    private void GetMemberAddress(string connectionString, string =
+userName)=0A=
+    {=0A=
+        // Define the SELECT query to get the member's address.=0A=
+        string query =3D "SELECT [buildingAddress], [streetAddress], =
+[district] FROM [Address] WHERE ([username] =3DN'" + userName + "')";=0A=
+=0A=
+        // Create the connection and the SQL command.=0A=
+        using (SqlConnection connection =3D new =
+SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].Co=
+nnectionString))=0A=
+        using (SqlCommand command =3D new SqlCommand(query, connection))=0A=
+        {=0A=
+            // Open the connection.=0A=
+            command.Connection.Open();=0A=
+            // Execute the SELECT query and place the result in a =
+DataReader.=0A=
+            SqlDataReader reader =3D command.ExecuteReader();=0A=
+            // Check if a result was returned.=0A=
+            if (reader.HasRows)=0A=
+            {=0A=
+                // Iterate through the table to get the retrieved values.=0A=
+                while (reader.Read())=0A=
+                {=0A=
+                    // Assign the data values to the web form labels.=0A=
+                    Address.Text =3D =
+reader["buildingAddress"].ToString().Trim();=0A=
+                    Street.Text =3D =
+reader["streetAddress"].ToString().Trim();=0A=
+                    District.Text =3D =
+reader["district"].ToString().Trim();=0A=
+                }=0A=
+            }=0A=
+=0A=
+            // Close the connection and the DataReader.=0A=
+            command.Connection.Close();=0A=
+            reader.Close();=0A=
+        }=0A=
+    }=0A=
+=0A=
+    private void GetMemberCreditCard(string connectionString, string =
+userName)=0A=
+    {=0A=
+        // Define the SELECT query to get the member's credit card.=0A=
+        string query =3D "SELECT [number], [type], [cardHolderName], =
+[expiryMonth], [expiryYear] FROM [CreditCard] WHERE ([username] =3DN'" + =
+userName + "')";=0A=
+=0A=
+        // Create the connection and the SQL command.=0A=
+        using (SqlConnection connection =3D new =
+SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].Co=
+nnectionString))=0A=
+        using (SqlCommand command =3D new SqlCommand(query, connection))=0A=
+        {=0A=
+            // Open the connection.=0A=
+            command.Connection.Open();=0A=
+            // Execute the SELECT query and place the result in a =
+DataReader.=0A=
+            SqlDataReader reader =3D command.ExecuteReader();=0A=
+            // Check if a result was returned.=0A=
+            if (reader.HasRows)=0A=
+            {=0A=
+                // Iterate through the table to get the retrieved values.=0A=
+                while (reader.Read())=0A=
+                {=0A=
+                    // Assign the data values to the web form labels.=0A=
+                    CardHolderName.Text =3D =
+reader["cardHolderName"].ToString().Trim();=0A=
+                    CardNumber.Text =3D =
+reader["number"].ToString().Trim();=0A=
+                    CardType.Text =3D reader["type"].ToString().Trim();=0A=
+                    Month.Text =3D =
+reader["expiryMonth"].ToString().Trim();=0A=
+                    Year.Text =3D reader["expiryYear"].ToString().Trim();=0A=
+                }=0A=
+            }=0A=
+=0A=
+            // Close the connection and the DataReader.=0A=
+            command.Connection.Close();=0A=
+            reader.Close();=0A=
+        }=0A=
+    }=0A=
+}</PRE></BODY></HTML>
