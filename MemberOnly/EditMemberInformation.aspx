@@ -168,7 +168,9 @@
                     ControlToValidate="MonthDropDownList" CssClass="failureNotification" Display="Dynamic" 
                     EnableClientScript="False" ErrorMessage="Please select a month" 
                     InitialValue="00">*</asp:RequiredFieldValidator>
-                /<asp:DropDownList ID="YearDropDownList" runat="server">
+                /
+                <asp:DropDownList ID="YearDropDownList" runat="server">
+                    <asp:ListItem Value="0">Year</asp:ListItem>
                 </asp:DropDownList>
                 <asp:RequiredFieldValidator ID="rfvYear" runat="server" 
                     ControlToValidate="YearDropDownList" CssClass="failureNotification" Display="Dynamic" 
