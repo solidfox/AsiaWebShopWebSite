@@ -5,11 +5,9 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
-
 
 public partial class Account_Register : System.Web.UI.Page
 {
@@ -24,9 +22,14 @@ public partial class Account_Register : System.Web.UI.Page
         RegisterUser.ContinueDestinationPageUrl = Request.QueryString["ReturnUrl"];
     }
 
+
     protected void RegisterUser_CreatedUser(object sender, EventArgs e)
     {
         string connectionString = "AsiaWebShopDBConnectionString";
+
+        // Assign the user to the Member role.
+        Roles.AddUserToRole(RegisterUser.UserName, "Member");
+
         // After the registration information is validated, add the member data into the database.
         InsertMember(connectionString,
             RegisterUser.UserName.Trim(),
@@ -55,10 +58,6 @@ public partial class Account_Register : System.Web.UI.Page
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedItem.Text.Trim(),
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedItem.Text.Trim());
 
-        
-        // Assign the user to the Student role.
-        Roles.AddUserToRole(RegisterUser.UserName, "Member");
-
         FormsAuthentication.SetAuthCookie(RegisterUser.UserName, false /* createPersistentCookie */);
 
         string continueUrl = RegisterUser.ContinueDestinationPageUrl;
@@ -68,12 +67,7 @@ public partial class Account_Register : System.Web.UI.Page
         }
         Response.Redirect(continueUrl);
     }
-
-    protected void RegisterUser_CreatingUser(object sender, LoginCancelEventArgs e)
-    {
-        
-    }
-
+   
     protected void InsertMember(string connectionString, string userName, string email, string firstName, string lastName, string phoneNumber, string renewalDate)
     {
         // Define the INSERT query with parameters.
@@ -175,6 +169,15 @@ public partial class Account_Register : System.Web.UI.Page
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).Items.Add(year.ToString());
         }
     }
+    
+    protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        Int16 month = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedValue.Trim()));
+        Int16 year = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedValue.Trim()));
+        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        {
+        args.IsValid = false;
+        }
+    }
+    
 }
-
-  
