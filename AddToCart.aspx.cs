@@ -33,7 +33,7 @@ public partial class AddToCart : System.Web.UI.Page
         }
 
         // View the shopping cart.
-        Response.Redirect("/MemberOnly/ViewShoppingCart.aspx");
+        Response.Redirect("~/MemberOnly/ViewShoppingCart.aspx");
 
     }
 }

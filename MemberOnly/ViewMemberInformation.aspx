@@ -18,7 +18,7 @@
         Your account</h2>
     <a href="EditMemberInformation.aspx">Edit my information</a>
     <br />
-    <a href="/Account/ChangePassword.aspx">Change password</a>
+    <a href="../Account/ChangePassword.aspx">Change password</a>
     <h3>Member Information</h3>
     <table>
         <tr>
