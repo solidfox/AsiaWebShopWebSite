@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="style3" style="text-align: center">
-        &nbsp;&copy;<%: DateTime.Now.Year %> - Daniel Schlaug(20184345)
+        &nbsp;&copy;<%: DateTime.Now.Year %> - Vigglytuff Studio (Group 111)
     </div>
     </form>
 </body>
