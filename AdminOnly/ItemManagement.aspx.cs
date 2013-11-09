@@ -116,11 +116,17 @@ public partial class ItemManagement : System.Web.UI.Page
         if (jpgMatch.Success)
         {
             FileUpload theFile = (FileUpload)dvItem.FindControl("pictureFileUpload");
-            double filesize = theFile.FileContent.Length;
-            if (filesize < 512000)
+
+            //Header of JPG:"FF D8"   So,FileBytes[0]=255,FileBytes[1]=216
+            if (theFile.FileBytes[0] == 255 && theFile.FileBytes[1] == 216)
             {
-                args.IsValid = true;
+                double filesize = theFile.FileContent.Length;
+                if (filesize < 512000)
+                {
+                    args.IsValid = true;
+                }
             }
+            
         }
         
     }
