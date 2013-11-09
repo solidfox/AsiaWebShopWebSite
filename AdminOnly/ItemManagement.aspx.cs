@@ -31,6 +31,25 @@ public partial class ItemManagement : System.Web.UI.Page
 
     protected void dvItem_ItemUpdated(object sender, EventArgs e)
     {
+        FileUpload FileUploadPicture = (FileUpload)dvItem.FindControl("pictureFileUpload");
+        if (FileUploadPicture.HasFile)
+        {
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+            {
+                // Get the value of the new UPC from the DetailsView control.
+                Label txtUPC = (Label)dvItem.FindControl("EditUPC");
+
+                // Count how many existing records have the student id value.
+                connection.Open();
+
+                SqlCommand command = new SqlCommand("UPDATE [Item] SET [picture]=@picture WHERE ([upc] = N'" + txtUPC.Text + "')", connection);
+                command.Parameters.AddWithValue("@picture", FileUploadPicture.FileBytes);
+                command.ExecuteScalar();
+                connection.Close();
+
+            }
+        }
+
         gvItem.DataBind();
     }
 

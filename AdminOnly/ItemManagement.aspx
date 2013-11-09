@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopAdmin.master" AutoEventWireup="true" CodeFile="ItemManagement.aspx.cs" Inherits="ItemManagement" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopAdmin.master" AutoEventWireup="true" CodeFile="ItemManagement.aspx.cs" Inherits="ItemManagement" MaintainScrollPositionOnPostback ="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
 </asp:Content>
@@ -49,11 +49,13 @@
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
     </p>
-    <p>
         <asp:DetailsView ID="dvItem" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource2" 
             ForeColor="#333333" GridLines="None" Height="50px" 
-            onpageindexchanging="DetailsView1_PageIndexChanging" Width="745px">
+            onpageindexchanging="DetailsView1_PageIndexChanging" Width="745px"
+            OnItemInserted="dvItem_ItemInserted" 
+            OnItemUpdated="dvItem_ItemUpdated" 
+            OnItemDeleted="dvItem_ItemDeleted" >
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -61,7 +63,7 @@
             <Fields>
                 <asp:TemplateField HeaderText="upc" SortExpression="upc">
                     <EditItemTemplate>
-                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
+                        <asp:Label ID="EditUPC" runat="server" Text='<%# Eval("upc") %>'></asp:Label>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="InsertUPC" runat="server" MaxLength="12" Text='<%# Bind("upc") %>'></asp:TextBox>
@@ -151,24 +153,25 @@
                 <asp:TemplateField HeaderText="Picture" SortExpression="Picture">
                     <EditItemTemplate>
                         <asp:FileUpload ID="pictureFileUpload" runat="server" FileBytes='<%# Bind("Picture") %>'></asp:FileUpload>
-                        <!--<asp:CustomValidator ID="cvPictureFileUpload" runat="server" 
-                            ControlToValidate="pictureFileUpload" CssClass="failureNotification" 
-                            Display="Dynamic" 
-                            ErrorMessage="Picture has to be a jpeg no larger than 512 KB." 
-                            onservervalidate="pictureFileUpload_ServerValidate" 
-                            EnableClientScript="False">*</asp:CustomValidator>-->
+                        <asp:CustomValidator ID="cvpictureFileUpload" runat="server" 
+                            ControlToValidate="pictureFileUpload" Display="Dynamic" 
+                            EnableClientScript="False" 
+                            ErrorMessage="the picture must be in jpg format and can be at most 512KB." 
+                            ForeColor="Red" onservervalidate="pictureFileUpload_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:FileUpload ID="pictureFileUpload" runat="server" FileBytes='<%# Bind("Picture") %>'></asp:FileUpload>
-                        <asp:CustomValidator ID="cvPictureFileUpload" runat="server" 
+                        <asp:FileUpload ID="pictureFileUpload" runat="server" 
+                            FileBytes='<%# Bind("Picture") %>'></asp:FileUpload>
+                        <asp:CustomValidator ID="cvPictureFileUploadInsert" runat="server" 
                             ControlToValidate="pictureFileUpload" CssClass="failureNotification" 
                             Display="Dynamic" 
                             ErrorMessage="Picture has to be a jpeg no larger than 512 KB." 
                             onservervalidate="pictureFileUpload_ServerValidate" 
-                            EnableClientScript="False">*</asp:CustomValidator>
+                            EnableClientScript="False" ForeColor="Red">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
-                        <asp:Label ID="Label1" runat="server" Text='<%# Bind("Picture") %>'></asp:Label>
+                        <asp:Image ID="Image2" runat="server" Height="60px" 
+                            ImageUrl='<%# Eval("upc", "GetDBImage.ashx?upc={0}") %>' Width="60px" />
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="normalPrice" SortExpression="normalPrice">
@@ -267,7 +270,6 @@
             <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
             <RowStyle BackColor="#EFF3FB" />
         </asp:DetailsView>
-    </p>
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         CssClass="failureNotification" EnableClientScript="False" 
         HeaderText="The following errors occured:" />
@@ -282,7 +284,8 @@
             SelectCommand="SELECT * FROM [Item] WHERE ([upc] = @upc)" 
             DeleteCommand="DELETE FROM [Item] WHERE [upc] = @upc" 
             InsertCommand="INSERT INTO [Item] ([upc], [category], [name], [description], [picture], [normalPrice], [discountPrice], [quantityAvailable], [visible]) VALUES (@upc, @category, @name, @description, @picture, @normalPrice, @discountPrice, @quantityAvailable, @visible)" 
-            UpdateCommand="UPDATE [Item] SET [category] = @category, [name] = @name, [description] = @description, [picture] = @picture, [normalPrice] = @normalPrice, [discountPrice] = @discountPrice, [quantityAvailable] = @quantityAvailable, [visible] = @visible WHERE [upc] = @upc">
+            
+            UpdateCommand="UPDATE [Item] SET [category] = @category, [name] = @name, [description] = @description, [normalPrice] = @normalPrice, [discountPrice] = @discountPrice, [quantityAvailable] = @quantityAvailable, [visible] = @visible WHERE [upc] = @upc">
             <DeleteParameters>
                 <asp:Parameter Name="upc" Type="String" />
             </DeleteParameters>
@@ -305,7 +308,6 @@
                 <asp:Parameter Name="category" Type="String" />
                 <asp:Parameter Name="name" Type="String" />
                 <asp:Parameter Name="description" Type="String" />
-                <asp:Parameter Name="picture" />
                 <asp:Parameter Name="normalPrice" Type="Decimal" />
                 <asp:Parameter Name="discountPrice" Type="Decimal" />
                 <asp:Parameter Name="quantityAvailable" Type="Int32" />

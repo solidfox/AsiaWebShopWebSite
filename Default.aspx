@@ -14,7 +14,7 @@
     </p>
     <p>
         <asp:HyperLink ID="AdminLink" runat="server" 
-            NavigateUrl="~/AdminOnly/ItemManagement.aspx">Admin Use Only</asp:HyperLink>
+            NavigateUrl="~/AdminOnly/AdminSelection.aspx">Admin Use Only</asp:HyperLink>
     </p>
 </asp:Content>
 
