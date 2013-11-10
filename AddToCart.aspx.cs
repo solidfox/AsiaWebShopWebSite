@@ -101,7 +101,7 @@ public partial class AddToCart : System.Web.UI.Page
             {
                 command.Connection.Close(); // Close the connection and the DataReader.
                 reader.Close();
-                GenerateOrderNumber(connectionString, userName);
+                OrderNum = GenerateOrderNumber(connectionString, userName);
             }
         }
 
