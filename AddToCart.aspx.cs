@@ -71,7 +71,7 @@ public partial class AddToCart : System.Web.UI.Page
     public int GetOrderNumber (string connectionString, string userName) 
     {
         string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
-        int test = 0;
+        int OrderNum = 0;
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
@@ -87,19 +87,25 @@ public partial class AddToCart : System.Web.UI.Page
                 while (reader.Read())
                 {
                     // ToAsk: what happens when there are two rows ?
-                    if (reader["confirmationNumber"].ToString().Trim() == null)
+                    if (true)
                     {
-                        command.Connection.Close(); // Close the connection and the DataReader.
-                        reader.Close();
-                        test = reader.GetInt32(0);
+                        OrderNum = int.Parse(reader["orderNum"].ToString());
                     }
+
                 }
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
             }
+
             else
+            {
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
                 GenerateOrderNumber(connectionString, userName);
+            }
         }
 
-        return test;
+        return OrderNum;
 
     }
 
