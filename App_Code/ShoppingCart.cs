@@ -96,6 +96,20 @@ public class ShoppingCart
         }
     }
 
+    // need to debug
+    public int GetItemQuantity (string upc)
+    {
+        CartItem updatedItem = new CartItem(upc);
+        foreach (CartItem item in Items)
+        {
+            if (item.Equals(updatedItem))
+            {
+                return item.Quantity;
+            }
+        }
+        return 0;
+    }
+
     /*
      * RemoveItem() removes an item from the shopping cart.
      */
