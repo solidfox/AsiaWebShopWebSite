@@ -29,7 +29,7 @@ public partial class AddToCart : System.Web.UI.Page
             ShoppingCart cart = ShoppingCart.GetShoppingCart();
             cart.AddItem(upc, name, discountPrice);
             ///TODO: Add the item to the shopping cart in the database.
-            InsertToShoppingCart (connectionString, 1, OrderNum, upc, name, discountPrice, cart);
+            InsertToShoppingCart (connectionString, 1, OrderNum, upc, name, discountPrice);
             // Save the shopping cart in the Session variable "MyShoppingCart".
             HttpContext.Current.Session["MyShoppingCart"] = cart;
         }
@@ -45,13 +45,11 @@ public partial class AddToCart : System.Web.UI.Page
 
     }
 
-    private void InsertToShoppingCart(string connectionString, int Quantity, int OrderNum, string upc, string name, decimal discountPrice, ShoppingCart cart)
+    private void InsertToShoppingCart(string connectionString, int Quantity, int OrderNum, string upc, string name, decimal discountPrice)
     {
         
         if (CheckItemDulplicate(connectionString, OrderNum, upc)) 
         {
-            int quantity = cart.GetItemQuantity(upc) + 1;
-            UpdateOrderItem (connectionString, OrderNum, upc, quantity);
             return;
         }
 
@@ -149,9 +147,11 @@ public partial class AddToCart : System.Web.UI.Page
             // Check if a result was returned.
             if (reader.HasRows)
             {
-                // Iterate through the table to get the retrieved values.
+                int quantity = reader.GetInt32(0);
+                // Iterate through the table to get the retrieved values.8
                 command.Connection.Close(); // Close the connection and the DataReader.
                 reader.Close();
+                UpdateOrderItem(connectionString, OrderNum, UPC, quantity);
                 return true;
             }
         }
