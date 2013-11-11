@@ -101,15 +101,14 @@ public partial class AddToCart : System.Web.UI.Page
             {
                 command.Connection.Close(); // Close the connection and the DataReader.
                 reader.Close();
-                OrderNum = GenerateOrderNumber(connectionString, userName);
+                GenerateOrderNumber(connectionString, userName);
+                OrderNum = GetOrderNumber (connectionString, userName);
             }
         }
-
         return OrderNum;
-
     }
 
-    protected int GenerateOrderNumber (string connectionString, string userName )
+    protected void GenerateOrderNumber (string connectionString, string userName )
     {
         // Define the UPDATE query with parameters.
         string query = "INSERT INTO [Order] ( [userName])" +
@@ -127,7 +126,5 @@ public partial class AddToCart : System.Web.UI.Page
             command.ExecuteNonQuery();
             command.Connection.Close();
         }
-
-        return GetOrderNumber(connectionString, userName);
     }
 }
