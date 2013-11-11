@@ -119,7 +119,8 @@ public class ShoppingCart
         CartItem updatedItem = new CartItem(upc);
         foreach (CartItem item in Items)
         {
-            if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, quantity))
+            int test = quantity - item.Quantity;
+            if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, test - 1))
             {
                 UpdateOrderItem(connectionString, OrderNum, upc, quantity);
                 int difference = item.Quantity - quantity;
