@@ -29,10 +29,11 @@ public partial class AddToCart : System.Web.UI.Page
             ShoppingCart cart = ShoppingCart.GetShoppingCart();
             cart.AddItem(upc, name, discountPrice);
             ///TODO: Add the item to the shopping cart in the database.
-            InsertToShoppingCart (connectionString, cart, OrderNum, upc, name, discountPrice);
+            InsertToShoppingCart (connectionString, 1, OrderNum, upc, name, discountPrice, cart);
             // Save the shopping cart in the Session variable "MyShoppingCart".
             HttpContext.Current.Session["MyShoppingCart"] = cart;
         }
+
         else
         {
             Debug.Fail("ERROR : We should never get to AddToCart.aspx without a UPC.");
@@ -44,9 +45,16 @@ public partial class AddToCart : System.Web.UI.Page
 
     }
 
-    private void InsertToShoppingCart(string connectionString, ShoppingCart cart, int OrderNum, string upc, string name, decimal discountPrice)
+    private void InsertToShoppingCart(string connectionString, int Quantity, int OrderNum, string upc, string name, decimal discountPrice, ShoppingCart cart)
     {
-        int quantity = cart.GetItemQuantity(upc);
+        
+        if (CheckItemDulplicate(connectionString, OrderNum, upc)) 
+        {
+            int quantity = cart.GetItemQuantity(upc) + 1;
+            UpdateOrderItem (connectionString, OrderNum, upc, quantity);
+            return;
+        }
+
         string query = "INSERT INTO [OrderItem] ([orderNum], [upc], [quantity], [PriceWhenAdded], [removed])" +
                        "VALUES (@OrderNumber, @UPC, @Quantity, @Price, @removed)";
 
@@ -57,7 +65,7 @@ public partial class AddToCart : System.Web.UI.Page
             // Define the UPDATE query parameters and their values.
             command.Parameters.AddWithValue("@OrderNumber", OrderNum);
             command.Parameters.AddWithValue("@UPC", upc);
-            command.Parameters.AddWithValue("@Quantity", quantity);
+            command.Parameters.AddWithValue("@Quantity", Quantity);
             command.Parameters.AddWithValue("@Price", discountPrice);
             command.Parameters.AddWithValue("@removed", 1);
             // Open the connection, execute the UPDATE query and close the connection.
@@ -121,6 +129,49 @@ public partial class AddToCart : System.Web.UI.Page
             // Define the UPDATE query parameters and their values.
             //command.Parameters.AddWithValue("@OrderNumber", orderNum);
             command.Parameters.AddWithValue("@Username", userName);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    public bool CheckItemDulplicate(string connectionString, int OrderNum, string UPC)
+    {
+        string query = "SELECT [quantity] FROM [OrderItem] WHERE ([upc] =N'" + UPC + "' AND [orderNum] = N'" + OrderNum + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void UpdateOrderItem (string connectionString, int OrderNum, string UPC, int Quantity)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [OrderItem] SET quantity=@Quantity " +
+                       "WHERE [orderNum]=@OrderNum AND [upc]=@UPC";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Quantity", Quantity);
+            command.Parameters.AddWithValue("@OrderNum", OrderNum);
+            command.Parameters.AddWithValue("@UPC",UPC);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
