@@ -136,7 +136,7 @@ public partial class AddToCart : System.Web.UI.Page
 
     public bool CheckItemDulplicate(string connectionString, int OrderNum, string UPC)
     {
-        string query = "SELECT [quantity] FROM [OrderItem] WHERE [upc] =N'" + UPC + "' AND [orderNum] = N'" + OrderNum + " ";
+        string query = "SELECT [quantity] FROM [OrderItem] WHERE ([upc] =N'" + UPC + "' AND [orderNum] = N'" + OrderNum + " ')";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
