@@ -15,7 +15,8 @@ public class ShoppingCart
 #region Properties
     // A shopping cart is a List of CartItem.
     public List<CartItem> Items {get; private set;}
-    string connectionString = "AsiaWebShopDBConnectionString";
+    public static string connectionString = "AsiaWebShopDBConnectionString";
+    public string userName = null;
 #endregion
 
 #region Singleton Implementation of ShoppingCart
@@ -23,19 +24,25 @@ public class ShoppingCart
     public static readonly ShoppingCart Instance;
 
     // The static constructor is called as soon as the class is loaded into memory.
-    public static ShoppingCart GetShoppingCart()
+    public static ShoppingCart GetShoppingCart(string UserName)
     {
         // If the cart is not in the session, create one and put it there.
         if (HttpContext.Current.Session["MyShoppingCart"] == null)
         {
             ShoppingCart cart = new ShoppingCart();
             cart.Items = new List<CartItem>();
+            cart.RetrieveFromDB (connectionString, UserName);
             /******
              * TODO: Load any previously saved items into the shopping cart from the database.
              */
             // Save the shopping cart in the Session variable "MyShoppingCart".
             HttpContext.Current.Session["MyShoppingCart"] = cart;
         }
+
+        ShoppingCart temp = (ShoppingCart)HttpContext.Current.Session["MyShoppingCart"];
+        if (temp.Items != null) temp.Items.Clear();           
+        temp.RetrieveFromDB (connectionString, UserName);            
+        HttpContext.Current.Session["MyShoppingCart"] = temp;
         return (ShoppingCart)HttpContext.Current.Session["MyShoppingCart"];
     }
 
@@ -47,11 +54,10 @@ public class ShoppingCart
     /*
      * AddItem() adds an item to the shopping cart.
      */
-    public void AddItem(string upc, string name, decimal discountPrice)
+    public void AddItem(string upc, string name, decimal discountPrice, int _quantity, int option)
     {
         // Create a new item to add to the cart.
         CartItem newItem = new CartItem(upc);
-
         // If this item already exists in the list of items, increase the quantity.
         // Otherwise, add the new item to the list of items with quantity 1;
         if (Items.Contains(newItem))
@@ -71,12 +77,21 @@ public class ShoppingCart
             }
         }
 
+        else if (option == 1)
+        {
+            newItem.UPC = upc;
+            newItem.ItemName = name;
+            newItem.DiscountPrice = discountPrice;
+            newItem.Quantity = _quantity;
+            Items.Add(newItem);
+        }
+
         else if (CheckItemStock(connectionString, newItem, 1))
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
             newItem.DiscountPrice = discountPrice;
-            newItem.Quantity = 1;
+            newItem.Quantity = _quantity;
             Items.Add(newItem);
         }
 
@@ -93,6 +108,7 @@ public class ShoppingCart
     public void SetItemQuantity(string upc, int quantity)
     {
         // If the quantity is set to 0, remove the item entirely.
+        int OrderNum = GetOrderNumber(connectionString, this.userName);
         if (quantity == 0)
         {
             RemoveItem(upc);
@@ -105,6 +121,7 @@ public class ShoppingCart
         {
             if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, quantity))
             {
+                UpdateOrderItem(connectionString, OrderNum, upc, quantity);
                 item.Quantity = quantity;
                 return;
             }
@@ -136,6 +153,102 @@ public class ShoppingCart
         Items.Remove(removedItem);
     }
 
+    //retrieve from db
+    public void RetrieveFromDB (string connectString,string UserName)
+    {
+        userName = UserName;
+        string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
+        int OrderNum = 0;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // ToAsk: what happens when there are two rows ?
+                    if (reader.IsDBNull(1))
+                    {
+                        OrderNum = int.Parse(reader["orderNum"].ToString());
+                    }
+
+                }
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+                RetrieveFromDBOrderItem(connectionString, OrderNum);
+            }
+
+        }
+        return;
+    }
+
+    //retrieve from order Item
+    public void RetrieveFromDBOrderItem(string connectionString, int OrderNum) 
+    {
+        string query = "SELECT [upc], [quantity],[PriceWhenAdded] FROM [OrderItem] WHERE ([orderNum] =N'" + OrderNum + "')";
+        string UPC = null;
+        int Quantity = 0;
+        decimal price;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    UPC = reader.GetString(0);
+                    Quantity = reader.GetInt32(1);
+                    price = reader.GetDecimal(2);
+                    AddItemFromDBItem(connectionString, UPC, Quantity, price);
+                }
+            }
+            command.Connection.Close();
+            reader.Close();
+        }
+    }
+
+    public void AddItemFromDBItem (string connectionString, string UPC, int Quantity, decimal price) 
+    {
+        // AddItem(string upc, string name, decimal discountPrice, quantity, 1)
+        string query = "SELECT [name], [discountPrice] FROM [Item] WHERE ([upc] =N'" + UPC + "')";
+        decimal temp = price;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    if (temp > reader.GetDecimal(1)) temp = reader.GetDecimal(1);
+                    this.AddItem(UPC, reader.GetString(0), temp, Quantity, 1);
+                }
+            }
+            command.Connection.Close();
+            reader.Close();
+        }
+    }
+    
+
     // query on the database, check the stock
     public bool CheckItemStock(string connectionString, CartItem item, int Comparision)
     {
@@ -165,6 +278,60 @@ public class ShoppingCart
             }
         }
         return false;
+    }
+
+    //repeated
+    public void UpdateOrderItem(string connectionString, int OrderNum, string UPC, int Quantity)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [OrderItem] SET quantity=@Quantity " +
+                       "WHERE [orderNum]=@OrderNum AND [upc]=@UPC";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Quantity", Quantity);
+            command.Parameters.AddWithValue("@OrderNum", OrderNum);
+            command.Parameters.AddWithValue("@UPC", UPC);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    public int GetOrderNumber(string connectionString, string userName)
+    {
+        string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
+        int OrderNum = 0;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // ToAsk: what happens when there are two rows ?
+                    if (reader.IsDBNull(1))
+                    {
+                        OrderNum = int.Parse(reader["orderNum"].ToString());
+                    }
+
+                }
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+            }
+        }
+        return OrderNum;
     }
 #endregion
 

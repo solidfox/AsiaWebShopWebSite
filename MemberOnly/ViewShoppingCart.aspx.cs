@@ -9,8 +9,10 @@ using System.Web.UI.WebControls;
 
 public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 {
+    protected string userName = null;
     protected void Page_Load(object sender, EventArgs e)
     {
+        userName = User.Identity.Name;
         if (!IsPostBack)
         {
             PopulateShoppingCart();
@@ -31,7 +33,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             // Update the items in the shopping cart.
             if (upc != "")
             {
-                ShoppingCart cart = ShoppingCart.GetShoppingCart();
+                ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
                 cart.SetItemQuantity(upc, quantity);
                 HttpContext.Current.Session["MyShoppingCart"] = cart;
             }
@@ -59,7 +61,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         viewCart.Columns.Add("totalPrice", typeof(Int16));
 
         // Populate the DataTable from the shopping cart.
-        ShoppingCart cart = ShoppingCart.GetShoppingCart();
+        ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
         for (int i = 0; i <= cart.Items.Count - 1; i++)
         {
             viewCart.Rows.Add(
@@ -83,7 +85,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
     public decimal GetTotalPrice()
     {
         // Calculate the total price of all items.
-        ShoppingCart cart = ShoppingCart.GetShoppingCart();
+        ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
         return (cart.GetCartTotal());
     }
 

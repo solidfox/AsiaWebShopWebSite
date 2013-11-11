@@ -26,8 +26,8 @@ public partial class AddToCart : System.Web.UI.Page
         // Add the item to the shopping cart with default quantity = 1.
         if (upc != "")
         {
-            ShoppingCart cart = ShoppingCart.GetShoppingCart();
-            cart.AddItem(upc, name, discountPrice);
+            ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
+            cart.AddItem(upc, name, discountPrice, 1, 0);
             ///TODO: Add the item to the shopping cart in the database.
             InsertToShoppingCart (connectionString, 1, OrderNum, upc, name, discountPrice);
             // Save the shopping cart in the Session variable "MyShoppingCart".
@@ -74,6 +74,7 @@ public partial class AddToCart : System.Web.UI.Page
 
     }
 
+    //repeated
     public int GetOrderNumber (string connectionString, string userName) 
     {
         string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
@@ -159,6 +160,7 @@ public partial class AddToCart : System.Web.UI.Page
         return false;
     }
 
+    //repeated
     public void UpdateOrderItem (string connectionString, int OrderNum, string UPC, int Quantity)
     {
         // Define the UPDATE query with parameters.
