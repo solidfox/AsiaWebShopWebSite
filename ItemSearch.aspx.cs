@@ -9,18 +9,33 @@ public partial class ItemSearch : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!Page.IsPostBack)
+        {
 
+        }
+        Generate_Item_List();
     }
     protected void CheckBox1_CheckedChanged(object sender, EventArgs e)
     {
 
     }
-    protected void btnSearch_Click(object sender, EventArgs e)
+    protected void btnSearch_Click(object sender, EventArgs e){
+    }
+    protected void Generate_Item_List()
     {
         // Get the search string and the category from the search page.
         string itemSearchCondition = "";
-        string searchString = txtSearchString.Text.Trim();
-        string category = categoryDropDownList.SelectedValue.Trim();
+        string category = Request.QueryString["category"];
+        string searchString = "";
+        if (Page.IsPostBack) {
+            searchString = txtSearchString.Text.Trim();
+            category = categoryDropDownList.SelectedValue.Trim();
+        }
+
+        if (category == "All Categories")
+        {
+            category = null;
+        }
 
         // Construct the basic SELECT statement for searching; only visible items should be displayed.
         string SQLCmd = "SELECT [upc], [name], [picture], [normalPrice], [discountPrice], [quantityAvailable] FROM [Item] WHERE (([visible] = 'true')";
@@ -40,7 +55,7 @@ public partial class ItemSearch : System.Web.UI.Page
         // SELECT statement to search only in the specified category.
         if (searchString == "")
         {
-            if (category != "All Categories")
+            if (category != null)
             {
                 SQLCmd = SQLCmd + " AND ([category] = N'" + category + "')";
             }
