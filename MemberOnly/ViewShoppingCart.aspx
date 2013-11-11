@@ -1,17 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopSite.master" AutoEventWireup="true" CodeFile="~/MemberOnly/ViewShoppingCart.aspx.cs" Inherits="MemberOnly_ShoppingCart" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    <style type="text/css">
-        .style1
-        {
-            width: 100%;
-        }
-        .style4
-        {
-            height: 34px;
-        }
-    </style>
-</asp:Content>
+    </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
         Your SHOPPING CART</h2>
@@ -33,7 +23,7 @@
                 <asp:BoundField DataField="name" HeaderText="Item Name" />
                 <asp:TemplateField HeaderText="Quantity">
                     <EditItemTemplate>
-                        <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="TextBox2" runat="server" MaxLength="4"></asp:TextBox>
                     </EditItemTemplate>
                     <FooterTemplate>
                         Total:<asp:Label ID="lblTotal" runat="server" Text="<%# GetTotalPrice() %>"></asp:Label>
@@ -64,6 +54,7 @@
     </p>
     <p>
         <asp:Button ID="btnUpdateCart" runat="server" OnClick="btnUpdateCart_Click" Text="Update Cart" />
+    &nbsp;<asp:Button ID="btnSubmitCart" runat="server" Text="Submit Cart" />
     </p>
     </asp:Content>
 
