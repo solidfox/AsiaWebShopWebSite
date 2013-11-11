@@ -95,7 +95,7 @@
                 Text="View item details" />
             <asp:TemplateField>
                 <ItemTemplate>
-                    <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString())) %>' Text="Add to cart"></asp:HyperLink>
+                    <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString())) %>' Text="Add to cart"></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>

@@ -87,7 +87,7 @@ public partial class AddToCart : System.Web.UI.Page
                 while (reader.Read())
                 {
                     // ToAsk: what happens when there are two rows ?
-                    if (true)
+                    if (reader.IsDBNull(1))
                     {
                         OrderNum = int.Parse(reader["orderNum"].ToString());
                     }
