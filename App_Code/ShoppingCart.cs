@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -13,6 +15,7 @@ public class ShoppingCart
 #region Properties
     // A shopping cart is a List of CartItem.
     public List<CartItem> Items {get; private set;}
+    string connectionString = "AsiaWebShopDBConnectionString";
 #endregion
 
 #region Singleton Implementation of ShoppingCart
@@ -57,18 +60,30 @@ public class ShoppingCart
             {
                 if (item.Equals(newItem))
                 {
-                    item.Quantity++;
-                    return;
+                    int test = item.Quantity + 1;
+                    if (CheckItemStock(connectionString, newItem, test))
+                    {
+                        item.Quantity++;
+                        return;
+                    }
+                    
                 }
             }
         }
-        else
+
+        else if (CheckItemStock(connectionString, newItem, 1))
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
             newItem.DiscountPrice = discountPrice;
             newItem.Quantity = 1;
             Items.Add(newItem);
+        }
+
+        else
+        {
+            // Inform the user the quantity is alreadt exceed the stock
+            return;
         }
     }
 
@@ -88,12 +103,14 @@ public class ShoppingCart
         CartItem updatedItem = new CartItem(upc);
         foreach (CartItem item in Items)
         {
-            if (item.Equals(updatedItem))
+            if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, quantity))
             {
                 item.Quantity = quantity;
                 return;
             }
         }
+            // Inform the user the quantity is alreadt exceed the stock
+            return;
     }
 
     // need to debug
@@ -117,6 +134,37 @@ public class ShoppingCart
     {
         CartItem removedItem = new CartItem(upc);
         Items.Remove(removedItem);
+    }
+
+    // query on the database, check the stock
+    public bool CheckItemStock(string connectionString, CartItem item, int Comparision)
+    {
+        string query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] =N'" + item.UPC + "')";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // ToAsk: what happens when there are two rows ?
+                    if ( reader.GetInt32(0) >= Comparision) 
+                    {
+                        return true;
+                    }
+                }
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+            }
+        }
+        return false;
     }
 #endregion
 
