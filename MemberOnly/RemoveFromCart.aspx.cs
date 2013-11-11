@@ -25,7 +25,9 @@ public partial class RemoveFromCart : System.Web.UI.Page
             * TODO: Remove the item from the shopping cart in the database.
             */
             int OrderNum = GetOrderNumber(connectionString, userName);
+            int _release = GetModifiedQuantity(connectionString, OrderNum, upc);
             RemoveFromDBOrderItem(connectionString, upc, OrderNum);
+            UpdateDBItem (connectionString, upc, _release);
             // Save the shopping cart in the Session variable "MyShoppingCart".
             HttpContext.Current.Session["MyShoppingCart"] = cart;
         }
@@ -87,5 +89,53 @@ public partial class RemoveFromCart : System.Web.UI.Page
             }
         }
         return OrderNum;
+    }
+
+    public void UpdateDBItem(string connectionString, string UPC, int releaseQuantity)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Item] SET quantityAvailable = quantityAvailable + @Quantity " +
+                       "WHERE [upc]=@UPC";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Quantity", releaseQuantity);
+            command.Parameters.AddWithValue("@UPC", UPC);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    public int GetModifiedQuantity(string connectionString, int OrderNum, string UPC)
+    {
+        string query = "SELECT [quantity] FROM [OrderItem] WHERE ([upc] =N'" + UPC + "' AND [orderNum] = N'" + OrderNum + " ')";
+        int release = 0;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    release = reader.GetInt32(0);
+                }
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+            }
+        }
+        return release;
+
     }
 }

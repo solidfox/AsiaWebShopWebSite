@@ -54,7 +54,7 @@ public class ShoppingCart
     /*
      * AddItem() adds an item to the shopping cart.
      */
-    public void AddItem(string upc, string name, decimal discountPrice, int _quantity, int option)
+    public void AddItem(string upc, string name, decimal discountPrice, int _quantity, bool reserved)
     {
         // Create a new item to add to the cart.
         CartItem newItem = new CartItem(upc);
@@ -66,18 +66,17 @@ public class ShoppingCart
             {
                 if (item.Equals(newItem))
                 {
-                    int test = item.Quantity + 1;
-                    if (CheckItemStock(connectionString, newItem, test))
+                    if (CheckItemStock(connectionString, newItem, 0))
                     {
                         item.Quantity++;
+                        UpdateDBItem(connectionString, upc, -1);
                         return;
                     }
-                    
                 }
             }
         }
 
-        else if (option == 1)
+        else if (reserved)
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
@@ -86,13 +85,14 @@ public class ShoppingCart
             Items.Add(newItem);
         }
 
-        else if (CheckItemStock(connectionString, newItem, 1))
+        else if (CheckItemStock(connectionString, newItem, 0))
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
             newItem.DiscountPrice = discountPrice;
-            newItem.Quantity = _quantity;
+            newItem.Quantity = 1;
             Items.Add(newItem);
+            UpdateDBItem(connectionString, upc, -1);
         }
 
         else
@@ -122,7 +122,9 @@ public class ShoppingCart
             if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, quantity))
             {
                 UpdateOrderItem(connectionString, OrderNum, upc, quantity);
+                int difference = quantity - item.Quantity;
                 item.Quantity = quantity;
+                UpdateDBItem(connectionString, upc, difference);
                 return;
             }
         }
@@ -192,10 +194,11 @@ public class ShoppingCart
     //retrieve from order Item
     public void RetrieveFromDBOrderItem(string connectionString, int OrderNum) 
     {
-        string query = "SELECT [upc], [quantity],[PriceWhenAdded] FROM [OrderItem] WHERE ([orderNum] =N'" + OrderNum + "')";
+        string query = "SELECT [upc], [quantity],[PriceWhenAdded], [removed] FROM [OrderItem] WHERE ([orderNum] =N'" + OrderNum + "')";
         string UPC = null;
         int Quantity = 0;
         decimal price;
+        bool reserved = false;
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
@@ -213,7 +216,8 @@ public class ShoppingCart
                     UPC = reader.GetString(0);
                     Quantity = reader.GetInt32(1);
                     price = reader.GetDecimal(2);
-                    AddItemFromDBItem(connectionString, UPC, Quantity, price);
+                    reserved = reader.GetBoolean(3);
+                    AddItemFromDBItem(connectionString, UPC, Quantity, price, true);
                 }
             }
             command.Connection.Close();
@@ -221,7 +225,7 @@ public class ShoppingCart
         }
     }
 
-    public void AddItemFromDBItem (string connectionString, string UPC, int Quantity, decimal price) 
+    public void AddItemFromDBItem (string connectionString, string UPC, int Quantity, decimal price, bool reserved) 
     {
         // AddItem(string upc, string name, decimal discountPrice, quantity, 1)
         string query = "SELECT [name], [discountPrice] FROM [Item] WHERE ([upc] =N'" + UPC + "')";
@@ -240,7 +244,7 @@ public class ShoppingCart
                 while (reader.Read())
                 {
                     if (temp > reader.GetDecimal(1)) temp = reader.GetDecimal(1);
-                    this.AddItem(UPC, reader.GetString(0), temp, Quantity, 1);
+                    this.AddItem(UPC, reader.GetString(0), temp, Quantity, reserved);
                 }
             }
             command.Connection.Close();
@@ -267,8 +271,7 @@ public class ShoppingCart
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    // ToAsk: what happens when there are two rows ?
-                    if ( reader.GetInt32(0) >= Comparision) 
+                    if ( reader.GetInt32(0) > Comparision) 
                     {
                         return true;
                     }
@@ -332,6 +335,26 @@ public class ShoppingCart
             }
         }
         return OrderNum;
+    }
+
+    public void UpdateDBItem (string connectionString, string UPC, int releaseQuantity)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Item] SET quantityAvailable = quantityAvailable + @Quantity " +
+                       "WHERE [upc]=@UPC";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Quantity", releaseQuantity);
+            command.Parameters.AddWithValue("@UPC", UPC);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
     }
 #endregion
 

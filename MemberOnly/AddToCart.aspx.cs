@@ -27,13 +27,17 @@ public partial class AddToCart : System.Web.UI.Page
         if (upc != "")
         {
             ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
-            cart.AddItem(upc, name, discountPrice, 1, 0);
+            CartItem temp = new CartItem(upc);
+            if (cart.CheckItemStock(connectionString, temp, 0))
+            {
+                cart.AddItem(upc, name, discountPrice, 1, false);
+                InsertToShoppingCart(connectionString, 1, OrderNum, upc, name, discountPrice);
+            }
             ///TODO: Add the item to the shopping cart in the database.
-            InsertToShoppingCart (connectionString, 1, OrderNum, upc, name, discountPrice);
             // Save the shopping cart in the Session variable "MyShoppingCart".
             HttpContext.Current.Session["MyShoppingCart"] = cart;
         }
-
+             
         else
         {
             Debug.Fail("ERROR : We should never get to AddToCart.aspx without a UPC.");
