@@ -122,7 +122,7 @@ public class ShoppingCart
             if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, quantity))
             {
                 UpdateOrderItem(connectionString, OrderNum, upc, quantity);
-                int difference = quantity - item.Quantity;
+                int difference = item.Quantity - quantity;
                 item.Quantity = quantity;
                 UpdateDBItem(connectionString, upc, difference);
                 return;
