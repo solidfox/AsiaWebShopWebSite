@@ -147,7 +147,8 @@ public partial class AddToCart : System.Web.UI.Page
             // Check if a result was returned.
             if (reader.HasRows)
             {
-                int quantity = reader.GetInt32(0);
+                reader.Read();
+                int quantity = reader.GetInt32(0) + 1;
                 // Iterate through the table to get the retrieved values.8
                 command.Connection.Close(); // Close the connection and the DataReader.
                 reader.Close();
