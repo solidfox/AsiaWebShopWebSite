@@ -109,14 +109,20 @@ public class ShoppingCart
     {
         // If the quantity is set to 0, remove the item entirely.
         int OrderNum = GetOrderNumber(connectionString, this.userName);
+        int _quantity = 0;
+        CartItem updatedItem = new CartItem(upc);
         if (quantity == 0)
         {
+            foreach (CartItem item in Items)
+                if (item.Equals(updatedItem))
+                    _quantity = item.Quantity;
+            UpdateDBItem(connectionString, upc, _quantity);
+            RemoveFromDBOrderItem(connectionString, upc, OrderNum);
             RemoveItem(upc);
             return;
         }
 
         // Find the item and update the quantity.
-        CartItem updatedItem = new CartItem(upc);
         foreach (CartItem item in Items)
         {
             int test = quantity - item.Quantity;
@@ -354,6 +360,23 @@ public class ShoppingCart
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
+
+    public void RemoveFromDBOrderItem(string connectionString, string UPC, int OrderNum)
+    {
+        //query
+        string query = "DELETE FROM [OrderItem] WHERE ([upc] = N'" + UPC + "' AND [orderNum] = N'" + OrderNum + "')";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            command.ExecuteReader();
+            // Check if a result was returned.
             command.Connection.Close();
         }
     }
