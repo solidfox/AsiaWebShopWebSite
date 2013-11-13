@@ -7,8 +7,6 @@
         <strong style="font-size: large; color: #000080;">MEMBER&nbsp; REPORT</strong></p>
     <p>
         Input a username. If no username that search all member.</p>
-    <p>
-                &nbsp;</p>
 <p>
         Member&#39;s UserName :<asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         <asp:CustomValidator ID="MemberCustomValidator" runat="server" 
@@ -23,7 +21,32 @@
                     onclick="btnGenerate_Click" />
     </p>
     <p>
-        &nbsp;</p>
+                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
+                    CellPadding="4" DataKeyNames="userName" DataSourceID="MemberSqlDataSource0" 
+                    ForeColor="#333333" GridLines="None">
+                    <AlternatingRowStyle BackColor="White" />
+                    <Columns>
+                        <asp:BoundField DataField="lastName" HeaderText="lastName" 
+                            SortExpression="lastName" />
+                        <asp:BoundField DataField="district" HeaderText="district" 
+                            SortExpression="district" />
+                        <asp:BoundField DataField="userName" HeaderText="userName" ReadOnly="True" 
+                            SortExpression="userName" />
+                    </Columns>
+                    <EditRowStyle BackColor="#2461BF" />
+                    <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                    <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                    <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                    <RowStyle BackColor="#EFF3FB" />
+                    <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                    <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                    <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                    <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                    <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                </asp:GridView>
+    </p>
+    <p>
+                &nbsp;</p>
         <asp:DataList ID="DataList1" runat="server" CellPadding="4" 
         DataKeyField="userName" DataSourceID="MemberSqlDataSource" 
         style="margin-right: 566px" Width="904px" ForeColor="#333333">
@@ -46,9 +69,9 @@
                 &nbsp;renewalDate:
                 <asp:Label ID="renewalDateLabel" runat="server" 
                     Text='<%# Eval("renewalDate") %>' />
-<br />
-                <asp:DataList ID="DataList2" runat="server" 
-                    DataSourceID="AddressSqlDataSource" 
+                <br />
+
+                <asp:DataList ID="DataList2" runat="server" DataSourceID="AddressSqlDataSource" 
                     Width="888px">
                     <ItemTemplate>
                         nickname:
@@ -60,8 +83,7 @@
                         <asp:Label ID="streetAddressLabel" runat="server" 
                             Text='<%# Eval("streetAddress") %>' />
                         &nbsp;district:
-                        <asp:Label ID="districtLabel" runat="server" 
-                            Text='<%# Eval("district") %>' />
+                        <asp:Label ID="districtLabel" runat="server" Text='<%# Eval("district") %>' />
                         <br />
                     </ItemTemplate>
                 </asp:DataList>
@@ -84,6 +106,8 @@
                         <br />
                     </ItemTemplate>
                 </asp:DataList>
+ 
+
                 <asp:SqlDataSource ID="CreditCardSqlDataSource" runat="server" 
                     ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
                     SelectCommand="SELECT * FROM [CreditCard] WHERE ([userName] = @userName)">
@@ -103,26 +127,25 @@
             </ItemTemplate>
             <SelectedItemStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
     </asp:DataList>
-    <p>
-        &nbsp;</p>
-    <p>
-        &nbsp;</p>
-        <p>
         <asp:SqlDataSource ID="MemberSqlDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
         
         
             
-            SelectCommand="SELECT [lastName], [firstName], [userName], [email], [phoneNumber], [renewalDate] FROM [Member] WHERE ([userName] = @userName)" 
+            SelectCommand="SELECT [lastName], [firstName], [userName], [email], [phoneNumber], [renewalDate] FROM [Member] " 
+           >
+        </asp:SqlDataSource>
+        <asp:SqlDataSource ID="MemberSqlDataSource0" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+        
+        
+            
+            SelectCommand="SELECT Member.lastName, Address.district, Member.userName FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') AND (Member.userName = @userName)" 
            >
             <SelectParameters>
-                <asp:ControlParameter ControlID="UserName" DefaultValue="" Name="userName" 
-                    PropertyName="Text" />
+                <asp:Parameter Name="userName" />
             </SelectParameters>
         </asp:SqlDataSource>
-    </p>
-    <p>
-        &nbsp;</p>
     <p>
         <br />
     </p>

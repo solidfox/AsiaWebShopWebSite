@@ -30,8 +30,11 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+
         if (UserName.Text.Trim() != null) 
         {
+            string SQLCmd = "SELECT [lastName], [firstName], [userName], [email], [phoneNumber], [renewalDate] FROM [Member] WHERE ( userName =N'"+ UserName.Text.Trim() + "')";
+            MemberSqlDataSource.SelectCommand = SQLCmd + " ORDER BY [lastName] ";
             DataList1.DataBind();
         }
     }
