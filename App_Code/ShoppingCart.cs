@@ -130,7 +130,7 @@ public class ShoppingCart
             int test = quantity - item.Quantity;
             if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, test - 1))
             {
-                UpdateOrderItem(connectionString, OrderNum, upc, quantity);
+                UpdateOrderItem(connectionString, OrderNum, upc, quantity, 0);
                 int difference = item.Quantity - quantity;
                 item.Quantity = quantity;
                 UpdateDBItem(connectionString, upc, difference);
@@ -239,6 +239,8 @@ public class ShoppingCart
     {
         // AddItem(string upc, string name, decimal discountPrice, quantity, 1)
         string query = "SELECT [name], [discountPrice] FROM [Item] WHERE ([upc] =N'" + UPC + "')";
+        string name = null;
+        decimal _price = price;
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
@@ -251,10 +253,15 @@ public class ShoppingCart
             {
                 // Iterate through the table to get the retrieved values.
                 reader.Read();
-                this.AddItem(UPC, reader.GetString(0), reader.GetDecimal(1), Quantity, removed);
+                name = reader.GetString(0);
+                if (reader.GetDecimal(1) < price)
+                    _price = reader.GetDecimal(1);
+
             }
             command.Connection.Close();
             reader.Close();
+            UpdateOrderItem(connectionString, GetOrderNumber(connectionString, userName) ,UPC, Quantity, _price);
+            this.AddItem(UPC, name, _price, Quantity, removed);
         }
     }
     
@@ -290,10 +297,10 @@ public class ShoppingCart
     }
 
     //repeated
-    public void UpdateOrderItem(string connectionString, int OrderNum, string UPC, int Quantity)
+    public void UpdateOrderItem(string connectionString, int OrderNum, string UPC, int Quantity, decimal Price)
     {
         // Define the UPDATE query with parameters.
-        string query = "UPDATE [OrderItem] SET quantity=@Quantity, removed=@Removed " +
+        string query = "UPDATE [OrderItem] SET quantity=@Quantity, removed=@Removed, PriceWhenAdded=@price " +
                        "WHERE [orderNum]=@OrderNum AND [upc]=@UPC";
 
         // Create the connection and the SQL command.
@@ -304,6 +311,7 @@ public class ShoppingCart
             command.Parameters.AddWithValue("@Quantity", Quantity);
             command.Parameters.AddWithValue("@OrderNum", OrderNum);
             command.Parameters.AddWithValue("@Removed", 0);
+            command.Parameters.AddWithValue("@price", Price);
             command.Parameters.AddWithValue("@UPC", UPC);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
