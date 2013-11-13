@@ -50,6 +50,8 @@
                         <asp:MenuItem NavigateUrl="~/" Text="Categories"/>
                         <asp:MenuItem NavigateUrl="~/ItemSearch.aspx" Text="Browse Items"/>
                         <asp:MenuItem NavigateUrl="~/AdminOnly/AdminSelection.aspx" Text="Admin"/>
+                        <asp:MenuItem NavigateUrl="~/MemberOnly/MemberSelection.aspx" Text="Member" 
+                            Value="Member"></asp:MenuItem>
                     </Items>
                 </asp:Menu>
             </div>

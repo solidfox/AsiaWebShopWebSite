@@ -15,10 +15,7 @@ public partial class ItemManagement : System.Web.UI.Page
     {
 
     }
-    protected void DetailsView1_PageIndexChanging(object sender, DetailsViewPageEventArgs e)
-    {
 
-    }
     protected void dvItem_ItemDeleted(object sender, EventArgs e)
     {
         gvItem.DataBind();

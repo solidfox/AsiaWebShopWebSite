@@ -70,7 +70,7 @@ public partial class _Default : System.Web.UI.Page
             command.Connection.Open();
             // Execute the SELECT query and place the result in a DataReader.
             SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
+            // Check if a result was returned.   
             if (reader.HasRows)
             {
                 // Iterate through the table to get the retrieved values.

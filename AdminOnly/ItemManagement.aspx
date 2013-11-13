@@ -8,7 +8,7 @@
     <p>
         <asp:GridView ID="gvItem" runat="server" AutoGenerateColumns="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource1" 
-            ForeColor="#333333" GridLines="None">
+            ForeColor="#333333" GridLines="None" style="margin-right: 0px">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
                 <asp:CommandField ShowSelectButton="True" />
@@ -51,8 +51,7 @@
     </p>
         <asp:DetailsView ID="dvItem" runat="server" AutoGenerateRows="False" 
             CellPadding="4" DataKeyNames="upc" DataSourceID="AsiaWebShopDBSqlDataSource2" 
-            ForeColor="#333333" GridLines="None" Height="50px" 
-            onpageindexchanging="DetailsView1_PageIndexChanging" Width="745px"
+            ForeColor="#333333" GridLines="None" Height="50px" Width="745px"
             OnItemInserted="dvItem_ItemInserted" 
             OnItemUpdated="dvItem_ItemUpdated" 
             OnItemDeleted="dvItem_ItemDeleted" >

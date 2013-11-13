@@ -8,13 +8,15 @@
     <p>
         Input a username. If no username that search all member.</p>
     <p>
-                <asp:CheckBox ID="cbItemName" runat="server" Text="Name" />
-            </p>
+                &nbsp;</p>
 <p>
         Member&#39;s UserName :<asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         <asp:CustomValidator ID="MemberCustomValidator" runat="server" 
             Display="Dynamic" ErrorMessage="Please enter existed username." ForeColor="Red" 
             onservervalidate="MemberCustomValidator_ServerValidate"></asp:CustomValidator>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <asp:CheckBox ID="cbItemName" runat="server" Text="Group By District" 
+             />
     </p>
 <p>
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate" 
