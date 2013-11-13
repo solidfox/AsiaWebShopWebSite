@@ -22,15 +22,17 @@ public class RemoveCart
                 */
                 int OrderNum = GetOrderNumber(connectionString, UserName);
                 int _release = GetModifiedQuantity(connectionString, OrderNum, upc);
-                if (inactivity) PreRemoveFromDBOrderItem(connectionString, upc, OrderNum);
-                else 
+                if (inactivity) 
+                    PreRemoveFromDBOrderItem(connectionString, upc, OrderNum);
+                else
                     RemoveFromDBOrderItem(connectionString, upc, OrderNum);
                     UpdateDBItem(connectionString, upc, _release);
                     // Save the shopping cart in the Session variable "MyShoppingCart".
                     cart.RemoveItem(upc);
+
                     HttpContext.Current.Session["MyShoppingCart"] = cart;
-            
             }
+
             else
             {
                 Debug.Fail("ERROR : We should never get to RemoveFromCart.aspx without a UPC.");

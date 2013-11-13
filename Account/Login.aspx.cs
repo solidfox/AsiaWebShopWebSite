@@ -18,7 +18,6 @@ public partial class Account_Login : System.Web.UI.Page
     protected void LoginUser_LoggingIn(object sender, LoginCancelEventArgs e)
     {
         MembershipUser user = Membership.GetUser(LoginUser.UserName);
-
         if (user != null)
         {
             if (user.IsApproved == false)
@@ -26,5 +25,6 @@ public partial class Account_Login : System.Web.UI.Page
                 LoginUser.FailureText = "Your account is disabled. Please contact administrator";
             }
         }
+        ShoppingCart.GetShoppingCart(LoginUser.UserName);
     }
 }

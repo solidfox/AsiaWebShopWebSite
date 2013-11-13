@@ -40,7 +40,8 @@ public partial class SiteMaster : System.Web.UI.MasterPage
         foreach (CartItem item in cart.Items)
             upc.Add(item.UPC);
         foreach(string UPC in upc)
-            removeall = new RemoveCart(cart, userName,UPC,false);
+            removeall = new RemoveCart(cart, userName, UPC, true);
+        cart.Items.Clear();
     }
 
     public void UpdateLastSeenTime (string connectionString, string UserName) 
@@ -89,7 +90,7 @@ public partial class SiteMaster : System.Web.UI.MasterPage
                             upc.Add(item.UPC);
                         foreach (string UPC in upc)
                             removeall = new RemoveCart(cart, UserName, UPC, false);
-
+                        cart.Items.Clear();
                     }
                 }
 
