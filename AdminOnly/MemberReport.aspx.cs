@@ -30,7 +30,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
-        if (UserName.Text.Trim() != null) ;
+        if (UserName.Text.Trim() != null) 
         {
             DataList1.DataBind();
         }
