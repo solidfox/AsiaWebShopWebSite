@@ -130,7 +130,7 @@ public class ShoppingCart
             int test = quantity - item.Quantity;
             if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, test - 1))
             {
-                UpdateOrderItem(connectionString, OrderNum, upc, quantity, 0);
+                UpdateOrderItem(connectionString, OrderNum, upc, quantity, item.DiscountPrice);
                 int difference = item.Quantity - quantity;
                 item.Quantity = quantity;
                 UpdateDBItem(connectionString, upc, difference);
@@ -224,8 +224,10 @@ public class ShoppingCart
                     UPC = reader.GetString(0);
                     Quantity = reader.GetInt32(1);
                     price = reader.GetDecimal(2);
-                    if(reader.GetBoolean(3))
+                    if (reader.GetBoolean(3))
+                    {
                         AddItemFromDBItem(connectionString, UPC, Quantity, price, false);
+                    }
                     else AddItemFromDBItem(connectionString, UPC, Quantity, price, true);
 
                 }
@@ -260,7 +262,7 @@ public class ShoppingCart
             }
             command.Connection.Close();
             reader.Close();
-            UpdateOrderItem(connectionString, GetOrderNumber(connectionString, userName) ,UPC, Quantity, _price);
+            UpdateOrderItem(connectionString, GetOrderNumber(connectionString, userName), UPC, Quantity, _price);
             this.AddItem(UPC, name, _price, Quantity, removed);
         }
     }
