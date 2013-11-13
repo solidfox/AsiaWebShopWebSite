@@ -257,7 +257,18 @@ public class ShoppingCart
                 reader.Read();
                 name = reader.GetString(0);
                 if (reader.GetDecimal(1) < price)
+                {
                     _price = reader.GetDecimal(1);
+                    CartItem updatedItem = new CartItem(UPC);
+                    foreach (CartItem item in Items)
+                    {
+                        if (item.Equals(updatedItem))
+                        {
+                            item.DiscountPrice = _price;
+                        }
+                    }
+                    
+                }
 
             }
             command.Connection.Close();
