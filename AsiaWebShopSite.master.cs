@@ -21,6 +21,10 @@ public partial class SiteMaster : System.Web.UI.MasterPage
         foreach(string username in UserNames)
         CheckOutOfTime(connectionString, username);
         UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
+        if (HttpContext.Current.User.Identity.Name != null)
+        {
+            ShoppingCart.GetShoppingCart(HttpContext.Current.User.Identity.Name);
+        }
     }
 
     public void ReserveForUser (object sender, Microsoft.Win32.SessionEndedEventArgs e)
