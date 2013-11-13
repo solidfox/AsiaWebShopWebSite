@@ -52,6 +52,7 @@
                         <asp:MenuItem NavigateUrl="~/AdminOnly/AdminSelection.aspx" Text="Admin"/>
                         <asp:MenuItem NavigateUrl="~/MemberOnly/MemberSelection.aspx" Text="Member" 
                             Value="Member"></asp:MenuItem>
+                        <asp:MenuItem NavigateUrl="~/MemberOnly/ViewShoppingCart.aspx" Text="Shopping Cart" Value="Shopping Cart"></asp:MenuItem>
                     </Items>
                 </asp:Menu>
             </div>
