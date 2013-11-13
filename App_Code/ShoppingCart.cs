@@ -77,7 +77,7 @@ public class ShoppingCart
             }
         }
 
-        else if (reserved)
+        else if (reserved )
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
@@ -94,12 +94,13 @@ public class ShoppingCart
             newItem.Quantity = _quantity;
             Items.Add(newItem);
             UpdateDBItem(connectionString, upc, -_quantity);
+            return;
         }
 
         else
         {
             // Inform the user the quantity is alreadt exceed the stock
-            UpdateDBItem(connectionString, upc, -_quantity);
+            RemoveFromDBOrderItem(connectionString, upc, GetOrderNumber(connectionString, userName));
             return;
         }
     }
@@ -257,7 +258,18 @@ public class ShoppingCart
                 reader.Read();
                 name = reader.GetString(0);
                 if (reader.GetDecimal(1) < price)
+                {
                     _price = reader.GetDecimal(1);
+                    CartItem updatedItem = new CartItem(UPC);
+                    foreach (CartItem item in Items)
+                    {
+                        if (item.Equals(updatedItem))
+                        {
+                            item.DiscountPrice = _price;
+                        }
+                    }
+                    
+                }
 
             }
             command.Connection.Close();
@@ -271,7 +283,7 @@ public class ShoppingCart
     // query on the database, check the stock
     public bool CheckItemStock(string connectionString, CartItem item, int Comparision)
     {
-        string query = "SELECT [quantityAvailable] FROM [Item] WHERE ([upc] =N'" + item.UPC + "')";
+        string query = "SELECT [quantityAvailable], [visible] FROM [Item] WHERE ([upc] =N'" + item.UPC + "')";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
 
@@ -286,7 +298,7 @@ public class ShoppingCart
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    if ( reader.GetInt32(0) > Comparision) 
+                    if ( reader.GetInt32(0) > Comparision && reader.GetBoolean(1)) 
                     {
                         return true;
                     }
@@ -390,6 +402,8 @@ public class ShoppingCart
             command.Connection.Close();
         }
     }
+
+
 
 #endregion
 
