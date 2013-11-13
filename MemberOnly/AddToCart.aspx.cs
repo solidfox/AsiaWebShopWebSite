@@ -69,7 +69,7 @@ public partial class AddToCart : System.Web.UI.Page
             command.Parameters.AddWithValue("@UPC", upc);
             command.Parameters.AddWithValue("@Quantity", Quantity);
             command.Parameters.AddWithValue("@Price", discountPrice);
-            command.Parameters.AddWithValue("@removed", 1);
+            command.Parameters.AddWithValue("@removed", 0);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
