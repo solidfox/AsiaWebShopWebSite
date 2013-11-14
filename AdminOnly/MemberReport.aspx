@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopAdmin.master" AutoEventWireup="true" CodeFile="MemberReport.aspx.cs" Inherits="AdminOnly_MemberReport" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
-</asp:Content>
+    </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p>
         <strong style="font-size: large; color: #000080;">MEMBER&nbsp; REPORT</strong></p>
@@ -13,7 +13,7 @@
             Display="Dynamic" ErrorMessage="Please enter existed username." ForeColor="Red" 
             onservervalidate="MemberCustomValidator_ServerValidate"></asp:CustomValidator>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:CheckBox ID="cbItemName" runat="server" Text="Group By District" 
+                <asp:CheckBox ID="cbGroupByDistrict" runat="server" Text="Group By District" 
              />
     </p>
 <p>
@@ -21,132 +21,156 @@
                     onclick="btnGenerate_Click" />
     </p>
     <p>
-                <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
-                    CellPadding="4" DataKeyNames="userName" DataSourceID="MemberSqlDataSource0" 
-                    ForeColor="#333333" GridLines="None">
-                    <AlternatingRowStyle BackColor="White" />
-                    <Columns>
-                        <asp:BoundField DataField="lastName" HeaderText="lastName" 
-                            SortExpression="lastName" />
-                        <asp:BoundField DataField="district" HeaderText="district" 
-                            SortExpression="district" />
-                        <asp:BoundField DataField="userName" HeaderText="userName" ReadOnly="True" 
-                            SortExpression="userName" />
-                    </Columns>
-                    <EditRowStyle BackColor="#2461BF" />
-                    <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                    <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                    <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-                    <RowStyle BackColor="#EFF3FB" />
-                    <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-                    <SortedAscendingCellStyle BackColor="#F5F7FB" />
-                    <SortedAscendingHeaderStyle BackColor="#6D95E1" />
-                    <SortedDescendingCellStyle BackColor="#E9EBEF" />
-                    <SortedDescendingHeaderStyle BackColor="#4870BE" />
-                </asp:GridView>
-    </p>
-    <p>
                 &nbsp;</p>
-        <asp:DataList ID="DataList1" runat="server" CellPadding="4" 
-        DataKeyField="userName" DataSourceID="MemberSqlDataSource" 
-        style="margin-right: 566px" Width="904px" ForeColor="#333333">
-            <AlternatingItemStyle BackColor="White" />
+                            <asp:Label ID="HeaderLabelDataList" runat="server" 
+                    style="color: #000000; font-size: larger; font-weight: 700; font-family: 'Segoe UI'" />
+    <p>
+      
+        <asp:GridView ID="MemberReportGridView" runat="server" 
+            AutoGenerateColumns="False" CellPadding="4" DataKeyNames="userName" 
+            DataSourceID="MemberSqlDataSource" ForeColor="#333333">
+            <AlternatingRowStyle BackColor="White" />
+            <Columns>
+                <asp:TemplateField HeaderText="District" SortExpression="district" 
+                    Visible="False">
+                   <ItemTemplate>
+                        <asp:Label ID="DistrictLabel" runat="server" Text='<%# Eval("district") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="userName" SortExpression="userName">
+                    <EditItemTemplate>
+                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("userName") %>'></asp:Label>
+                    </EditItemTemplate>
+                    <ItemTemplate>
+                        <asp:Label ID="userNameLabel" runat="server" Text='<%# Eval("userName") %>'></asp:Label>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField HeaderText="Member information">
+                    <ItemTemplate>
+                        <asp:GridView ID="GridView4" runat="server" AutoGenerateColumns="False" 
+                            CellPadding="4" DataSourceID="MemberSqlDataSource" ForeColor="#333333" 
+                            GridLines="None">
+                            <AlternatingRowStyle BackColor="White" />
+                            <Columns>
+                                <asp:BoundField DataField="email" HeaderText="email" SortExpression="email" />
+                                <asp:BoundField DataField="firstName" HeaderText="firstName" 
+                                    SortExpression="firstName" />
+                                <asp:BoundField DataField="lastName" HeaderText="lastName" 
+                                    SortExpression="lastName" />
+                                <asp:BoundField DataField="phoneNumber" HeaderText="phoneNumber" 
+                                    SortExpression="phoneNumber" />
+                                <asp:BoundField DataField="renewalDate" HeaderText="renewalDate" 
+                                    SortExpression="renewalDate" />
+                            </Columns>
+                            <EditRowStyle BackColor="#2461BF" />
+                            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                            <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                        </asp:GridView>
+                        <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" 
+                            CellPadding="4" DataSourceID="AddressSqlDataSource" ForeColor="#333333" 
+                            GridLines="None">
+                            <AlternatingRowStyle BackColor="White" />
+                            <Columns>
+                                <asp:BoundField DataField="nickname" HeaderText="nickname" 
+                                    SortExpression="nickname" />
+                                <asp:BoundField DataField="buildingAddress" HeaderText="buildingAddress" 
+                                    SortExpression="buildingAddress" />
+                                <asp:BoundField DataField="streetAddress" HeaderText="streetAddress" 
+                                    SortExpression="streetAddress" />
+                                <asp:BoundField DataField="district" HeaderText="district" 
+                                    SortExpression="district" />
+                            </Columns>
+                            <EditRowStyle BackColor="#2461BF" />
+                            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                            <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                        </asp:GridView>
+                        <asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="False" 
+                            CellPadding="4" DataSourceID="CreditCardSqlDataSource" ForeColor="#333333" 
+                            GridLines="None">
+                            <AlternatingRowStyle BackColor="White" />
+                            <Columns>
+                                <asp:BoundField DataField="number" HeaderText="number" 
+                                    SortExpression="number" />
+                                <asp:BoundField DataField="type" HeaderText="type" SortExpression="type" />
+                                <asp:BoundField DataField="cardHolderName" HeaderText="cardHolderName" 
+                                    SortExpression="cardHolderName" />
+                                <asp:BoundField DataField="expiryMonth" HeaderText="expiryMonth" 
+                                    SortExpression="expiryMonth" />
+                                <asp:BoundField DataField="expiryYear" HeaderText="expiryYear" 
+                                    SortExpression="expiryYear" />
+                            </Columns>
+                            <EditRowStyle BackColor="#2461BF" />
+                            <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+                            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+                            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+                            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+                            <SortedDescendingHeaderStyle BackColor="#4870BE" />
+                        </asp:GridView>
+                        <asp:SqlDataSource ID="CreditCardSqlDataSource" runat="server" 
+                            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+                            SelectCommand="SELECT [number], [type], [cardHolderName], [expiryMonth], [expiryYear] FROM [CreditCard]  WHERE ([userName] = @userName)">
+                            <SelectParameters>
+                                <asp:ControlParameter ControlID="userNameLabel" DefaultValue="" Name="userName" 
+                                    PropertyName="Text" Type="String" />
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+                        <asp:SqlDataSource ID="AddressSqlDataSource" runat="server" 
+                            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+                            SelectCommand="SELECT [nickname], [buildingAddress], [streetAddress], [district]  FROM [Address] WHERE ([userName] = @userName)">
+                            <SelectParameters>
+                                <asp:ControlParameter ControlID="userNameLabel" Name="username" 
+                                    PropertyName="Text" />
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+                        <asp:SqlDataSource ID="MemberSqlDataSource" runat="server" 
+                            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+                            SelectCommand="SELECT [email], [firstName], [lastName], [phoneNumber], [renewalDate] FROM [Member] WHERE ([userName] = @userName)">
+                            <SelectParameters>
+                                <asp:ControlParameter ControlID="userNameLabel" Name="userName" 
+                                    PropertyName="Text" Type="String" />
+                            </SelectParameters>
+                        </asp:SqlDataSource>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+            <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
             <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-            <ItemStyle BackColor="#EFF3FB" />
-            <ItemTemplate>
-                userName:
-                <asp:Label ID="userNameLabel" runat="server" Text='<%# Eval("userName") %>' />
-                &nbsp;&nbsp; lastName:
-                <asp:Label ID="lastNameLabel" runat="server" Text='<%# Eval("lastName") %>' />
-                &nbsp;&nbsp; firstName:
-                <asp:Label ID="firstNameLabel" runat="server" Text='<%# Eval("firstName") %>' />
-                &nbsp;<br /> email:
-                <asp:Label ID="emailLabel" runat="server" Text='<%# Eval("email") %>' />
-                &nbsp;phoneNumber:
-                <asp:Label ID="phoneNumberLabel" runat="server" 
-                    Text='<%# Eval("phoneNumber") %>' />
-                &nbsp;renewalDate:
-                <asp:Label ID="renewalDateLabel" runat="server" 
-                    Text='<%# Eval("renewalDate") %>' />
-                <br />
-
-                <asp:DataList ID="DataList2" runat="server" DataSourceID="AddressSqlDataSource" 
-                    Width="888px">
-                    <ItemTemplate>
-                        nickname:
-                        <asp:Label ID="nicknameLabel" runat="server" Text='<%# Eval("nickname") %>' />
-                        &nbsp; buildingAddress:
-                        <asp:Label ID="buildingAddressLabel" runat="server" 
-                            Text='<%# Eval("buildingAddress") %>' />
-                        &nbsp;streetAddress:
-                        <asp:Label ID="streetAddressLabel" runat="server" 
-                            Text='<%# Eval("streetAddress") %>' />
-                        &nbsp;district:
-                        <asp:Label ID="districtLabel" runat="server" Text='<%# Eval("district") %>' />
-                        <br />
-                    </ItemTemplate>
-                </asp:DataList>
-                <asp:DataList ID="DataList3" runat="server" DataKeyField="userName" 
-                    DataSourceID="CreditCardSqlDataSource" Width="888px">
-                    <ItemTemplate>
-                        number:
-                        <asp:Label ID="numberLabel" runat="server" Text='<%# Eval("number") %>' />
-                        &nbsp; type:
-                        <asp:Label ID="typeLabel" runat="server" Text='<%# Eval("type") %>' />
-                        &nbsp; cardHolderName:
-                        <asp:Label ID="cardHolderNameLabel" runat="server" 
-                            Text='<%# Eval("cardHolderName") %>' />
-                        &nbsp; expiryMonth:
-                        <asp:Label ID="expiryMonthLabel" runat="server" 
-                            Text='<%# Eval("expiryMonth") %>' />
-                        &nbsp;expiryYear:
-                        <asp:Label ID="expiryYearLabel" runat="server" 
-                            Text='<%# Eval("expiryYear") %>' />
-                        <br />
-                    </ItemTemplate>
-                </asp:DataList>
- 
-
-                <asp:SqlDataSource ID="CreditCardSqlDataSource" runat="server" 
-                    ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-                    SelectCommand="SELECT * FROM [CreditCard] WHERE ([userName] = @userName)">
-                    <SelectParameters>
-                        <asp:ControlParameter ControlID="userNameLabel" DefaultValue="" Name="userName" 
-                            PropertyName="Text" Type="String" />
-                    </SelectParameters>
-                </asp:SqlDataSource>
-                <asp:SqlDataSource ID="AddressSqlDataSource" runat="server" 
-                    ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-                    SelectCommand="SELECT * FROM [Address] WHERE ([userName] = @userName)">
-                    <SelectParameters>
-                        <asp:ControlParameter ControlID="userNameLabel" Name="username" 
-                            PropertyName="Text" />
-                    </SelectParameters>
-                </asp:SqlDataSource>
-            </ItemTemplate>
-            <SelectedItemStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
-    </asp:DataList>
+            <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
+            <RowStyle BackColor="#EFF3FB" BorderWidth="2px" />
+            <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+            <SortedAscendingCellStyle BackColor="#F5F7FB" />
+            <SortedAscendingHeaderStyle BackColor="#6D95E1" />
+            <SortedDescendingCellStyle BackColor="#E9EBEF" />
+            <SortedDescendingHeaderStyle BackColor="#4870BE" />
+        </asp:GridView>
         <asp:SqlDataSource ID="MemberSqlDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
         
         
             
-            SelectCommand="SELECT [lastName], [firstName], [userName], [email], [phoneNumber], [renewalDate] FROM [Member] " 
+            SelectCommand="SELECT Member.userName,Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') ORDER BY LastName" 
            >
         </asp:SqlDataSource>
-        <asp:SqlDataSource ID="MemberSqlDataSource0" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        
-        
-            
-            SelectCommand="SELECT Member.lastName, Address.district, Member.userName FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') AND (Member.userName = @userName)" 
-           >
-            <SelectParameters>
-                <asp:Parameter Name="userName" />
-            </SelectParameters>
-        </asp:SqlDataSource>
-    <p>
+      
         <br />
     </p>
 </asp:Content>
