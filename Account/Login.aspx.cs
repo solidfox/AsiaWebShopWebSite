@@ -25,6 +25,7 @@ public partial class Account_Login : System.Web.UI.Page
                 LoginUser.FailureText = "Your account is disabled. Please contact administrator";
             }
         }
+        UserNotify test = new UserNotify("Have Fun !!");
         ShoppingCart.GetShoppingCart(LoginUser.UserName);
     }
 }

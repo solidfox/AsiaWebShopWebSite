@@ -17,6 +17,7 @@ public class ShoppingCart
     public List<CartItem> Items {get; private set;}
     public static string connectionString = "AsiaWebShopDBConnectionString";
     public string userName = null;
+    public string msg = "";
 #endregion
 
 #region Singleton Implementation of ShoppingCart
@@ -100,6 +101,8 @@ public class ShoppingCart
         else
         {
             // Inform the user the quantity is alreadt exceed the stock
+            msg += "The item " + name + " is deleted from your shopping cart.";
+            UserNotify test = new UserNotify(msg);
             RemoveFromDBOrderItem(connectionString, upc, GetOrderNumber(connectionString, userName));
             return;
         }

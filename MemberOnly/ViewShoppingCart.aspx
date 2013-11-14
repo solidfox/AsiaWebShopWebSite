@@ -53,6 +53,9 @@
         </asp:GridView>
     </p>
     <p>
+        <asp:Label ID="InformUser" runat="server" Font-Size="Medium" ForeColor="#CC0000" Text="Have Fun !!"></asp:Label>
+    </p>
+    <p>
         <asp:Button ID="btnUpdateCart" runat="server" OnClick="btnUpdateCart_Click" Text="Update Cart" />
     &nbsp;<asp:Button ID="btnSubmitCart" runat="server" Text="Submit Cart" />
     </p>

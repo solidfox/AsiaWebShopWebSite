@@ -14,6 +14,7 @@ public partial class AddToCart : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         // Get the upc, item name and discount price from the query string.
+        UserNotify test = new UserNotify("Have Fun !!");
         string connectionString = "AsiaWebShopDBConnectionString";
         string userName = User.Identity.Name;
         //string OrderNum = GetOrderNumber(connectionString, userName);

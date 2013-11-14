@@ -16,6 +16,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         if (!IsPostBack)
         {
             PopulateShoppingCart();
+            this.InformUser.Text = UserNotify.Inform;
         }
     }
     protected void btnUpdateCart_Click(object sender, EventArgs e)
