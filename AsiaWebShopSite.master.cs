@@ -19,8 +19,8 @@ public partial class SiteMaster : System.Web.UI.MasterPage
         Microsoft.Win32.SystemEvents.SessionEnded += new Microsoft.Win32.SessionEndedEventHandler(ReserveForUser);
         GetAllUser(connectionString);
         foreach(string username in UserNames)
-        CheckOutOfTime(connectionString, username);
-        UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
+        GenericQuery.CheckOutOfTime(connectionString, username);
+        GenericQuery.UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
         if (HttpContext.Current.User.Identity.Name != null)
         {
             ShoppingCart.GetShoppingCart(HttpContext.Current.User.Identity.Name);
@@ -31,7 +31,7 @@ public partial class SiteMaster : System.Web.UI.MasterPage
     {
         if (HttpContext.Current.User.Identity.Name != null)
         {
-            UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
+            GenericQuery.UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
         }
     }
 
@@ -48,65 +48,7 @@ public partial class SiteMaster : System.Web.UI.MasterPage
         cart.Items.Clear();
     }
 
-    public void UpdateLastSeenTime (string connectionString, string UserName) 
-    {
-        // Define the UPDATE query with parameters.
-        string query = "UPDATE [Member] SET lastSeen=@LastSeen " +
-                       "WHERE [userName]=@UserName";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@UserName", UserName);
-            command.Parameters.AddWithValue("@LastSeen", (DateTime.Now.ToString().Trim()));
-            // Open the connection, execute the UPDATE query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    public void CheckOutOfTime(string connectionString, string UserName) 
-    {
-        string query = "SELECT [lastSeen] FROM [Member] WHERE ([userName] = N'" + UserName + "')";
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                reader.Read();
-                if(!reader.IsDBNull(0))
-                {
-                    DateTime Expiry = DateTime.Now.AddMinutes(-15);
-                    DateTime LastSeen = reader.GetDateTime(0);
-                    if (Expiry > LastSeen)
-                    {
-                        ShoppingCart cart = ShoppingCart.GetShoppingCart(UserName);
-                        RemoveCart removeall;
-                        List<string> upc = new List<string> { };
-                        foreach (CartItem item in cart.Items)
-                            upc.Add(item.UPC);
-                        foreach (string UPC in upc)
-                            removeall = new RemoveCart(cart, UserName, UPC, false);
-                        cart.Items.Clear();
-                    }
-                }
-
-                
-                command.Connection.Close(); // Close the connection and the DataReader.
-                reader.Close();
-            }
-
-        }
-
-        return;
-    }
+    
 
     private void GetAllUser(string connectionString) 
     {

@@ -67,11 +67,11 @@ public class ShoppingCart
             {
                 if (item.Equals(newItem))
                 {
-                    if (CheckItemStock(connectionString, newItem, _quantity - 1))
+                    if (GenericQuery.CheckItemStock(connectionString, newItem, _quantity - 1))
                     {
                         if (!reserved)
                             item.Quantity++;
-                        UpdateDBItem(connectionString, upc, -_quantity);
+                        GenericQuery.UpdateDBItem(connectionString, upc, -_quantity);
                         return;
                     }
                 }
@@ -87,14 +87,14 @@ public class ShoppingCart
             Items.Add(newItem);
         }
 
-        else if (CheckItemStock(connectionString, newItem, _quantity - 1 ))
+        else if (GenericQuery.CheckItemStock(connectionString, newItem, _quantity - 1))
         {
             newItem.UPC = upc;
             newItem.ItemName = name;
             newItem.DiscountPrice = discountPrice;
             newItem.Quantity = _quantity;
             Items.Add(newItem);
-            UpdateDBItem(connectionString, upc, -_quantity);
+            GenericQuery.UpdateDBItem(connectionString, upc, -_quantity);
             return;
         }
 
@@ -103,7 +103,7 @@ public class ShoppingCart
             // Inform the user the quantity is alreadt exceed the stock
             msg += "The item " + name + " is deleted from your shopping cart.";
             UserNotify test = new UserNotify(msg);
-            RemoveFromDBOrderItem(connectionString, upc, GetOrderNumber(connectionString, userName));
+            GenericQuery.RemoveFromDBOrderItem(connectionString, upc, GenericQuery.GetOrderNumber(connectionString, userName));
             return;
         }
     }
@@ -114,7 +114,7 @@ public class ShoppingCart
     public void SetItemQuantity(string upc, int quantity)
     {
         // If the quantity is set to 0, remove the item entirely.
-        int OrderNum = GetOrderNumber(connectionString, this.userName);
+        int OrderNum = GenericQuery.GetOrderNumber(connectionString, this.userName);
         int _quantity = 0;
         CartItem updatedItem = new CartItem(upc);
         if (quantity == 0)
@@ -122,8 +122,8 @@ public class ShoppingCart
             foreach (CartItem item in Items)
                 if (item.Equals(updatedItem))
                     _quantity = item.Quantity;
-            UpdateDBItem(connectionString, upc, _quantity);
-            RemoveFromDBOrderItem(connectionString, upc, OrderNum);
+            GenericQuery.UpdateDBItem(connectionString, upc, _quantity);
+            GenericQuery.RemoveFromDBOrderItem(connectionString, upc, OrderNum);
             RemoveItem(upc);
             return;
         }
@@ -132,12 +132,12 @@ public class ShoppingCart
         foreach (CartItem item in Items)
         {
             int test = quantity - item.Quantity;
-            if (item.Equals(updatedItem) && CheckItemStock (connectionString, updatedItem, test - 1))
+            if (item.Equals(updatedItem) && GenericQuery.CheckItemStock (connectionString, updatedItem, test - 1))
             {
-                UpdateOrderItem(connectionString, OrderNum, upc, quantity, item.DiscountPrice);
+                GenericQuery.SubUpdateOrderItem(connectionString, OrderNum, upc, quantity, item.DiscountPrice);
                 int difference = item.Quantity - quantity;
                 item.Quantity = quantity;
-                UpdateDBItem(connectionString, upc, difference);
+                GenericQuery.UpdateDBItem(connectionString, upc, difference);
                 return;
             }
         }
@@ -169,7 +169,7 @@ public class ShoppingCart
     }
 
     //retrieve from db
-    public void RetrieveFromDB (string connectString,string UserName)
+    public void RetrieveFromDB(string connectString, string UserName)
     {
         userName = UserName;
         string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
@@ -205,7 +205,7 @@ public class ShoppingCart
     }
 
     //retrieve from order Item
-    public void RetrieveFromDBOrderItem(string connectionString, int OrderNum) 
+    public void RetrieveFromDBOrderItem(string connectionString, int OrderNum)
     {
         string query = "SELECT [upc], [quantity],[PriceWhenAdded],[removed] FROM [OrderItem] WHERE ([orderNum] =N'" + OrderNum + "')";
         string UPC = null;
@@ -241,7 +241,7 @@ public class ShoppingCart
         }
     }
 
-    public void AddItemFromDBItem (string connectionString, string UPC, int Quantity, decimal price, bool removed) 
+    public void AddItemFromDBItem(string connectionString, string UPC, int Quantity, decimal price, bool removed)
     {
         // AddItem(string upc, string name, decimal discountPrice, quantity, 1)
         string query = "SELECT [name], [discountPrice] FROM [Item] WHERE ([upc] =N'" + UPC + "')";
@@ -271,140 +271,21 @@ public class ShoppingCart
                             item.DiscountPrice = _price;
                         }
                     }
-                    
+
                 }
 
             }
             command.Connection.Close();
             reader.Close();
-            UpdateOrderItem(connectionString, GetOrderNumber(connectionString, userName), UPC, Quantity, _price);
+            GenericQuery.SubUpdateOrderItem(connectionString, GenericQuery.GetOrderNumber(connectionString, userName), UPC, Quantity, _price);
             this.AddItem(UPC, name, _price, Quantity, removed);
         }
     }
-    
-
-    // query on the database, check the stock
-    public bool CheckItemStock(string connectionString, CartItem item, int Comparision)
-    {
-        string query = "SELECT [quantityAvailable], [visible] FROM [Item] WHERE ([upc] =N'" + item.UPC + "')";
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    if ( reader.GetInt32(0) > Comparision && reader.GetBoolean(1)) 
-                    {
-                        return true;
-                    }
-                }
-                command.Connection.Close(); // Close the connection and the DataReader.
-                reader.Close();
-            }
-        }
-        return false;
-    }
 
     //repeated
-    public void UpdateOrderItem(string connectionString, int OrderNum, string UPC, int Quantity, decimal Price)
-    {
-        // Define the UPDATE query with parameters.
-        string query = "UPDATE [OrderItem] SET quantity=@Quantity, removed=@Removed, PriceWhenAdded=@price " +
-                       "WHERE [orderNum]=@OrderNum AND [upc]=@UPC";
+    
 
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@Quantity", Quantity);
-            command.Parameters.AddWithValue("@OrderNum", OrderNum);
-            command.Parameters.AddWithValue("@Removed", 0);
-            command.Parameters.AddWithValue("@price", Price);
-            command.Parameters.AddWithValue("@UPC", UPC);
-            // Open the connection, execute the UPDATE query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    public int GetOrderNumber(string connectionString, string userName)
-    {
-        string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
-        int OrderNum = 0;
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    // ToAsk: what happens when there are two rows ?
-                    if (reader.IsDBNull(1))
-                    {
-                        OrderNum = int.Parse(reader["orderNum"].ToString());
-                    }
-
-                }
-                command.Connection.Close(); // Close the connection and the DataReader.
-                reader.Close();
-            }
-        }
-        return OrderNum;
-    }
-
-    public void UpdateDBItem (string connectionString, string UPC, int releaseQuantity)
-    {
-        // Define the UPDATE query with parameters.
-        string query = "UPDATE [Item] SET quantityAvailable = quantityAvailable + @Quantity " +
-                       "WHERE [upc]=@UPC";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@Quantity", releaseQuantity);
-            command.Parameters.AddWithValue("@UPC", UPC);
-            // Open the connection, execute the UPDATE query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
-            command.Connection.Close();
-        }
-    }
-
-    public void RemoveFromDBOrderItem(string connectionString, string UPC, int OrderNum)
-    {
-        //query
-        string query = "DELETE FROM [OrderItem] WHERE ([upc] = N'" + UPC + "' AND [orderNum] = N'" + OrderNum + "')";
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            command.ExecuteReader();
-            // Check if a result was returned.
-            command.Connection.Close();
-        }
-    }
+    
 
 
 
