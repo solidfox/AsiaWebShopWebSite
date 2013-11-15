@@ -68,37 +68,7 @@
             SelectCommand="SELECT * FROM [Address]"></asp:SqlDataSource>
     </p>
     <p>
-        <asp:SqlDataSource ID="DeliveryAddress" runat="server" 
-            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            DeleteCommand="DELETE FROM [Address] WHERE [userName] = @userName AND [nickname] = @nickname" 
-            InsertCommand="INSERT INTO [Address] ([userName], [nickname], [buildingAddress], [streetAddress], [district]) VALUES (@userName, @nickname, @buildingAddress, @streetAddress, @district)" 
-            SelectCommand="SELECT * FROM [Address] WHERE (([userName] = @userName) AND ([nickname] = @nickname))" 
-            UpdateCommand="UPDATE [Address] SET [buildingAddress] = @buildingAddress, [streetAddress] = @streetAddress, [district] = @district WHERE [userName] = @userName AND [nickname] = @nickname">
-            <DeleteParameters>
-                <asp:Parameter Name="userName" Type="String" />
-                <asp:Parameter Name="nickname" Type="String" />
-            </DeleteParameters>
-            <InsertParameters>
-                <asp:Parameter Name="userName" Type="String" />
-                <asp:Parameter Name="nickname" Type="String" />
-                <asp:Parameter Name="buildingAddress" Type="String" />
-                <asp:Parameter Name="streetAddress" Type="String" />
-                <asp:Parameter Name="district" Type="String" />
-            </InsertParameters>
-            <SelectParameters>
-                <asp:ControlParameter ControlID="gvAddress" Name="userName" 
-                    PropertyName="SelectedValue" Type="String" />
-                <asp:ControlParameter ControlID="gvAddress" Name="nickname" 
-                    PropertyName="SelectedValue" Type="String" />
-            </SelectParameters>
-            <UpdateParameters>
-                <asp:Parameter Name="buildingAddress" Type="String" />
-                <asp:Parameter Name="streetAddress" Type="String" />
-                <asp:Parameter Name="district" Type="String" />
-                <asp:Parameter Name="userName" Type="String" />
-                <asp:Parameter Name="nickname" Type="String" />
-            </UpdateParameters>
-        </asp:SqlDataSource>
+        
     </p>
     <p>
     </p>
