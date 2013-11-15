@@ -17,6 +17,7 @@ public class GenericQuery
 		//
 	}
 
+    #region DBOrderItem
     public static void RemoveFromDBOrderItem(string connectionString, string UPC, int OrderNum)
     {
         //query
@@ -30,26 +31,6 @@ public class GenericQuery
             // Execute the SELECT query and place the result in a DataReader.
             command.ExecuteReader();
             // Check if a result was returned.
-            command.Connection.Close();
-        }
-    }
-
-    public static void UpdateDBItem(string connectionString, string UPC, int releaseQuantity)
-    {
-        // Define the UPDATE query with parameters.
-        string query = "UPDATE [Item] SET quantityAvailable = quantityAvailable + @Quantity " +
-                       "WHERE [upc]=@UPC";
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@Quantity", releaseQuantity);
-            command.Parameters.AddWithValue("@UPC", UPC);
-            // Open the connection, execute the UPDATE query and close the connection.
-            command.Connection.Open();
-            command.ExecuteNonQuery();
             command.Connection.Close();
         }
     }
@@ -211,8 +192,28 @@ public class GenericQuery
         }
 
     }
-   
+    #endregion
 
+    #region DBItem
+    public static void UpdateDBItem(string connectionString, string UPC, int releaseQuantity)
+    {
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Item] SET quantityAvailable = quantityAvailable + @Quantity " +
+                       "WHERE [upc]=@UPC";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@Quantity", releaseQuantity);
+            command.Parameters.AddWithValue("@UPC", UPC);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+    }
 
     // query on the database, check the stock
     public static bool CheckItemStock(string connectionString, CartItem item, int Comparision)
@@ -243,6 +244,9 @@ public class GenericQuery
         return false;
     }
 
+    #endregion
+
+    #region DBMember
     public static void UpdateLastSeenTime(string connectionString, string UserName)
     {
         // Define the UPDATE query with parameters.
@@ -302,5 +306,6 @@ public class GenericQuery
 
         return;
     }
+    #endregion
 
 }
