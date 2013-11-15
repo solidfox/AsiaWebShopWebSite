@@ -22,14 +22,13 @@
                 </asp:TemplateField>
                 <asp:BoundField DataField="name" HeaderText="Item Name" />
                 <asp:TemplateField HeaderText="Quantity">
-                    <EditItemTemplate>
-                        <asp:TextBox ID="TextBox2" runat="server" MaxLength="4"></asp:TextBox>
-                    </EditItemTemplate>
                     <FooterTemplate>
                         Total:<asp:Label ID="lblTotal" runat="server" Text="<%# GetTotalPrice() %>"></asp:Label>
                     </FooterTemplate>
                     <ItemTemplate>
                         <asp:TextBox ID="txtQuantity" runat="server" Columns="5" MaxLength="5" Text='<%# Eval("Quantity") %>' Wrap="False"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="failureNotification" Display="Dynamic" EnableClientScript="True" ErrorMessage="Quantity is required.">*</asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="failureNotification" Display="Dynamic" EnableClientScript="True" ErrorMessage="Quantity must be an integer value." ValidationExpression="\d{1,4}">*</asp:RegularExpressionValidator>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="discountPrice" DataFormatString="{0:F2}" HeaderText="Discount Price" />
@@ -51,6 +50,9 @@
             <SortedDescendingCellStyle BackColor="#E9EBEF" />
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
+    </p>
+    <asp:ValidationSummary ID="ValidationSummary2" runat="server" CssClass="failureNotification" HeaderText="The following errors occured:" />
+    <p>
     </p>
     <p>
         <asp:Label ID="InformUser" runat="server" Font-Size="Medium" ForeColor="#CC0000" Text="Have Fun !!"></asp:Label>
