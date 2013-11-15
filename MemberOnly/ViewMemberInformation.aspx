@@ -14,7 +14,7 @@
         Your account</h2>
     <a href="EditMemberInformation.aspx">Edit my information</a><br />
     <a href="../Account/ChangePassword.aspx">Change password</a><br />
-    <a href="ManageDeliveryAddress/ManageDeliveryAddressList.aspx">Manage delivery address List</a><br />
+    <a href="ManageDeliveryAddress/ManageAddressList.aspx">Manage delivery address List</a><br />
     <a href="../Account/ChangePassword.aspx">Manage credit card List</a><br />
 &nbsp;<h3>Member Information</h3>
     <table>
