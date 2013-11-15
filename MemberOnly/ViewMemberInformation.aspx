@@ -3,10 +3,6 @@
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
     <style type="text/css">
-        .style1
-        {
-            width: 100%;
-        }
         .style4
         {
             height: 34px;
@@ -16,10 +12,11 @@
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
         Your account</h2>
-    <a href="EditMemberInformation.aspx">Edit my information</a>
-    <br />
-    <a href="../Account/ChangePassword.aspx">Change password</a>
-    <h3>Member Information</h3>
+    <a href="EditMemberInformation.aspx">Edit my information</a><br />
+    <a href="../Account/ChangePassword.aspx">Change password</a><br />
+    <a href="ManageDeliveryAddress/ManageDeliveryAddressList.aspx">Manage delivery address List</a><br />
+    <a href="../Account/ChangePassword.aspx">Manage credit card List</a><br />
+&nbsp;<h3>Member Information</h3>
     <table>
         <tr>
             <td>
