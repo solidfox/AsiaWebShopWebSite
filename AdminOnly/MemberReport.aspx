@@ -1,19 +1,27 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/AsiaWebShopAdmin.master" AutoEventWireup="true" CodeFile="MemberReport.aspx.cs" Inherits="AdminOnly_MemberReport" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" Runat="Server">
+    <style type="text/css">
+        .style4
+        {
+            color: #000000;
+            font-size: medium;
+        }
+    </style>
     </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
     <p>
         <strong style="font-size: large; color: #000080;">MEMBER&nbsp; REPORT</strong></p>
-    <p>
-        Input a username. If no username that search all member.</p>
+    <p class="style4">
+        <strong>No username, search all members.</strong></p>
 <p>
         Member&#39;s UserName :<asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         <asp:CustomValidator ID="MemberCustomValidator" runat="server" 
             Display="Dynamic" ErrorMessage="Please enter existed username." ForeColor="Red" 
             onservervalidate="MemberCustomValidator_ServerValidate"></asp:CustomValidator>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <asp:CheckBox ID="cbGroupByDistrict" runat="server" Text="Group By District" 
+                <asp:CheckBox ID="cbGroupByDistrict" runat="server" 
+            Text="Group By District" oncheckedchanged="btnGenerate_Click" 
              />
     </p>
 <p>
@@ -37,7 +45,12 @@
                         <asp:Label ID="DistrictLabel" runat="server" Text='<%# Eval("district") %>'></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="userName" SortExpression="userName">
+                <asp:BoundField DataField="lastName" HeaderText="LastName" 
+                    SortExpression="lastName" />
+                <asp:BoundField DataField="firstName" HeaderText="FirstName" 
+                    SortExpression="firstName" />
+                <asp:TemplateField HeaderText="userName" SortExpression="userName" 
+                    Visible="False">
                     <EditItemTemplate>
                         <asp:Label ID="Label1" runat="server" Text='<%# Eval("userName") %>'></asp:Label>
                     </EditItemTemplate>
@@ -49,14 +62,13 @@
                     <ItemTemplate>
                         <asp:GridView ID="GridView4" runat="server" AutoGenerateColumns="False" 
                             CellPadding="4" DataSourceID="MemberSqlDataSource" ForeColor="#333333" 
-                            GridLines="None">
+                            DataKeyNames="userName">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
-                                <asp:BoundField DataField="email" HeaderText="email" SortExpression="email" />
-                                <asp:BoundField DataField="firstName" HeaderText="firstName" 
-                                    SortExpression="firstName" />
-                                <asp:BoundField DataField="lastName" HeaderText="lastName" 
-                                    SortExpression="lastName" />
+                                <asp:BoundField DataField="userName" HeaderText="userName" 
+                                    SortExpression="userName" ReadOnly="True" />
+                                <asp:BoundField DataField="email" HeaderText="email" 
+                                    SortExpression="email" />
                                 <asp:BoundField DataField="phoneNumber" HeaderText="phoneNumber" 
                                     SortExpression="phoneNumber" />
                                 <asp:BoundField DataField="renewalDate" HeaderText="renewalDate" 
@@ -74,8 +86,7 @@
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
                         <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" 
-                            CellPadding="4" DataSourceID="AddressSqlDataSource" ForeColor="#333333" 
-                            GridLines="None">
+                            CellPadding="4" DataSourceID="AddressSqlDataSource" ForeColor="#333333">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
                                 <asp:BoundField DataField="nickname" HeaderText="nickname" 
@@ -99,8 +110,7 @@
                             <SortedDescendingHeaderStyle BackColor="#4870BE" />
                         </asp:GridView>
                         <asp:GridView ID="GridView3" runat="server" AutoGenerateColumns="False" 
-                            CellPadding="4" DataSourceID="CreditCardSqlDataSource" ForeColor="#333333" 
-                            GridLines="None">
+                            CellPadding="4" DataSourceID="CreditCardSqlDataSource" ForeColor="#333333">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
                                 <asp:BoundField DataField="number" HeaderText="number" 
@@ -142,7 +152,8 @@
                         </asp:SqlDataSource>
                         <asp:SqlDataSource ID="MemberSqlDataSource" runat="server" 
                             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-                            SelectCommand="SELECT [email], [firstName], [lastName], [phoneNumber], [renewalDate] FROM [Member] WHERE ([userName] = @userName)">
+                            
+                            SelectCommand="SELECT userName, email, phoneNumber, renewalDate FROM Member WHERE (userName = @userName)">
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="userNameLabel" Name="userName" 
                                     PropertyName="Text" Type="String" />
@@ -167,7 +178,7 @@
         
         
             
-            SelectCommand="SELECT Member.userName,Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') ORDER BY LastName" 
+            SelectCommand="SELECT Member.userName, Member.lastName, Member.firstName, Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') ORDER BY Member.lastName" 
            >
         </asp:SqlDataSource>
       

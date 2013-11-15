@@ -45,7 +45,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
-        string SQLCmd = "SELECT Member.userName, Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing')";
+        string SQLCmd = "SELECT Member.userName, Member.lastName, Member.firstName, Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') ";
         string labelmessage = " Member information " ;
         if (UserName.Text.Trim() != "")
         {
@@ -54,7 +54,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         }
         else
         {
-            labelmessage = labelmessage + "All Members ";
+            labelmessage = labelmessage + ": All Members ";
             if (cbGroupByDistrict.Checked)
             {
                 MemberSqlDataSource.SelectCommand = SQLCmd + " ORDER BY Address.district,LastName  ";
@@ -63,7 +63,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
             }
             else
             {
-                MemberSqlDataSource.SelectCommand = SQLCmd + " ORDER BY LastName ";
+                MemberSqlDataSource.SelectCommand = SQLCmd + " ORDER BY Member.lastName ";
                 MemberReportGridView.Columns[0].Visible = false;
             }
 

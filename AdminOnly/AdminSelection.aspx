@@ -28,7 +28,7 @@
     </p>
     <p>
         <asp:HyperLink ID="AdminLink2" runat="server" 
-            NavigateUrl="~/AdminOnly/MemberReport.aspx">Generate Total Purchase Report</asp:HyperLink>
+            NavigateUrl="~/AdminOnly/TotalAmountReport.aspx">Generate Total Purchase Report</asp:HyperLink>
     </p>
     <p>
         <asp:HyperLink ID="AdminLink3" runat="server" 
