@@ -82,6 +82,7 @@
                                         ControlToValidate="Email" Display="Dynamic" EnableClientScript="False" 
                                         ErrorMessage="Email Address is required." ForeColor="Red" 
                                         ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="Email" CssClass="footer" Display="Dynamic" EnableClientScript="False" ErrorMessage="Please input valid Email address" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" ValidationGroup="RegisterUserValidationGroup">*</asp:RegularExpressionValidator>
                                 </td>
                             </tr>
                             <tr>
@@ -296,6 +297,8 @@
                             <p class="submitButton">
                                 <asp:Button ID="CreateUserButton" runat="server" CommandName="MoveNext" 
                                     Text="Create User" ValidationGroup="RegisterUserValidationGroup" />
+                            </p>
+                            <p>
                             </p>
                             <p>
                             </p>

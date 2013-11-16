@@ -28,7 +28,7 @@
                     <ItemTemplate>
                         <asp:TextBox ID="txtQuantity" runat="server" Columns="5" MaxLength="5" Text='<%# Eval("Quantity") %>' Wrap="False"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="failureNotification" Display="Dynamic" EnableClientScript="True" ErrorMessage="Quantity is required.">*</asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="failureNotification" Display="Dynamic" EnableClientScript="True" ErrorMessage="Quantity must be an integer value." ValidationExpression="\d{1,4}">*</asp:RegularExpressionValidator>
+                        <asp:RegularExpressionValidator ID="revQuantity" runat="server" ControlToValidate="txtQuantity" CssClass="failureNotification" Display="Dynamic" EnableClientScript="True" ErrorMessage="Quantity must be an integer value." ValidationExpression="\d+">*</asp:RegularExpressionValidator>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:BoundField DataField="discountPrice" DataFormatString="{0:F2}" HeaderText="Discount Price" />
