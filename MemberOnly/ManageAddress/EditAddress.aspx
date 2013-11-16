@@ -37,7 +37,7 @@
         </asp:GridView>
     </p>
     <asp:DetailsView ID="dvAddress" runat="server" AutoGenerateRows="False" 
-        CellPadding="4" DataKeyNames="userName,nickname" DataSourceID="DeliveryAddress" 
+        CellPadding="4" DataKeyNames="userName,nickname" DataSourceID="SelectedDeliveryAddress" 
         ForeColor="#333333" GridLines="None" Height="50px" Width="125px">
         <AlternatingRowStyle BackColor="White" />
         <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
@@ -65,8 +65,45 @@
     <p>
         <asp:SqlDataSource ID="DeliveryAddressList" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT * FROM [Address]"></asp:SqlDataSource>
+            SelectCommand="SELECT * FROM [Address] WHERE ([userName] = @userName)">
+            <SelectParameters>
+                <asp:Parameter Name="userName" Type="String" />
+            </SelectParameters>
+        </asp:SqlDataSource>
     </p>
+        <asp:SqlDataSource ID="SelectedDeliveryAddress" runat="server" 
+            ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
+            SelectCommand="SELECT userName, nickname, buildingAddress, streetAddress, district FROM Address WHERE (userName = @userName) AND (nickname = @nickname)" 
+        DeleteCommand="DELETE FROM [Address] WHERE [userName] = @userName AND [nickname] = @nickname" 
+        InsertCommand="INSERT INTO [Address] ([userName], [nickname], [buildingAddress], [streetAddress], [district]) VALUES (@userName, @nickname, @buildingAddress, @streetAddress, @district)" 
+        
+        UpdateCommand="UPDATE [Address] SET [buildingAddress] = @buildingAddress, [streetAddress] = @streetAddress, [district] = @district WHERE [userName] = @userName AND [nickname] = @nickname">
+            <DeleteParameters>
+                <asp:Parameter Name="userName" Type="String" />
+                <asp:Parameter Name="nickname" Type="String" />
+            </DeleteParameters>
+            <InsertParameters>
+                <asp:Parameter Name="userName" Type="String" />
+                <asp:Parameter Name="nickname" Type="String" />
+                <asp:Parameter Name="buildingAddress" Type="String" />
+                <asp:Parameter Name="streetAddress" Type="String" />
+                <asp:Parameter Name="district" Type="String" />
+            </InsertParameters>
+            <SelectParameters>
+                <asp:ControlParameter ControlID="gvAddress" Name="userName" 
+                    PropertyName="SelectedDataKey.Values[0]" Type="String" />
+                <asp:ControlParameter ControlID="gvAddress" Name="nickname" 
+                    PropertyName="SelectedDataKey.Values[1]" Type="String" />
+       
+            </SelectParameters>
+            <UpdateParameters>
+                <asp:Parameter Name="buildingAddress" Type="String" />
+                <asp:Parameter Name="streetAddress" Type="String" />
+                <asp:Parameter Name="district" Type="String" />
+                <asp:Parameter Name="userName" Type="String" />
+                <asp:Parameter Name="nickname" Type="String" />
+            </UpdateParameters>
+    </asp:SqlDataSource>
     <p>
         
     </p>

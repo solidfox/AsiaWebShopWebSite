@@ -37,7 +37,7 @@
     <br />
     <asp:SqlDataSource ID="sqlAddressList" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="">
+        SelectCommand="SELECT * FROM [Address]">
     </asp:SqlDataSource>
     <br />
 

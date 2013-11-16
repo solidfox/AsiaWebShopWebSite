@@ -13,7 +13,7 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        DeliveryAddressList.SelectParameters["userName"].DefaultValue = User.Identity.Name;
     }
     protected void dvItem_ItemDeleted(object sender, EventArgs e)
     {
@@ -29,6 +29,7 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
     {
         gvAddress.DataBind();
     }
+
 
 
 }

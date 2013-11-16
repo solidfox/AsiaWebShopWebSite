@@ -13,8 +13,8 @@ public partial class MemberOnly_AllPurchase : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        ReviewedItemDataSource.SelectParameters["username"].DefaultValue = User.Identity.Name;
-        UniquePurchaseDataSource.SelectParameters["username"].DefaultValue = User.Identity.Name;
+        ReviewedItemDataSource.SelectParameters["userName"].DefaultValue = User.Identity.Name;
+        UniquePurchaseDataSource.SelectParameters["userName"].DefaultValue = User.Identity.Name;
     }
 
 
