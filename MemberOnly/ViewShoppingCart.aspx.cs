@@ -29,7 +29,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
             // Get the upc and the quantity of the item.
             string upc = ((Label)gvShoppingCart.Rows[i].FindControl("lblUPC")).Text;
             TextBox txtQuantity = (TextBox)gvShoppingCart.Rows[i].Cells[2].FindControl("txtQuantity");
-            int quantity = Convert.ToInt16(txtQuantity.Text);
+            int quantity = Convert.ToInt32(txtQuantity.Text);
 
             // Update the items in the shopping cart.
             if (upc != "")
