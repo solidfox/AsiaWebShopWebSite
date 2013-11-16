@@ -23,7 +23,7 @@ public partial class AddToCart : System.Web.UI.Page
         string upc = Request.QueryString["upc"].Trim();
         string name = Request.QueryString["name"].Trim();
         decimal discountPrice = Convert.ToDecimal(Request.QueryString["discountPrice"].Trim());
-
+        decimal amountSavedForOne = Convert.ToDecimal(Request.QueryString["normalPrice"].Trim());
         // Add the item to the shopping cart with default quantity = 1.
         if (upc != "")
         {
@@ -32,7 +32,7 @@ public partial class AddToCart : System.Web.UI.Page
             if (GenericQuery.CheckItemStock(connectionString, temp, 0))
             {
                 cart.AddItem(upc, name, discountPrice, 1, false);
-                GenericQuery.InsertToShoppingCart(connectionString, 1, OrderNum, upc, name, discountPrice);
+                GenericQuery.InsertToShoppingCart(connectionString, 1, OrderNum, upc, name, discountPrice, amountSavedForOne);
             }
             ///TODO: Add the item to the shopping cart in the database.
             // Save the shopping cart in the Session variable "MyShoppingCart".
