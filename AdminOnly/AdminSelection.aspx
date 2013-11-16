@@ -32,7 +32,7 @@
     </p>
     <p>
         <asp:HyperLink ID="AdminLink3" runat="server" 
-            NavigateUrl="~/AdminOnly/MemberReport.aspx">Generate Member Purchase Report</asp:HyperLink>
+            NavigateUrl="~/AdminOnly/PurchaseReport.aspx">Generate Member Purchase Report</asp:HyperLink>
     </p>
     <p>
         &nbsp;</p>

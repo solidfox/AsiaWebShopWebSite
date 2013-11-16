@@ -15,6 +15,10 @@
         {
             width: 148px;
         }
+        .style7
+        {
+            color: #FF0000;
+        }
         </style>
     </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" Runat="Server">
@@ -23,7 +27,9 @@
     <p>
         <strong style="color: #FF0000">No username, search all members.</strong></p>
     <p class="style7">
-        Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year</p>
+        <asp:Label ID="Label1" runat="server" 
+            Text="Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" Visible="False"></asp:Label>
+    </p>
 
     
                 <table class="style4">
@@ -48,13 +54,13 @@
                             Date Range:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                             From</td>
                         <td class="style5">
-                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
     <asp:Button ID="StartCalendarButton" runat="server" onclick="StartCalendarButton_Click" Text=".." />
                         </td>
                         <td>
                             To</td>
                         <td>
-                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
     <asp:Button ID="EndCalendarButton" runat="server" onclick="EndCalendarButton_Click" Text=".." />
                         </td>
                         <td>
@@ -81,7 +87,12 @@
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate" 
                     onclick="btnGenerate_Click" />
                 <asp:DataList ID="DataList1" runat="server" DataKeyField="orderNum" 
-                    DataSourceID="MemberSqlDataSource">
+                    DataSourceID="MemberSqlDataSource" CellPadding="4" 
+        ForeColor="#333333" GridLines="Both">
+                    <AlternatingItemStyle BackColor="White" />
+                    <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
+                    <HeaderStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
+                    <ItemStyle BackColor="#E3EAEB" />
                     <ItemTemplate>
                         firstName:
                         <asp:Label ID="firstNameLabel" runat="server" Text='<%# Eval("firstName") %>' />
@@ -99,6 +110,8 @@
                         &nbsp;deliveryDistrict:
                         <asp:Label ID="deliveryDistrictLabel" runat="server" 
                             Text='<%# Eval("deliveryDistrict") %>' />
+                        <asp:Label ID="orderNumLabel" runat="server" Text='<%# Eval("orderNum") %>' 
+                            Visible="False" />
                         <br />
                         creditCardNumber:
                         <asp:Label ID="creditCardNumberLabel" runat="server" 
@@ -109,16 +122,14 @@
                         &nbsp;confirmationNumber:
                         <asp:Label ID="confirmationNumberLabel" runat="server" 
                             Text='<%# Eval("confirmationNumber") %>' />
-                        <br />
-                        <asp:Label ID="orderNumLabel" runat="server" Text='<%# Eval("orderNum") %>' 
-                            Visible="False" />
-                        <br />
                         <asp:GridView ID="TotalAmountGridView" runat="server" 
                             AutoGenerateColumns="False" CellPadding="4" 
                             DataSourceID="OrderItemSqlDataSource" ForeColor="#333333" 
                             style="margin-right: 11px">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
+                                <asp:BoundField DataField="category" HeaderText="category" 
+                                    SortExpression="category" />
                                 <asp:BoundField DataField="name" HeaderText="name" 
                                     SortExpression="name" />
                                 <asp:BoundField DataField="quantity" HeaderText="quantity" 
@@ -126,7 +137,7 @@
                                 <asp:BoundField DataField="TotalPurchasePrice" HeaderText="TotalPurchasePrice" 
                                     SortExpression="TotalPurchasePrice" ReadOnly="True" />
                                 <asp:BoundField DataField="TotalAmountSaved" HeaderText="TotalAmountSaved" 
-                                    SortExpression="TotalAmountSaved" ReadOnly="True" />
+                                    ReadOnly="True" SortExpression="TotalAmountSaved" />
                             </Columns>
                             <EditRowStyle BackColor="#2461BF" />
                             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -142,15 +153,17 @@
                         <asp:SqlDataSource ID="OrderItemSqlDataSource" runat="server" 
                             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
                             
-                            SelectCommand="SELECT Item.category, Item.name, OrderItem.quantity, OrderItem.quantity * OrderItem.PriceWhenAdded AS TotalPurchasePrice, OrderItem.quantity * OrderItem.amountSavedForOne AS TotalAmountSaved FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc ORDER BY Item.category, Item.name Where orderNum =@orderNum">
+                            
+                            SelectCommand="SELECT Item.category, Item.name, OrderItem.quantity, OrderItem.quantity * OrderItem.PriceWhenAdded AS TotalPurchasePrice, OrderItem.quantity * OrderItem.amountSavedForOne AS TotalAmountSaved FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = @orderNum) ORDER BY Item.category, Item.name">
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="orderNumLabel" Name="orderNum" 
                                     PropertyName="Text" />
                             </SelectParameters>
                         </asp:SqlDataSource>
                     </ItemTemplate>
+                    <SelectedItemStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
                 </asp:DataList>
-    </p>
+    
     <p>
       
         <asp:SqlDataSource ID="MemberSqlDataSource" runat="server" 
@@ -163,6 +176,10 @@
            >
         </asp:SqlDataSource>
       
+    </p>
+    <p>
+      
+        <br />
     </p>
     <p>
       

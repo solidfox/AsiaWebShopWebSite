@@ -95,7 +95,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
 
         string SQLCmd = " SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].confirmationNumber, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)"
-                        + userNameQuery;
+                        + userNameQuery+ dateRangQuery;
          
         MemberSqlDataSource.SelectCommand = SQLCmd;
         DataList1.DataBind();
@@ -103,36 +103,14 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     }
 
-
-
-
-
-    public static void MergeRows(GridView gridView)
+    protected void ClearRangeButton_Click(object sender, EventArgs e)
     {
-        for (int rowIndex = gridView.Rows.Count - 2; rowIndex >= 0; rowIndex--)
-        {
-            GridViewRow row = gridView.Rows[rowIndex];
-            GridViewRow previousRow = gridView.Rows[rowIndex + 1];
-
-            string rowString = ((Label)row.FindControl("DistrictLabel")).Text;
-            string previousRowString = ((Label)previousRow.FindControl("DistrictLabel")).Text;
-
-            if (rowString == previousRowString)
-            {
-                row.Cells[0].RowSpan = previousRow.Cells[0].RowSpan < 2 ? 2 :
-                                       previousRow.Cells[0].RowSpan + 1;
-                previousRow.Cells[0].Visible = false;
-            }
-
-
-
-        }
-    }
-
-    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
+        StartDayTextBox.Text = null;
+        EndDayTextBox.Text = null;
+        StartCalendar.SelectedDates.Clear();
+        EndCalendar.SelectedDates.Clear();
         StartCalendar.Visible = false;
+        EndCalendar.Visible = false;
     }
 
 
@@ -140,13 +118,13 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
     {
         EndDayTextBox.Text = EndCalendar.SelectedDate.ToShortDateString();
         EndCalendar.Visible = false;
+        EndCalendar.SelectedDates.Clear();
     }
-    protected void ClearRangeButton_Click(object sender, EventArgs e)
+    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
     {
-        StartDayTextBox.Text = null;
-        EndDayTextBox.Text = null;
+        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
+        StartCalendar.Visible = false;
+        StartCalendar.SelectedDates.Clear();
     }
-
-
 }
 

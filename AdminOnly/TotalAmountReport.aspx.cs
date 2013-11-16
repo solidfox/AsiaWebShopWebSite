@@ -153,23 +153,29 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         }
     }
 
-    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
-        StartCalendar.Visible = false;
-    }
-
-
-    protected void EndCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        EndDayTextBox.Text = EndCalendar.SelectedDate.ToShortDateString();
-        EndCalendar.Visible = false;
-    }
     protected void ClearRangeButton_Click(object sender, EventArgs e)
     {
         StartDayTextBox.Text = null;
         EndDayTextBox.Text = null;
+        StartCalendar.SelectedDates.Clear();
+        EndCalendar.SelectedDates.Clear();
+        StartCalendar.Visible = false;
+        EndCalendar.Visible = false;
     }
+    protected void EndCalendar_SelectionChanged(object sender, EventArgs e)
+    {
+        EndDayTextBox.Text = EndCalendar.SelectedDate.ToShortDateString();
+        EndCalendar.Visible = false;
+        EndCalendar.SelectedDates.Clear();
+    }
+    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
+    {
+        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
+        StartCalendar.Visible = false;
+        StartCalendar.SelectedDates.Clear();
+    }
+
+
 
 
 }
