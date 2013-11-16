@@ -8,8 +8,7 @@
         Confirm order details</h2>
     <asp:DetailsView ID="orderDetailsView" runat="server" Height="50px" Width="461px" 
         AutoGenerateRows="False" DataKeyNames="orderNum" 
-        DataSourceID="orderDataSource" 
-        onpageindexchanging="orderDetailsView_PageIndexChanging">
+        DataSourceID="orderDataSource">
         <Fields>
             <asp:BoundField DataField="orderNum" HeaderText="orderNum" 
                 InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
@@ -51,7 +50,7 @@
     </asp:SqlDataSource>
     <br />
     <asp:ListView ID="orderItemsView" runat="server" 
-        DataSourceID="orderItemsDataSource">
+        DataSourceID="orderItemsDataSource" >
         <AlternatingItemTemplate>
             <tr style="">
                 <td>
@@ -87,10 +86,8 @@
             </tr>
         </ItemTemplate>
         <LayoutTemplate>
-            <table runat="server">
-                <tr runat="server">
-                    <td runat="server">
                         <table ID="itemPlaceholderContainer" runat="server" border="0" style="">
+                        <tbody>
                             <tr runat="server" style="">
                                 <th runat="server">
                                     Item</th>
@@ -101,14 +98,14 @@
                             </tr>
                             <tr ID="itemPlaceholder" runat="server">
                             </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2">Total</td>
+                                <td><%:total()%></td>
+                            </tr>
+                        </tfoot>
                         </table>
-                    </td>
-                </tr>
-                <tr runat="server">
-                    <td runat="server" style="">
-                    </td>
-                </tr>
-            </table>
         </LayoutTemplate>
         <SelectedItemTemplate>
             <tr style="">
