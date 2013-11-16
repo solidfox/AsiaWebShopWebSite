@@ -27,7 +27,9 @@
     <p>
         <strong style="color: #FF0000">No username, search all members.</strong></p>
     <p class="style7">
-        Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year</p>
+        <asp:Label ID="Label1" runat="server" 
+            Text="Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" Visible="False"></asp:Label>
+    </p>
 <p>
     
                 <table class="style4">
@@ -59,13 +61,13 @@
                             Date Range:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                             From</td>
                         <td class="style5">
-                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
     <asp:Button ID="StartCalendarButton" runat="server" onclick="StartCalendarButton_Click" Text=".." />
                         </td>
                         <td>
                             To</td>
                         <td>
-                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
     <asp:Button ID="EndCalendarButton" runat="server" onclick="EndCalendarButton_Click" Text=".." />
                         </td>
                         <td>
@@ -92,6 +94,9 @@
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate" 
                     onclick="btnGenerate_Click" />
     </p>
+    <p>
+    
+                &nbsp;</p>
     <p>
       
         <asp:GridView ID="TotalAmountGridView" runat="server" 

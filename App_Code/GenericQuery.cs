@@ -164,7 +164,7 @@ public class GenericQuery
         }
     }
 
-    public static void InsertToShoppingCart(string connectionString, int Quantity, int OrderNum, string upc, string name, decimal discountPrice)
+    public static void InsertToShoppingCart(string connectionString, int Quantity, int OrderNum, string upc, string name, decimal discountPrice, decimal amountSavedForOne)
     {
 
         if (GenericQuery.CheckItemDulplicate(connectionString, OrderNum, upc))
@@ -172,8 +172,8 @@ public class GenericQuery
             return;
         }
 
-        string query = "INSERT INTO [OrderItem] ([orderNum], [upc], [quantity], [PriceWhenAdded], [removed])" +
-                       "VALUES (@OrderNumber, @UPC, @Quantity, @Price, @removed)";
+        string query = "INSERT INTO [OrderItem] ([orderNum], [upc], [quantity], [PriceWhenAdded], [amountSavedForOne], [removed])" +
+                       "VALUES (@OrderNumber, @UPC, @Quantity, @Price, @amountSaved, @removed)";
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -184,6 +184,7 @@ public class GenericQuery
             command.Parameters.AddWithValue("@UPC", upc);
             command.Parameters.AddWithValue("@Quantity", Quantity);
             command.Parameters.AddWithValue("@Price", discountPrice);
+            command.Parameters.AddWithValue("@amountSaved", amountSavedForOne);
             command.Parameters.AddWithValue("@removed", 0);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();

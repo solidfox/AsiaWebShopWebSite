@@ -22,31 +22,31 @@
             <td>
                 User Name:</td>
             <td>
-                <asp:Label ID="UserName" runat="server" MaxLength="10"></asp:Label>
+                <asp:Label ID="UserName" runat="server"></asp:Label>
             </td>
             <td>
                 Email Address:</td>
             <td>
-                <asp:Label ID="Email" runat="server" MaxLength="30"></asp:Label>
+                <asp:Label ID="Email" runat="server"></asp:Label>
             </td>
         </tr>
         <tr>
             <td class="style4">
                 First Name</td>
             <td class="style4">
-                <asp:Label ID="FirstName" runat="server" MaxLength="20"></asp:Label>
+                <asp:Label ID="FirstName" runat="server"></asp:Label>
             </td>
             <td class="style4">
                 Last Name:</td>
             <td class="style4">
-                <asp:Label ID="LastName" runat="server" MaxLength="30"></asp:Label>
+                <asp:Label ID="LastName" runat="server"></asp:Label>
             </td>
         </tr>
         <tr>
             <td>
                 Phone Number:</td>
             <td>
-                <asp:Label ID="PhoneNumber" runat="server" MaxLength="8"></asp:Label>
+                <asp:Label ID="PhoneNumber" runat="server"></asp:Label>
             </td>
             <td>
                 </td>
@@ -64,7 +64,7 @@
             <td>
                 Street:</td>
             <td>
-                <asp:Label ID="Street" runat="server" MaxLength="30"></asp:Label>
+                <asp:Label ID="Street" runat="server"></asp:Label>
             </td>
             <td>
                 District</td>
@@ -87,7 +87,7 @@
             <td>
                 Cardholder Name:</td>
             <td>
-                <asp:Label ID="CardHolderName" runat="server" MaxLength="50"></asp:Label>
+                <asp:Label ID="CardHolderName" runat="server"></asp:Label>
             </td>
             <td>
                 Card Type:</td>
@@ -100,7 +100,7 @@
             <td>
                 Card Number:</td>
             <td style="margin-left: 40px">
-                <asp:Label ID="CardNumber" runat="server" MaxLength="16"></asp:Label>
+                <asp:Label ID="CardNumber" runat="server"></asp:Label>
 &nbsp;</td>
             <td>
                 Expiry Date:</td>
