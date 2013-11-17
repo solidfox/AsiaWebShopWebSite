@@ -17,11 +17,7 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
 
     protected void orderDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
     {
-
         e.Command.Parameters[0].Value = User.Identity.Name;
-
-        //Label1.Text = Membership.GetUser().ProviderUserKey.ToString()
-
     }
     protected void orderItemsDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
     {
@@ -35,16 +31,11 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
                         "FROM   OrderItem INNER JOIN [Order] ON OrderItem.orderNum = [Order].orderNum " +
                         "WHERE  ([Order].userName = '" + userName + "') AND ([Order].confirmationNumber IS NULL) ";
 
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            String total = command.ExecuteScalar().ToString();
-            // Close the connection and the DataReader.
-            command.Connection.Close();
-            return total;
-        }
+        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString);
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Connection.Open();
+        String total = command.ExecuteScalar().ToString();
+        command.Connection.Close();
+        return total;
     }
 }
