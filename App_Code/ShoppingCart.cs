@@ -282,6 +282,9 @@ public class ShoppingCart
         }
     }
 
+    /*
+     * 
+     */
     public string checkOut()
     {
         String authenticationCode = CreditCardAuthorization.chargeCard(this.getCreditCard(), this.GetCartTotal());
@@ -290,9 +293,7 @@ public class ShoppingCart
             return null;
         }
         String confirmationString = this.generateConfirmationNumber();
-
-        //TODO store the authentication code.
-        string query = "UPDATE [Order] SET [confirmationNumber] = '" + confirmationString + "' WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
+        string query = "UPDATE [Order] SET [confirmationNumber] = '" + confirmationString + "', code = '" + authenticationCode + "' WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
