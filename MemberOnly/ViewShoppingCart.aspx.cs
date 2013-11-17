@@ -90,4 +90,16 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         return (cart.GetCartTotal());
     }
 
+    protected void btnSubmitCart_Click(object sender, EventArgs e)
+    {
+        if (ShoppingCart.GetShoppingCart(userName).Items.Count != 0)
+        {
+            InformUser.Text = "Have Fun !!";
+            Response.Redirect("~/MemberOnly/DeliveryAndPayment.aspx");
+        }
+        else
+        {
+            InformUser.Text = "Cannot submit an empty Shopping Cart.";
+        }
+    }
 }

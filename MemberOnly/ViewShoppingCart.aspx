@@ -59,7 +59,7 @@
     </p>
     <p>
         <asp:Button ID="btnUpdateCart" runat="server" OnClick="btnUpdateCart_Click" Text="Update Cart" />
-    &nbsp;<asp:Button ID="btnSubmitCart" runat="server" Text="Submit Cart" />
+    &nbsp;<asp:Button ID="btnSubmitCart" runat="server" Text="Submit Cart" OnClick="btnSubmitCart_Click" />
     </p>
     </asp:Content>
 
