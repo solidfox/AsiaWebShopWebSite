@@ -128,9 +128,48 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         SelectTime.Items.Add(new ListItem("18:00-21:00", "4"));
 
     }
+    protected void cvDeliveryDate_ServerValidate1(object source, ServerValidateEventArgs args)
+    {
+        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
+        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
 
+        int currentHour = GetCurrentHourID();
+
+        if (selectedDate == 1 && currentHour > selectedTime)
+        {
+            args.IsValid = false;
+        }
+    }
+    protected void cvDeliveryDate_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
+        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
+
+        int currentHour = GetCurrentHourID();
+
+        if (selectedDate == 1 && currentHour > selectedTime)
+        {
+            args.IsValid = false;
+        }
+    }
+    protected int GetCurrentHourID()
+    {
+        int hour = DateTime.Now.Hour;
+        int hourID = 0;
+        if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
+        else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
+        else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
+        else { hourID = 4; }//Time Slot 4
+        return hourID;
+    }
     protected void btnSubmit_Click(object sender, EventArgs e)
     {
+        //for invlaid input, stay at this page
+        if (!Page.IsValid)
+        {
+            return;
+        }
+        
         //DB connection
         string connectionString = "AsiaWebShopDBConnectionString";
         
@@ -139,11 +178,16 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         string selectedAddress = SelectAddress.SelectedValue;
         string selectedDate = SelectDate.SelectedValue; 
         string selectedTime = SelectTime.SelectedValue;
+        string selectedCard = SelectCreditCard.SelectedValue;
         int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
 
         //Update DB
         InsertDeliveryAddress(connectionString, userName, selectedAddress);
-        UpdateDeliveryTime(connectionString, orderNum, selectedDate, selectedTime);        
+        UpdateDeliveryTime(connectionString, orderNum, selectedDate, selectedTime);
+        InsertMemberCard(connectionString, userName, selectedCard);
+        
+        //Go to the confirmation page
+        Response.Redirect("ConfirmOrder.aspx");
 
     }
     private void InsertDeliveryAddress(string connectionString, string userName, string address)
@@ -231,39 +275,60 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Connection.Close();
         }
     }
-
-    protected void cvDeliveryDate_ServerValidate1(object source, ServerValidateEventArgs args)
+    private void InsertMemberCard(string connectionString, string userName, string number)
     {
-        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
-        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
+        //Define the query to get the address of member
+        string GETquery = "SELECT [type] FROM [CreditCard] WHERE ([username] =N'" + userName + "' AND [number] =N'" + number + "')";
 
-        int currentHour = GetCurrentHourID();
+        //Define the string storing the cardtype temporarily
+        string cardType = null;
 
-        if (selectedDate == 1 && currentHour > selectedTime)
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(GETquery, connection))
         {
-            args.IsValid = false;
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.   
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the temp strings.
+                    cardType = reader["type"].ToString().Trim();
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
         }
+
+        int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
+        UpdateMemberCard(connectionString, orderNum, cardType, number);
     }
-    protected void cvDeliveryDate_ServerValidate(object source, ServerValidateEventArgs args)
+    private void UpdateMemberCard(string connectionString, int orderNum, string cardType, string cardNum)
     {
-        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
-        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
+        // Define the UPDATE query with parameters.
+        string query = "UPDATE [Order] SET creditCardtype=@CreditCardType, creditCardNumber=@CreditCardNumber " +
+                       "WHERE [orderNum]=@OrderNum";
 
-        int currentHour = GetCurrentHourID();
-
-        if (selectedDate == 1 && currentHour > selectedTime)
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
         {
-            args.IsValid = false;
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@OrderNum", orderNum);
+            command.Parameters.AddWithValue("@CreditCardType", cardType);
+            command.Parameters.AddWithValue("@CreditCardNumber", cardNum);
+
+            // Open the connection, execute the INSERT query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
         }
-    }
-    protected int GetCurrentHourID()
-    {
-        int hour = DateTime.Now.Hour;
-        int hourID = 0;
-        if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
-        else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
-        else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
-        else { hourID = 4; }//Time Slot 4
-        return hourID;
     }
 }
