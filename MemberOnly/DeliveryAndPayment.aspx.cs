@@ -74,8 +74,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
                 while (reader.Read())
                 {
                     SelectAddress.DataSource = reader;
-                    SelectAddress.DataValueField = "nickname";
-                    SelectAddress.DataTextField = "nickname";
+                    SelectAddress.DataValueField = reader["nickname"].ToString().Trim();
+                    SelectAddress.DataTextField = reader["nickname"].ToString().Trim();
                     SelectAddress.DataBind();
                 }
             }
@@ -105,8 +105,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
                 while (reader.Read())
                 {
                     SelectCreditCard.DataSource = reader;
-                    SelectCreditCard.DataValueField = "number";
-                    SelectCreditCard.DataTextField = "number";
+                    SelectCreditCard.DataValueField = reader["number"].ToString().Trim();
+                    SelectCreditCard.DataTextField = reader["number"].ToString().Trim();
                     SelectCreditCard.DataBind();
                 }
             }
@@ -120,7 +120,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
     {
         //Populate the SelectDate dropdown list 7 days from current day
         int count = 1;
-        for (DateTime date = DateTime.Now.Date.AddDays(1); date <= DateTime.Now.Date.AddDays(7); count++, date.AddDays(1))
+        for (DateTime date = DateTime.Now.Date.AddDays(1); date > DateTime.Now.Date.AddDays(7); count++, date.AddDays(1))
         {
             SelectDate.Items.Add(new ListItem(date.ToString(), count.ToString()));
         }
