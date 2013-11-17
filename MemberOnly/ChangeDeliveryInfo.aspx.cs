@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 
-public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
+public partial class MemberOnly_ChangeDeliveryInfo : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -91,10 +91,10 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             SelectDate.Items.Add(new ListItem(date.ToString(), date.ToString()));
         }
         //Populate the SelectDate dropdown list
-        SelectTime.Items.Add(new ListItem("09:00-12:00", "1"));
-        SelectTime.Items.Add(new ListItem("12:00-15:00", "2"));
-        SelectTime.Items.Add(new ListItem("15:00-18:00", "3"));
-        SelectTime.Items.Add(new ListItem("18:00-21:00", "4"));
+        SelectTime.Items.Add(new ListItem("09:00-12:00", "09:00:00"));
+        SelectTime.Items.Add(new ListItem("12:00-15:00", "12:00:00"));
+        SelectTime.Items.Add(new ListItem("15:00-18:00", "15:00:00"));
+        SelectTime.Items.Add(new ListItem("18:00-21:00", "18:00:00"));
 
     }
 
@@ -106,13 +106,11 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         //Get Data
         string userName = User.Identity.Name;
         string selectedAddress = SelectAddress.SelectedValue;
-        string selectedDate = SelectDate.SelectedValue; 
-        string selectedTime = SelectTime.SelectedValue;
-        int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
+        string selectedTime = SelectDate.SelectedValue + " " + SelectTime.SelectedValue;
 
         //Update DB
         InsertDeliveryAddress(connectionString, userName, selectedAddress);
-        UpdateDeliveryTime(connectionString, orderNum, selectedDate, selectedTime);        
+        //UpdateDeliveryTime(connectionString, orderNum, selectedTime);        
 
     }
     private void InsertDeliveryAddress(string connectionString, string userName, string address)
@@ -121,9 +119,9 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         string GETquery = "SELECT [buildingAddress], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "' AND [nickname] =N'" + address + "')";
 
         //Define the string storing the address temporarily
-        string buildingAddress = null;
-        string streetAddress = null;
-        string district = null;
+        string buildingAddress;
+        string streetAddress;
+        string district;
 
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -151,8 +149,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
 
-        int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
-        UpdateDeliveryAddress(connectionString, orderNum, buildingAddress, streetAddress, district);
+        //UpdateDeliveryAddress(connectionString, orderNum, buildingAddress, streetAddress, district);
     }
     private void UpdateDeliveryAddress(string connectionString, int orderNum, string buildingAddress, string streetAddress, string district)
     {
@@ -178,10 +175,10 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         }
     }
     
-    private void UpdateDeliveryTime(string connectionString, int orderNum, string selectedDate, string selectedTime)
+    private void UpdateDeliveryTime(string connectionString, int orderNum, string selectedTime)
     {
         // Define the UPDATE query with parameters.
-        string query = "UPDATE [Order] SET deliveryDateOffset=@DeliveryDateOffset, de " +
+        string query = "UPDATE [Order] SET deliveryTime=@DeliveryTime " +
                        "WHERE [orderNum]=@OrderNum";
 
         // Create the connection and the SQL command.
