@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 
 public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 {
@@ -16,11 +17,13 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         string connectionString = "AsiaWebShopDBConnectionString";
         string userName = User.Identity.Name;
 
-        GetMemberData(connectionString, userName);
-        GetMemberAddress(connectionString, userName);
-        GetMemberCreditCard(connectionString, userName);
-        PopulateDropdownList();
-
+        if (!Page.IsPostBack)
+        {
+            GetMemberData(connectionString, userName);
+            GetMemberAddress(connectionString, userName);
+            GetMemberCreditCard(connectionString, userName);
+            PopulateDropdownList();
+        }
     }
     private void GetMemberData(string connectionString, string userName)
     {
@@ -73,10 +76,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    SelectAddress.DataSource = reader;
-                    SelectAddress.DataValueField = reader["nickname"].ToString().Trim();
-                    SelectAddress.DataTextField = reader["nickname"].ToString().Trim();
-                    SelectAddress.DataBind();
+                    SelectAddress.Items.Add(new ListItem(reader["nickname"].ToString().Trim(), reader["nickname"].ToString().Trim()));
                 }
             }
 
@@ -104,10 +104,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
                 // Iterate through the table to get the retrieved values.
                 while (reader.Read())
                 {
-                    SelectCreditCard.DataSource = reader;
-                    SelectCreditCard.DataValueField = reader["number"].ToString().Trim();
-                    SelectCreditCard.DataTextField = reader["number"].ToString().Trim();
-                    SelectCreditCard.DataBind();
+                    SelectCreditCard.Items.Add(new ListItem(reader["number"].ToString().Trim(), reader["number"].ToString().Trim()));
                 }
             }
 
@@ -116,13 +113,13 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
     }
+
     protected void PopulateDropdownList()
     {
         //Populate the SelectDate dropdown list 7 days from current day
-        int count = 1;
-        for (DateTime date = DateTime.Now.Date.AddDays(1); date > DateTime.Now.Date.AddDays(7); count++, date.AddDays(1))
+        for (int count = 1; count <= 7; count++)
         {
-            SelectDate.Items.Add(new ListItem(date.ToString(), count.ToString()));
+            SelectDate.Items.Add(new ListItem(DateTime.Now.Date.AddDays(count).ToShortDateString(), count.ToString()));
         }
         //Populate the SelectDate dropdown list
         SelectTime.Items.Add(new ListItem("09:00-12:00", "1"));
@@ -202,6 +199,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             string deliveryAddress = buildingAddress + " " + streetAddress;
             
             // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@OrderNum", orderNum);
             command.Parameters.AddWithValue("@DeliveryAddress", deliveryAddress);
             command.Parameters.AddWithValue("@District", district);
 
@@ -223,6 +221,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         using (SqlCommand command = new SqlCommand(query, connection))
         {
             // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@OrderNum", orderNum);
             command.Parameters.AddWithValue("@DeliveryDateOffset", Convert.ToInt32(selectedDate));
             command.Parameters.AddWithValue("@TimeSlotID", Convert.ToInt32(selectedTime));
 
