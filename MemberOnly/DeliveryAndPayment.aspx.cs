@@ -16,10 +16,43 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         string connectionString = "AsiaWebShopDBConnectionString";
         string userName = User.Identity.Name;
 
+        GetMemberData(connectionString, userName);
         GetMemberAddress(connectionString, userName);
         GetMemberCreditCard(connectionString, userName);
         PopulateDropdownList();
 
+    }
+    private void GetMemberData(string connectionString, string userName)
+    {
+        // Define the SELECT query to get the member's personal data.
+        string query = "SELECT [email], [firstName], [lastName], [phoneNumber] FROM [Member] WHERE ([username] =N'" + userName + "')";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the web form labels.
+                    EmailAddress.Text = reader["email"].ToString().Trim();
+                    FirstName.Text = reader["firstName"].ToString().Trim();
+                    LastName.Text = reader["lastName"].ToString().Trim();
+                    TelephoneNo.Text = reader["phoneNumber"].ToString().Trim();
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
     }
     private void GetMemberAddress(string connectionString, string userName)
     {
@@ -86,9 +119,10 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
     protected void PopulateDropdownList()
     {
         //Populate the SelectDate dropdown list 7 days from current day
-        for (DateTime date = DateTime.Now.Date.AddDays(1); date <= DateTime.Now.Date.AddDays(7); date.AddDays(1))
+        int count = 1;
+        for (DateTime date = DateTime.Now.Date.AddDays(1); date <= DateTime.Now.Date.AddDays(7); count++, date.AddDays(1))
         {
-            SelectDate.Items.Add(new ListItem(date.ToString(), date.ToString()));
+            SelectDate.Items.Add(new ListItem(date.ToString(), count.ToString()));
         }
         //Populate the SelectDate dropdown list
         SelectTime.Items.Add(new ListItem("09:00-12:00", "1"));
@@ -181,7 +215,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
     private void UpdateDeliveryTime(string connectionString, int orderNum, string selectedDate, string selectedTime)
     {
         // Define the UPDATE query with parameters.
-        string query = "UPDATE [Order] SET deliveryDateOffset=@DeliveryDateOffset, de " +
+        string query = "UPDATE [Order] SET deliveryDateOffset=@DeliveryDateOffset, timeSlotID=@TimeSlotID " +
                        "WHERE [orderNum]=@OrderNum";
 
         // Create the connection and the SQL command.
@@ -189,7 +223,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         using (SqlCommand command = new SqlCommand(query, connection))
         {
             // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@DeliveryTime", selectedTime);
+            command.Parameters.AddWithValue("@DeliveryDateOffset", Convert.ToInt32(selectedDate));
+            command.Parameters.AddWithValue("@TimeSlotID", Convert.ToInt32(selectedTime));
 
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
@@ -200,22 +235,36 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
     protected void cvDeliveryDate_ServerValidate1(object source, ServerValidateEventArgs args)
     {
-        string selected = SelectDate.SelectedValue + " " + SelectTime.SelectedValue;
-        DateTime selectedTime = DateTime.Parse(selected);
+        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
+        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
 
-        if (DateTime.Compare(DateTime.Now.Date.AddDays(1), selectedTime) >= 0)
+        int currentHour = GetCurrentHourID();
+
+        if (selectedDate == 1 && currentHour > selectedTime)
         {
             args.IsValid = false;
         }
     }
     protected void cvDeliveryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
-        string selected = SelectDate.SelectedValue + " " + SelectTime.SelectedValue;
-        DateTime selectedTime = DateTime.Parse(selected);
+        int selectedDate = Convert.ToInt32(SelectDate.SelectedValue);
+        int selectedTime = Convert.ToInt32(SelectTime.SelectedValue);
 
-        if (DateTime.Compare(DateTime.Now.Date.AddDays(1), selectedTime) >= 0)
+        int currentHour = GetCurrentHourID();
+
+        if (selectedDate == 1 && currentHour > selectedTime)
         {
             args.IsValid = false;
         }
+    }
+    protected int GetCurrentHourID()
+    {
+        int hour = DateTime.Now.Hour;
+        int hourID = 0;
+        if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
+        else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
+        else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
+        else { hourID = 4; }//Time Slot 4
+        return hourID;
     }
 }
