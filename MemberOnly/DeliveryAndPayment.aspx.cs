@@ -257,7 +257,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
     private void UpdateDeliveryTime(string connectionString, int orderNum, string selectedDate, string selectedTime)
     {
         // Define the UPDATE query with parameters.
-        string query = "UPDATE [Order] SET deliveryDateOffset=@DeliveryDateOffset, timeSlotID=@TimeSlotID " +
+        string query = "UPDATE [Order] SET orderDateTime=@OrderDateTime, deliveryDateOffset=@DeliveryDateOffset, timeSlotID=@TimeSlotID " +
                        "WHERE [orderNum]=@OrderNum";
 
         // Create the connection and the SQL command.
@@ -268,7 +268,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Parameters.AddWithValue("@OrderNum", orderNum);
             command.Parameters.AddWithValue("@DeliveryDateOffset", Convert.ToInt32(selectedDate));
             command.Parameters.AddWithValue("@TimeSlotID", Convert.ToInt32(selectedTime));
-
+            command.Parameters.AddWithValue("@OrderDateTime", DateTime.Now.Date);
+            
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
