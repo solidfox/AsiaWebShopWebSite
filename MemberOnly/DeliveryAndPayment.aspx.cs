@@ -20,9 +20,12 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         if (!Page.IsPostBack)
         {
             GetMemberData(connectionString, userName);
-            GetMemberAddress(connectionString, userName);
-            GetMemberCreditCard(connectionString, userName);
+            PopulateMemberAddress(connectionString, userName);
+            PopulateMemberCreditCard(connectionString, userName);
             PopulateDropdownList();
+            PopulateDistrictDropDownList();
+            SelectAddress_SelectedIndexChanged(sender, e);
+            SelectCreditCard_SelectedIndexChanged(sender, e);
         }
     }
     private void GetMemberData(string connectionString, string userName)
@@ -57,7 +60,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
     }
-    private void GetMemberAddress(string connectionString, string userName)
+    private void PopulateMemberAddress(string connectionString, string userName)
     {
         //Define the SQL query to get the addresses of the member
         string query = "SELECT [nickname] FROM [Address] WHERE ([username] =N'" + userName + "')";
@@ -85,7 +88,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
     }
-    private void GetMemberCreditCard(string connectionString, string userName)
+    private void PopulateMemberCreditCard(string connectionString, string userName)
     {
         //Define the SQL query to get the credit card no. of the member
         string query = "SELECT [number] FROM [CreditCard] WHERE ([username] =N'" + userName + "')";
@@ -113,7 +116,135 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
     }
+    protected void SelectAddress_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //DB connection
+        string nickname = SelectAddress.SelectedValue;
+        string userName = User.Identity.Name;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        
+        // Define the SELECT query to get the member's address.
+        string query = "SELECT [buildingAddress], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "' AND [nickname] =N'" + nickname +"')";
 
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the web form labels.
+                    String buildingAddress = reader["buildingAddress"].ToString().Trim();
+                    String[] splitBuildingAddress = buildingAddress.Split(" ".ToCharArray());
+                    switch (splitBuildingAddress.Length)
+                    {
+                        case 4:
+                            BlockTower.Text = splitBuildingAddress[3];
+                            goto case 3;
+                        case 3:
+                            FlatSuite.Text = splitBuildingAddress[2];
+                            goto case 2;
+                        case 2:
+                            Floor.Text = splitBuildingAddress[1];
+                            goto case 1;
+                        case 1:
+                            Building.Text = splitBuildingAddress[0];
+                            break;
+                        default:
+                            Building.Text = buildingAddress;
+                            break;
+                    }
+                    Street.Text = reader["streetAddress"].ToString().Trim();
+                    SelectDropDownItemByValue(DistrictDropDownList, reader["district"].ToString().Trim());
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
+    }
+    protected void SelectCreditCard_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //DB connection
+        string number = SelectCreditCard.SelectedValue;
+        string userName = User.Identity.Name;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        
+        // Define the SELECT query to get the member's credit card.
+        string query = "SELECT [number], [type], [cardHolderName], [expiryMonth], [expiryYear] FROM [CreditCard] " + 
+            "WHERE ([username] =N'" + userName + "' AND [number] =N'" + number + "')";
+
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            // Check if a result was returned.
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                while (reader.Read())
+                {
+                    // Assign the data values to the web form labels.
+                    CardHolderName.Text = reader["cardHolderName"].ToString().Trim();
+                    CardNumber.Text = reader["number"].ToString().Trim();
+                    SelectDropDownItemByValue(CardTypeDropDownList, reader["type"].ToString().Trim());
+                    SelectDropDownItemByValue(MonthDropDownList, reader["expiryMonth"].ToString().Trim());
+                    SelectDropDownItemByValue(YearDropDownList, reader["expiryYear"].ToString().Trim());
+                }
+            }
+
+            // Close the connection and the DataReader.
+            command.Connection.Close();
+            reader.Close();
+        }
+    }
+    private void SelectDropDownItemByValue(DropDownList list, String value)
+    {
+        ListItemCollection items = list.Items;
+        int index = items.IndexOf(items.FindByValue(value));
+        if (index >= 0)
+        {
+            list.SelectedIndex = index;
+        }
+        else
+        {
+            Debug.WriteLine(value + " could not be selected from DropDownList " + list.ID);
+        }
+    }
+    private void PopulateDistrictDropDownList()
+    {
+        DistrictDropDownList.Items.Add("-- Select district --");
+        DistrictDropDownList.Items.Add("Central and Western");
+        DistrictDropDownList.Items.Add("Eastern");
+        DistrictDropDownList.Items.Add("Islands");
+        DistrictDropDownList.Items.Add("Kowloon City");
+        DistrictDropDownList.Items.Add("Kwai Tsing");
+        DistrictDropDownList.Items.Add("Kwun Tong");
+        DistrictDropDownList.Items.Add("North");
+        DistrictDropDownList.Items.Add("Sai Kung");
+        DistrictDropDownList.Items.Add("Sha Tin");
+        DistrictDropDownList.Items.Add("Sham Shui Po");
+        DistrictDropDownList.Items.Add("Southern");
+        DistrictDropDownList.Items.Add("Tai Po");
+        DistrictDropDownList.Items.Add("Tsuen Wan");
+        DistrictDropDownList.Items.Add("Tuen Mun");
+        DistrictDropDownList.Items.Add("Wan Chai");
+        DistrictDropDownList.Items.Add("Wong Tai Sin");
+        DistrictDropDownList.Items.Add("Yau Tsim Mong");
+        DistrictDropDownList.Items.Add("Yuen Long");
+    }
     protected void PopulateDropdownList()
     {
         //Populate the SelectDate dropdown list 7 days from current day
@@ -127,6 +258,13 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         SelectTime.Items.Add(new ListItem("15:00-18:00", "3"));
         SelectTime.Items.Add(new ListItem("18:00-21:00", "4"));
 
+        // Populate the YearDropDownList from current year to plus 10 years.
+        //YearDropDownList.Items.Add("Year");
+        for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
+        {
+            YearDropDownList.Items.Add(year.ToString());
+        }
+
     }
     protected void cvDeliveryDate_ServerValidate1(object source, ServerValidateEventArgs args)
     {
@@ -135,7 +273,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && currentHour > selectedTime)
+        if (selectedDate == 1 && (currentHour > selectedTime || currentHour == 4))
         {
             args.IsValid = false;
         }
@@ -147,7 +285,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && currentHour > selectedTime)
+        if (selectedDate == 1 && (currentHour > selectedTime || currentHour == 4))
         {
             args.IsValid = false;
         }
@@ -175,22 +313,26 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         
         //Get Data
         string userName = User.Identity.Name;
-        string selectedAddress = SelectAddress.SelectedValue;
+        string buildingAddress = Building.Text.Trim() + " " + Floor.Text.Trim() + " " + FlatSuite.Text.Trim() + " " + BlockTower.Text.Trim();
+        string streetAddress = Street.Text.Trim();
+        string district = DistrictDropDownList.SelectedValue;
         string selectedDate = SelectDate.SelectedValue; 
         string selectedTime = SelectTime.SelectedValue;
-        string selectedCard = SelectCreditCard.SelectedValue;
+        string cardType = CardTypeDropDownList.SelectedValue;
+        string cardNum = CardNumber.Text.Trim();
         int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
 
         //Update DB
-        InsertDeliveryAddress(connectionString, userName, selectedAddress);
+        /*InsertDeliveryAddress(connectionString, userName, selectedAddress);*/
+        UpdateDeliveryAddress(connectionString, orderNum, buildingAddress, streetAddress, district);
         UpdateDeliveryTime(connectionString, orderNum, selectedDate, selectedTime);
-        InsertMemberCard(connectionString, userName, selectedCard);
+        UpdateMemberCard(connectionString, orderNum, cardType, cardNum);
         
         //Go to the confirmation page
         Response.Redirect("ConfirmOrder.aspx");
 
     }
-    private void InsertDeliveryAddress(string connectionString, string userName, string address)
+    /*private void InsertDeliveryAddress(string connectionString, string userName, string address)
     {
         //Define the query to get the address of member
         string GETquery = "SELECT [buildingAddress], [streetAddress], [district] FROM [Address] WHERE ([username] =N'" + userName + "' AND [nickname] =N'" + address + "')";
@@ -228,7 +370,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
         UpdateDeliveryAddress(connectionString, orderNum, buildingAddress, streetAddress, district);
-    }
+    }*/
     private void UpdateDeliveryAddress(string connectionString, int orderNum, string buildingAddress, string streetAddress, string district)
     {
         // Define the UPDATE query with parameters.
@@ -253,7 +395,6 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Connection.Close();
         }
     }
-    
     private void UpdateDeliveryTime(string connectionString, int orderNum, string selectedDate, string selectedTime)
     {
         // Define the UPDATE query with parameters.
@@ -276,7 +417,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Connection.Close();
         }
     }
-    private void InsertMemberCard(string connectionString, string userName, string number)
+    /*private void InsertMemberCard(string connectionString, string userName, string number)
     {
         //Define the query to get the address of member
         string GETquery = "SELECT [type] FROM [CreditCard] WHERE ([username] =N'" + userName + "' AND [number] =N'" + number + "')";
@@ -310,7 +451,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
         UpdateMemberCard(connectionString, orderNum, cardType, number);
-    }
+    }*/
     private void UpdateMemberCard(string connectionString, int orderNum, string cardType, string cardNum)
     {
         // Define the UPDATE query with parameters.
