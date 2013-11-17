@@ -35,9 +35,11 @@ public class GenericQuery
         }
     }
 
+
+
     public static int GetOrderNumber(string connectionString, string userName)
     {
-        string query = "SELECT [orderNum], [confirmationNumber] FROM [Order] WHERE ([username] =N'" + userName + "')";
+        string query = "SELECT [orderNum] FROM [Order] WHERE ([username] =N'" + userName + "' AND [confirmationNumber] IS NULL)";
         int OrderNum = 0;
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
@@ -45,38 +47,25 @@ public class GenericQuery
         {
             // Open the connection.
             command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
+
+            object result = command.ExecuteScalar();
+
+            if (result != null)
             {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    // ToAsk: what happens when there are two rows ?
-                    if (reader.IsDBNull(1))
-                    {
-                        OrderNum = int.Parse(reader["orderNum"].ToString());
-                    }
-
-                }
+                OrderNum = (Int32)result;
                 command.Connection.Close(); // Close the connection and the DataReader.
-                reader.Close();
             }
-
             else
             {
                 command.Connection.Close(); // Close the connection and the DataReader.
-                reader.Close();
-                GenerateOrder(connectionString, userName);
+                GenerateOrderNumber(connectionString, userName);
                 OrderNum = GetOrderNumber(connectionString, userName);
             }
         }
         return OrderNum;
     }
 
-
-    protected static void GenerateOrder(string connectionString, string userName)
+    protected static void GenerateOrderNumber(string connectionString, string userName)
     {
         // Define the UPDATE query with parameters.
         string query = "INSERT INTO [Order] ( [userName])" +
@@ -95,47 +84,6 @@ public class GenericQuery
             command.Connection.Close();
         }
     }
-
-/*    public static DateTime GetOrderDateTime(string connectionString, string userName)
-    {
-        //get the orderNum from DB
-        int orderNum = GetOrderNumber(connectionString, userName);
-        //define query to get orderDateTime from Order table
-        string query = "SELECT [orderDateTime] FROM [Order] WHERE ([orderNum] =N'" + orderNum + "')";
-
-        DateTime orderDateTime = DateTime.Now.AddYears(1);//define orderDateTime
-
-        // Create the connection and the SQL command.
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            // Open the connection.
-            command.Connection.Open();
-            // Execute the SELECT query and place the result in a DataReader.
-            SqlDataReader reader = command.ExecuteReader();
-            // Check if a result was returned.
-            if (reader.HasRows)
-            {
-                // Iterate through the table to get the retrieved values.
-                while (reader.Read())
-                {
-                    //assign the value to orderDateTime
-                    orderDateTime = DateTime.Parse(reader["orderDateTime"].ToString());
-                }
-            }
-
-            // Close the connection and the DataReader.
-            command.Connection.Close();
-            reader.Close();
-        }
-
-        return orderDateTime;
-    }*/
-
-    /*protected static void GenerateOrderDateTime(string connectionString, int orderNum)
-    {
-
-    }*/
 
     public static bool CheckItemDulplicate(string connectionString, int OrderNum, string UPC)
     {

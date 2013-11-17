@@ -125,6 +125,9 @@
     <asp:Button ID="editItemsButton" runat="server" 
         PostBackUrl="~/MemberOnly/ViewShoppingCart.aspx" Text="Edit items" 
         UseSubmitBehavior="False" />
+    <asp:Button ID="confirmButton" runat="server" 
+        PostBackUrl="~/MemberOnly/PurchaseDone.aspx" Text="Confirm Purchase" 
+        UseSubmitBehavior="False" />
     <asp:SqlDataSource ID="orderItemsDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
         onselecting="orderItemsDataSource_Selecting" SelectCommand="SELECT Item.name AS Item, OrderItem.quantity AS Quantity, OrderItem.PriceWhenAdded AS Price 

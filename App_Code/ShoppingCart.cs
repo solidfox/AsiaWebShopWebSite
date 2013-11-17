@@ -282,13 +282,68 @@ public class ShoppingCart
         }
     }
 
-    //repeated
-    
+    public string checkOut()
+    {
+        String authenticationCode = CreditCardAuthorization.chargeCard(this.getCreditCard(), this.GetCartTotal());
+        if (authenticationCode == null)
+        {
+            return null;
+        }
+        String confirmationString = this.generateConfirmationNumber();
 
-    
+        //TODO store the authentication code.
+        string query = "UPDATE [Order] SET [confirmationNumber] = '" + confirmationString + "' WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
 
+        return confirmationString;
+    }
 
+    private string getCreditCard()
+    {
+        string query = "SELECT [creditCardNumber] FROM [Order] WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
 
+        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString);
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Connection.Open();
+        String cardNumber = (String)command.ExecuteScalar();
+
+        return cardNumber;
+    }
+
+    private string generateConfirmationNumber()
+    {
+        const int firstConfirmationNumber = 999999 * 16 * 16;
+
+        int confirmationNumber = firstConfirmationNumber - this.getOrderNum();
+
+        char letter1 = (char)((confirmationNumber & 15) + 97);
+        char letter2 = (char)(((confirmationNumber >> 4) & 15) + 97);
+        int sixDigits = confirmationNumber >> 8;
+        return letter1.ToString() + letter2.ToString() + sixDigits.ToString();
+
+    }
+
+    public Int32 getOrderNum()
+    {
+        string query = "SELECT [orderNum] FROM [Order] WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
+        int OrderNum = 0;
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Open the connection.
+            command.Connection.Open();
+
+            OrderNum = (Int32)command.ExecuteScalar();
+        }
+        return OrderNum;
+    }
 #endregion
 
 #region Reporting Methods
