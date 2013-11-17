@@ -53,7 +53,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         string userNameQuery = "";
         string dateRangQuery = "";
 
-        userNameQuery = User.Identity.Name;
+        userNameQuery = "AND ( [Order].userName =N'"+User.Identity.Name + "')";
        
     
         if (StartDayTextBox.Text != "")
