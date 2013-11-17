@@ -17,6 +17,8 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
         userName = User.Identity.Name;
         DeliveryAddressList.SelectParameters["userName"].DefaultValue = User.Identity.Name;
         SelectedDeliveryAddress.InsertParameters["userName"].DefaultValue = User.Identity.Name;
+        // Bug with district selection
+        SelectedDeliveryAddress.UpdateParameters["district"].DefaultValue = "Central and Western";
     }
     protected void dvAddress_ItemDeleted(object sender, EventArgs e)
     {
@@ -51,49 +53,5 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
                 args.IsValid = false;
             }
         }
-    }
-    protected void cvEditDistrict_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-        String EdDistrict = ((TextBox)dvAddress.FindControl("edDistrict")).Text;
-
-        if (!validCategory(EdDistrict))
-        {
-            args.IsValid = false;
-        }
-    }
-    protected void cvInsertDistrict_ServerValidate(object source, ServerValidateEventArgs args)
-    {
-        String InsertDistrict = ((TextBox)dvAddress.FindControl("InsertDistrict")).Text;
-
-        if (!validCategory(InsertDistrict))
-        {
-            args.IsValid = false;
-        }
-    }
-    protected bool validCategory(String category)
-    {
-        switch (category.Trim())
-        {
-            case "Central and Western":
-            case "Eastern":
-            case "Islands":
-            case "Kowloon City":
-            case "Kwai Tsing":
-            case "Kwun Tong":
-            case "North":
-            case "Sai Kung":
-            case "Sha Tin":
-            case "Sham Shui Po":
-            case "Southern":
-            case "Tai Po":
-            case "Tsuen Wan":
-            case "Tuen Mun":
-            case "Wan Chai":
-            case "Wong Tai Sin":
-            case "Yau Tsim Mong":
-            case "Yuen Long":
-                return true;
-        }
-        return false;
     }
 }

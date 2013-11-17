@@ -108,24 +108,51 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="district" SortExpression="district">
                 <EditItemTemplate>
-                    <asp:TextBox ID="edDistrict" runat="server" Text='<%# Bind("district") %>'></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rvDistrict" runat="server" 
-                        ControlToValidate="edDistrict" Display="Dynamic" EnableClientScript="False" 
-                        ErrorMessage="District is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
-                    <asp:CustomValidator ID="cvEditDistrict" runat="server" 
-                        ControlToValidate="edDistrict" Display="Dynamic" EnableClientScript="False" 
-                        ErrorMessage="Wrong Distirct input." ForeColor="#CC0000" 
-                        onservervalidate="cvEditDistrict_ServerValidate">*</asp:CustomValidator>
+                    <asp:DropDownList ID="edDistrict" runat="server" 
+                        SelectedValue='<%# Bind("district") %>' AppendDataBoundItems="True" 
+                        AutoPostBack="True">
+                        <asp:ListItem>Central and Western</asp:ListItem>
+                        <asp:ListItem>Eastern</asp:ListItem>
+                        <asp:ListItem>Islands</asp:ListItem>
+                        <asp:ListItem>Kowloon City</asp:ListItem>
+                        <asp:ListItem>Kwai Tsing</asp:ListItem>
+                        <asp:ListItem>Kwun Tong</asp:ListItem>
+                        <asp:ListItem>North</asp:ListItem>
+                        <asp:ListItem>Sai Kung</asp:ListItem>
+                        <asp:ListItem>Sha Tin</asp:ListItem>
+                        <asp:ListItem>Sham Shui Po</asp:ListItem>
+                        <asp:ListItem>Southern</asp:ListItem>
+                        <asp:ListItem>Tai Po</asp:ListItem>
+                        <asp:ListItem>Tsuen Wan</asp:ListItem>
+                        <asp:ListItem>Tuen Mun</asp:ListItem>
+                        <asp:ListItem>Wan Chai</asp:ListItem>
+                        <asp:ListItem>Wong Tai Sin</asp:ListItem>
+                        <asp:ListItem>Yau Tsim Mong</asp:ListItem>
+                        <asp:ListItem>Yuen Long</asp:ListItem>
+                    </asp:DropDownList>
                 </EditItemTemplate>
                 <InsertItemTemplate>
-                    <asp:TextBox ID="InsertDistrict" runat="server" Text='<%# Bind("district") %>'></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rvInsertDistrict" runat="server" 
-                        ControlToValidate="InsertDistrict" Display="Dynamic" EnableClientScript="False" 
-                        ErrorMessage="District is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
-                    <asp:CustomValidator ID="cvInsertDistrict" runat="server" 
-                        ControlToValidate="InsertDistrict" Display="Dynamic" EnableClientScript="False" 
-                        ErrorMessage="Wrong District input" ForeColor="#CC0000" 
-                        onservervalidate="cvInsertDistrict_ServerValidate">*</asp:CustomValidator>
+                    <asp:DropDownList ID="InsertDistrict" runat="server" 
+                        SelectedValue='<%# Bind("district") %>'>
+                        <asp:ListItem>Central and Western</asp:ListItem>
+                        <asp:ListItem>Eastern</asp:ListItem>
+                        <asp:ListItem>Islands</asp:ListItem>
+                        <asp:ListItem>Kowloon City</asp:ListItem>
+                        <asp:ListItem>Kwai Tsing</asp:ListItem>
+                        <asp:ListItem>Kwun Tong</asp:ListItem>
+                        <asp:ListItem>North</asp:ListItem>
+                        <asp:ListItem>Sai Kung</asp:ListItem>
+                        <asp:ListItem>Sha Tin</asp:ListItem>
+                        <asp:ListItem>Sham Shui Po</asp:ListItem>
+                        <asp:ListItem>Southern</asp:ListItem>
+                        <asp:ListItem>Tai Po</asp:ListItem>
+                        <asp:ListItem>Tsuen Wan</asp:ListItem>
+                        <asp:ListItem>Tuen Mun</asp:ListItem>
+                        <asp:ListItem>Wan Chai</asp:ListItem>
+                        <asp:ListItem>Wong Tai Sin</asp:ListItem>
+                        <asp:ListItem>Yau Tsim Mong</asp:ListItem>
+                        <asp:ListItem>Yuen Long</asp:ListItem>
+                    </asp:DropDownList>
                 </InsertItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label5" runat="server" Text='<%# Bind("district") %>'></asp:Label>
@@ -139,8 +166,6 @@
         <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
         <RowStyle BackColor="#EFF3FB" />
     </asp:DetailsView>
-    <p>
-        &nbsp;</p>
     <asp:ValidationSummary ID="smDvAddress" runat="server" 
         CssClass="failureNotification" EnableClientScript="False" ForeColor="#CC0000" 
         HeaderText="The following errors occured:" />
@@ -176,7 +201,6 @@
                     PropertyName="SelectedDataKey.Values[0]" Type="String" />
                 <asp:ControlParameter ControlID="gvAddress" Name="nickname" 
                     PropertyName="SelectedDataKey.Values[1]" Type="String" />
-       
             </SelectParameters>
             <UpdateParameters>
                 <asp:Parameter Name="buildingAddress" Type="String" />
