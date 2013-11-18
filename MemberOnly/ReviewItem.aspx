@@ -155,7 +155,7 @@
                 <td class="style10">
                     comment</td>
                 <td class="style11">
-                    <asp:TextBox ID="commentTextBox" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="commentTextBox" runat="server" MaxLength="140"></asp:TextBox>
                 </td>
             </tr>
             <tr>
@@ -172,10 +172,17 @@
         <strong>Item Reviewed:</strong></p>
     <asp:GridView ID="ReviewedItemGridView" runat="server" AutoGenerateColumns="False" 
         CellPadding="4" DataSourceID="ReviewedItemDataSource" ForeColor="#333333" 
-        GridLines="None">
+        GridLines="None" Width="587px">
         <AlternatingRowStyle BackColor="White" />
         <Columns>
-            <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
+            <asp:TemplateField HeaderText="name" SortExpression="name">
+                <EditItemTemplate>
+                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("name") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("name") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
             <asp:BoundField DataField="category" HeaderText="category" 
                 SortExpression="category" />
             <asp:BoundField DataField="quality" HeaderText="quality" 
@@ -189,7 +196,12 @@
             <asp:BoundField DataField="durability" HeaderText="durability" 
                 SortExpression="durability" />
             <asp:BoundField DataField="comment" HeaderText="comment" 
-                SortExpression="comment" />
+                SortExpression="comment" >
+            <ControlStyle Width="10%" />
+            <FooterStyle Width="10%" />
+            <HeaderStyle Width="10%" />
+            <ItemStyle Width="10%" />
+            </asp:BoundField>
         </Columns>
         <EditRowStyle BackColor="#2461BF" />
         <EmptyDataTemplate>

@@ -59,5 +59,6 @@ public partial class MemberOnly_AllPurchase : System.Web.UI.Page
         ItemNameLabel.Text = ((Label)UniquePurchaseGridView.SelectedRow.FindControl("ItemNameGrid")).Text;
     }
 
- 
+
+
 }

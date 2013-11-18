@@ -24,7 +24,7 @@
     </p>
     <p>
         <asp:HyperLink ID="BrowseOwnPurchaseLink" runat="server" 
-            NavigateUrl="~/MemberOnly/BrowseAllPurchase.aspx">Browse Own Purchase</asp:HyperLink>
+            NavigateUrl="~/MemberOnly/BrowseOwnPurchase.aspx">Browse Own Purchase</asp:HyperLink>
     </p>
     <p>
         &nbsp;</p>

@@ -23,7 +23,7 @@ public partial class AddToCart : System.Web.UI.Page
         string upc = Request.QueryString["upc"].Trim();
         string name = Request.QueryString["name"].Trim();
         decimal discountPrice = Convert.ToDecimal(Request.QueryString["discountPrice"].Trim());
-        decimal amountSavedForOne = Convert.ToDecimal(Request.QueryString["normalPrice"].Trim());
+        decimal amountSavedForOne = Convert.ToDecimal(Request.QueryString["normalPrice"].Trim()) - discountPrice;
         // Add the item to the shopping cart with default quantity = 1.
         if (upc != "")
         {
