@@ -28,7 +28,7 @@
     </asp:DetailsView>
     <asp:SqlDataSource ID="orderDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT [Order].orderNum, DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS Date)) AS 'Delivery Date', TimeSlot.slot, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].userName = @userName) AND ([Order].confirmationNumber IS NULL)" 
+        SelectCommand="SELECT [Order].orderNum, DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].userName = @userName) AND ([Order].confirmationNumber IS NULL)" 
         onselecting="orderDataSource_Selecting">
         <SelectParameters>
             <asp:Parameter Name="userName" Type="String" />
