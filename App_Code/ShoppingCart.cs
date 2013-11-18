@@ -322,13 +322,11 @@ public class ShoppingCart
         const int firstConfirmationNumber = 999999;
 
         int confirmationNumber = firstConfirmationNumber - this.getOrderNum();
-
-        char letter1 = (char)((confirmationNumber & 15) + 97);
-        char letter2 = (char)(((confirmationNumber >> 4) & 15) + 97);
-        int Digits = confirmationNumber;
-        string sixDigits = Digits.ToString().PadLeft(6, '0');
-        return letter1.ToString() + letter2.ToString() + sixDigits;
-
+        
+        char letter1 = (char)((confirmationNumber >> 24) & 15) + 65);
+        char letter2 = (char)(((confirmationNumber >> 20) & 15) + 65);
+        int sixDigits = confirmationNumber >> 8;
+        return letter1.ToString() + letter2.ToString() + sixDigits.ToString().PadLeft(6, '0');
     }
 
     public Int32 getOrderNum()
