@@ -186,7 +186,7 @@ public class GenericQuery
 
     public static void CheckDelivered (string connectionString, string UserName)
     {
-        string query = "SELECT [orderDateTime],[orderNum] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNum IS NOT NULL)";
+        string query = "SELECT [orderDateTime],[orderNum] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNumber IS NOT NULL)";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
@@ -233,6 +233,18 @@ public class GenericQuery
         }
 
     }
+
+    public static int GetCurrentHourID()
+    {
+        int hour = DateTime.Now.Hour;
+        int hourID = 0;
+        if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
+        else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
+        else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
+        else { hourID = 4; }//Time Slot 4
+        return hourID;
+    }
+
     #endregion
 
     #region DBItem

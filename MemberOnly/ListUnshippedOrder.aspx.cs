@@ -22,10 +22,11 @@ public partial class MemberOnly_ListUnshippedOrder : System.Web.UI.Page
 
     }
 
-    protected void AddUnshippedOrderToGrid()
+    private void AddUnshippedOrderToGrid()
     {
         DateTime currentDT = DateTime.Now.Date;
         int currentid = GenericQuery.GetCurrentHourID();
+
 
         DataTable UnshippedOrder = new DataTable();
         // Define the columns of the DataTable.

@@ -18,8 +18,11 @@ public partial class SiteMaster : System.Web.UI.MasterPage
     {
         Microsoft.Win32.SystemEvents.SessionEnded += new Microsoft.Win32.SessionEndedEventHandler(ReserveForUser);
         GetAllUser(connectionString);
-        foreach(string username in UserNames)
-        GenericQuery.CheckOutOfTime(connectionString, username);
+        foreach (string username in UserNames)
+        {
+            GenericQuery.CheckOutOfTime(connectionString, username);
+            GenericQuery.CheckDelivered(connectionString, username);
+        }
         GenericQuery.UpdateLastSeenTime(connectionString, HttpContext.Current.User.Identity.Name);
         if (HttpContext.Current.User.Identity.Name != null)
         {
