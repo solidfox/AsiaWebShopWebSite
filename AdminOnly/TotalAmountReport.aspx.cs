@@ -15,37 +15,8 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
-        {
-            StartCalendar.Visible = false;
-            EndCalendar.Visible = false;
-        }
     }
-    protected void StartCalendarButton_Click(object sender, EventArgs e)
-    {
-        if (StartCalendar.Visible)
-        {
-            StartCalendar.Visible = false;
-        }
-        else
-        {
-            StartCalendar.Visible = true;
-        }
-    }
-    protected void EndCalendarButton_Click(object sender, EventArgs e)
-    {
-        if (EndCalendar.Visible)
-        {
-            EndCalendar.Visible = false;
-        }
-        else
-        {
-            EndCalendar.Visible = true;
-        }
-
-    }
- 
-
+   
     protected void MemberCustomValidator_ServerValidate(object source, ServerValidateEventArgs args)
     {
 
@@ -73,6 +44,11 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+        if (!Page.IsValid)
+        {
+            TotalAmountGridView.Visible = false;
+            return;
+        }
         string userNameQuery = "";
         string orderRuleQuery = "";
         string dateRangQuery = "";
@@ -121,10 +97,20 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
               userNameQuery + ") AS Result0 ON Result0.userName = [Order].userName WHERE (([Order].confirmationNumber IS NOT NULL)" + dateRangQuery +")) AS Result1 ON OrderItem.orderNum = Result1.orderNum GROUP BY Result1.district, Result1.userName, Result1.firstName, Result1.lastName " + orderRuleQuery;
 
         MemberSqlDataSource.SelectCommand = SQLCmd;
+        TotalAmountGridView.Visible = true;
         TotalAmountGridView.DataBind();
         MergeRows(TotalAmountGridView);
 
         MemberSqlDataSource.Select(DataSourceSelectArguments.Empty);
+
+        // Display a no result message if nothing was retrieved from the database.
+        if (TotalAmountGridView.Rows.Count == 0)
+        {
+            lblGeneratedResultMessage.Text = "No records.";
+            lblGeneratedResultMessage.Visible = true;
+        }
+        else
+            lblGeneratedResultMessage.Visible = false;
     }
 
 
@@ -153,27 +139,6 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         }
     }
 
-    protected void ClearRangeButton_Click(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = null;
-        EndDayTextBox.Text = null;
-        StartCalendar.SelectedDates.Clear();
-        EndCalendar.SelectedDates.Clear();
-        StartCalendar.Visible = false;
-        EndCalendar.Visible = false;
-    }
-    protected void EndCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        EndDayTextBox.Text = EndCalendar.SelectedDate.ToShortDateString();
-        EndCalendar.Visible = false;
-        EndCalendar.SelectedDates.Clear();
-    }
-    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
-        StartCalendar.Visible = false;
-        StartCalendar.SelectedDates.Clear();
-    }
 
 
 

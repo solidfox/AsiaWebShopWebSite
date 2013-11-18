@@ -13,11 +13,38 @@
         }
         .style5
         {
-            width: 148px;
+            width: 222px;
         }
         .style7
         {
             color: #FF0000;
+        }
+        .style12
+        {
+            width: 180px;
+            height: 21px;
+        }
+        .style13
+        {
+            width: 222px;
+            height: 21px;
+        }
+        .style14
+        {
+            height: 21px;
+        }
+        .style10
+        {
+            width: 313px;
+        }
+        .style8
+        {
+            width: 355px;
+        }
+        .style16
+        {
+            height: 21px;
+            width: 313px;
         }
         </style>
     </asp:Content>
@@ -28,8 +55,11 @@
         <strong style="color: #FF0000">No username, search all members.</strong></p>
     <p class="style7">
         <asp:Label ID="Label1" runat="server" 
-            Text="Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" Visible="False"></asp:Label>
+            Text="Date Format : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" 
+            style="color: #0000FF"></asp:Label>
     </p>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        EnableClientScript="False" ForeColor="Red" ValidationGroup="ReportValidation" />
 
     
                 <table class="style4">
@@ -40,55 +70,76 @@
                             <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         <asp:CustomValidator ID="MemberCustomValidator" runat="server" 
             Display="Dynamic" ErrorMessage="Please enter existed username." ForeColor="Red" 
-            onservervalidate="MemberCustomValidator_ServerValidate"></asp:CustomValidator>
+            onservervalidate="MemberCustomValidator_ServerValidate" ValidationGroup="ReportValidation">*</asp:CustomValidator>
                         </td>
                         <td>
                             &nbsp;</td>
-                        <td>
-                            &nbsp;</td>
-                        <td>
+                        <td class="style10">
                             &nbsp;</td>
                     </tr>
                     <tr>
-                        <td class="style6">
-                            Date Range:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-                            From</td>
-                        <td class="style5">
-                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
-    <asp:Button ID="StartCalendarButton" runat="server" onclick="StartCalendarButton_Click" Text=".." />
+                        <td class="style12">
+                            Date Range:&nbsp;&nbsp;From</td>
+                        <td class="style13">
+
+    
+                <table class="style4">
+                    <tr>
+                        <td class="style10">
+                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px"></asp:TextBox>
+    &nbsp;
+                        <asp:CompareValidator ID="CompareValidatorStart" runat="server" ControlToValidate="StartDayTextBox"
+                            ControlToCompare="EndDayTextBox" Type="Date" 
+                            ErrorMessage="Invalid Date Range" Display="Dynamic" EnableClientScript="False" 
+                                ForeColor="Red" Operator="LessThanEqual" ValidationGroup="ReportValidation">*</asp:CompareValidator>
+                            <asp:RegularExpressionValidator ID="DateFormatStartValidator" runat="server" 
+                                ControlToValidate="StartDayTextBox" Display="Dynamic" 
+                                EnableClientScript="False" ErrorMessage="Wrong Date Format" ForeColor="Red" 
+                                ValidationExpression="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
+                                ValidationGroup="ReportValidation">*</asp:RegularExpressionValidator>
                         </td>
-                        <td>
+                    </tr>
+        </table>
+                        </td>
+                        <td class="style14">
                             To</td>
-                        <td>
-                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
-    <asp:Button ID="EndCalendarButton" runat="server" onclick="EndCalendarButton_Click" Text=".." />
-                        </td>
-                        <td>
-                            <asp:Button ID="ClearRangeButton" runat="server" 
-                                onclick="ClearRangeButton_Click" Text="ClearRange" />
+                        <td class="style16">
+
+    
+                <table class="style4">
+                    <tr>
+                        <td class="style8">
+                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                        &nbsp;
+                        <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="EndDayTextBox"
+                        ControlToCompare="StartDayTextBox" Type="Date" 
+                        ErrorMessage="Invalid Date Range" Display="Dynamic" EnableClientScript="False" 
+                                ForeColor="Red" Operator="GreaterThanEqual" ValidationGroup="ReportValidation">*</asp:CompareValidator>
+                
+                            <asp:RegularExpressionValidator ID="DateFormatEndValidator" runat="server" 
+                                ControlToValidate="EndDayTextBox" Display="Dynamic" EnableClientScript="False" 
+                                ErrorMessage="Wrong Date Format" ForeColor="Red" 
+                                ValidationExpression="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
+                                ValidationGroup="ReportValidation">*</asp:RegularExpressionValidator>
+                
                         </td>
                     </tr>
-                    <tr>
-                        <td class="style6">
-                            &nbsp;</td>
-                        <td class="style5">
-        <asp:Calendar ID="StartCalendar" runat="server" onselectionchanged="StartCalendar_SelectionChanged"></asp:Calendar>
+        </table>
                         </td>
-                        <td>
-                            &nbsp;</td>
-                        <td>
-        <asp:Calendar ID="EndCalendar" runat="server" onselectionchanged="EndCalendar_SelectionChanged"></asp:Calendar>
-                        </td>
-                        <td>
-                            &nbsp;</td>
                     </tr>
         </table>
 &nbsp;
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate" 
-                    onclick="btnGenerate_Click" />
+                    onclick="btnGenerate_Click" 
+        ValidationGroup="ReportValidation" />
+                <br />
+    <br />
+    <asp:Label ID="lblGeneratedResultMessage" runat="server" Font-Bold="True" 
+        ForeColor="Red" style="color: #0000FF"></asp:Label>
+    <br />
                 <asp:DataList ID="DataList1" runat="server" DataKeyField="orderNum" 
                     DataSourceID="MemberSqlDataSource" CellPadding="4" 
-        ForeColor="#333333" GridLines="Both">
+        ForeColor="#333333" GridLines="Both" Visible="False">
                     <AlternatingItemStyle BackColor="White" />
                     <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />

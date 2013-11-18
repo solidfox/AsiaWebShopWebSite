@@ -28,8 +28,13 @@
         <strong style="color: #FF0000">No username, search all members.</strong></p>
     <p class="style7">
         <asp:Label ID="Label1" runat="server" 
-            Text="Date Formate : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" Visible="False"></asp:Label>
+            Text="Date Format : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" 
+            style="color: #0000FF"></asp:Label>
     </p>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        EnableClientScript="False" ForeColor="Red" ValidationGroup="ReportValidation" />
+
+    
 <p>
     
                 <table class="style4">
@@ -40,13 +45,13 @@
                             <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
         <asp:CustomValidator ID="MemberCustomValidator" runat="server" 
             Display="Dynamic" ErrorMessage="Please enter existed username." ForeColor="Red" 
-            onservervalidate="MemberCustomValidator_ServerValidate"></asp:CustomValidator>
+            onservervalidate="MemberCustomValidator_ServerValidate" ValidationGroup="ReportValidation">*</asp:CustomValidator>
                         </td>
                         <td>
                             &nbsp;</td>
                         <td>
                 <asp:CheckBox ID="cbGroupByDistrict" runat="server" 
-            Text="Group By District" oncheckedchanged="btnGenerate_Click" 
+            Text="Group By District" 
              />
                         </td>
                         <td>
@@ -61,42 +66,49 @@
                             Date Range:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
                             From</td>
                         <td class="style5">
-                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
-    <asp:Button ID="StartCalendarButton" runat="server" onclick="StartCalendarButton_Click" Text=".." />
+                            <asp:TextBox ID="StartDayTextBox" runat="server" Width="116px"></asp:TextBox>
+    &nbsp;
+                        <asp:CompareValidator ID="CompareValidatorStart" runat="server" ControlToValidate="StartDayTextBox"
+                            ControlToCompare="EndDayTextBox" Type="Date" 
+                            ErrorMessage="Invalid Date Range" Display="Dynamic" EnableClientScript="False" 
+                                ForeColor="Red" Operator="LessThanEqual" ValidationGroup="ReportValidation">*</asp:CompareValidator>
+                            <asp:RegularExpressionValidator ID="DateFormatStartValidator" runat="server" 
+                                ControlToValidate="StartDayTextBox" Display="Dynamic" 
+                                EnableClientScript="False" ErrorMessage="Wrong Date Format" ForeColor="Red" 
+                                ValidationExpression="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
+                                ValidationGroup="ReportValidation">*</asp:RegularExpressionValidator>
                         </td>
                         <td>
                             To</td>
                         <td>
-                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px" ReadOnly="True"></asp:TextBox>
-    <asp:Button ID="EndCalendarButton" runat="server" onclick="EndCalendarButton_Click" Text=".." />
-                        </td>
-                        <td>
-                            <asp:Button ID="ClearRangeButton" runat="server" 
-                                onclick="ClearRangeButton_Click" Text="ClearRange" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="style6">
-                            &nbsp;</td>
-                        <td class="style5">
-        <asp:Calendar ID="StartCalendar" runat="server" onselectionchanged="StartCalendar_SelectionChanged"></asp:Calendar>
-                        </td>
-                        <td>
-                            &nbsp;</td>
-                        <td>
-        <asp:Calendar ID="EndCalendar" runat="server" onselectionchanged="EndCalendar_SelectionChanged"></asp:Calendar>
+                            <asp:TextBox ID="EndDayTextBox" runat="server" Width="116px"></asp:TextBox>
+                        &nbsp;
+                        <asp:CompareValidator ID="CompareValidator2" runat="server" ControlToValidate="EndDayTextBox"
+                        ControlToCompare="StartDayTextBox" Type="Date" 
+                        ErrorMessage="Invalid Date Range" Display="Dynamic" EnableClientScript="False" 
+                                ForeColor="Red" Operator="GreaterThanEqual" ValidationGroup="ReportValidation">*</asp:CompareValidator>
+                
+                            <asp:RegularExpressionValidator ID="DateFormatEndValidator" runat="server" 
+                                ControlToValidate="EndDayTextBox" Display="Dynamic" EnableClientScript="False" 
+                                ErrorMessage="Wrong Date Format" ForeColor="Red" 
+                                ValidationExpression="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
+                                ValidationGroup="ReportValidation">*</asp:RegularExpressionValidator>
+                
                         </td>
                         <td>
                             &nbsp;</td>
                     </tr>
-        </table>
+                    </table>
 &nbsp;
                 <asp:Button ID="btnGenerate" runat="server" Text="Generate" 
-                    onclick="btnGenerate_Click" />
+                    onclick="btnGenerate_Click" 
+        ValidationGroup="ReportValidation" />
     </p>
     <p>
     
-                &nbsp;</p>
+    <asp:Label ID="lblGeneratedResultMessage" runat="server" Font-Bold="True" 
+        ForeColor="Red" style="color: #0000FF"></asp:Label>
+    </p>
     <p>
       
         <asp:GridView ID="TotalAmountGridView" runat="server" 

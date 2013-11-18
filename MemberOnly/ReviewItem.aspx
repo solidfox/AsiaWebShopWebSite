@@ -172,7 +172,7 @@
         <strong>Item Reviewed:</strong></p>
     <asp:GridView ID="ReviewedItemGridView" runat="server" AutoGenerateColumns="False" 
         CellPadding="4" DataSourceID="ReviewedItemDataSource" ForeColor="#333333" 
-        GridLines="None" Width="587px">
+        GridLines="None" Width="600px">
         <AlternatingRowStyle BackColor="White" />
         <Columns>
             <asp:TemplateField HeaderText="name" SortExpression="name">
@@ -197,10 +197,10 @@
                 SortExpression="durability" />
             <asp:BoundField DataField="comment" HeaderText="comment" 
                 SortExpression="comment" >
-            <ControlStyle Width="10%" />
-            <FooterStyle Width="10%" />
-            <HeaderStyle Width="10%" />
-            <ItemStyle Width="10%" />
+            <ControlStyle Width="100px" />
+            <FooterStyle Width="100px" Wrap="True" />
+            <HeaderStyle Width="100px" Wrap="True" />
+            <ItemStyle Width="100px" Wrap="True" />
             </asp:BoundField>
         </Columns>
         <EditRowStyle BackColor="#2461BF" />
@@ -210,8 +210,8 @@
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
-        <RowStyle BackColor="#EFF3FB" />
-        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333" />
+        <RowStyle BackColor="#EFF3FB" Width="600px"  Wrap="True" />
+        <SelectedRowStyle BackColor="#D1DDF1" Font-Bold="True" ForeColor="#333333"  Wrap="True"/>
         <SortedAscendingCellStyle BackColor="#F5F7FB" />
         <SortedAscendingHeaderStyle BackColor="#6D95E1" />
         <SortedDescendingCellStyle BackColor="#E9EBEF" />

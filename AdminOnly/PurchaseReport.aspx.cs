@@ -15,35 +15,9 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack)
-        {
-            StartCalendar.Visible = false;
-            EndCalendar.Visible = false;
-        }
-    }
-    protected void StartCalendarButton_Click(object sender, EventArgs e)
-    {
-        if (StartCalendar.Visible)
-        {
-            StartCalendar.Visible = false;
-        }
-        else
-        {
-            StartCalendar.Visible = true;
-        }
-    }
-    protected void EndCalendarButton_Click(object sender, EventArgs e)
-    {
-        if (EndCalendar.Visible)
-        {
-            EndCalendar.Visible = false;
-        }
-        else
-        {
-            EndCalendar.Visible = true;
-        }
 
     }
+
 
 
     protected void MemberCustomValidator_ServerValidate(object source, ServerValidateEventArgs args)
@@ -73,6 +47,12 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
     protected void btnGenerate_Click(object sender, EventArgs e)
     {
+        if (!Page.IsValid)
+        {
+            DataList1.Visible = false;
+            return;
+        }
+
         string userNameQuery = "";
         string dateRangQuery = "";
 
@@ -80,7 +60,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         {
             userNameQuery = "AND (Member.userName = N'" + UserName.Text.Trim() + "')";
         }
-    
+
         if (StartDayTextBox.Text != "")
         {
             dateRangQuery = "AND (([Order].orderDateTime >= CAST('" + StartDayTextBox.Text.Trim() + "' AS SMALLDATETIME)))";
@@ -95,36 +75,24 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
 
         string SQLCmd = " SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].confirmationNumber, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)"
-                        + userNameQuery+ dateRangQuery;
-         
+                        + userNameQuery + dateRangQuery;
+
         MemberSqlDataSource.SelectCommand = SQLCmd;
+        DataList1.Visible = true;
         DataList1.DataBind();
         MemberSqlDataSource.Select(DataSourceSelectArguments.Empty);
 
+        // Display a no result message if nothing was retrieved from the database.
+        if (DataList1.Items.Count == 0)
+        {
+            lblGeneratedResultMessage.Text = "No records.";
+            lblGeneratedResultMessage.Visible = true;
+        }
+        else
+            lblGeneratedResultMessage.Visible = false;
+
     }
 
-    protected void ClearRangeButton_Click(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = null;
-        EndDayTextBox.Text = null;
-        StartCalendar.SelectedDates.Clear();
-        EndCalendar.SelectedDates.Clear();
-        StartCalendar.Visible = false;
-        EndCalendar.Visible = false;
-    }
-
-
-    protected void EndCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        EndDayTextBox.Text = EndCalendar.SelectedDate.ToShortDateString();
-        EndCalendar.Visible = false;
-        EndCalendar.SelectedDates.Clear();
-    }
-    protected void StartCalendar_SelectionChanged(object sender, EventArgs e)
-    {
-        StartDayTextBox.Text = StartCalendar.SelectedDate.ToShortDateString();
-        StartCalendar.Visible = false;
-        StartCalendar.SelectedDates.Clear();
-    }
 }
 
+  
