@@ -24,9 +24,9 @@
                 <asp:BoundField DataField="orderNum" HeaderText="Order Number" InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
                 <asp:BoundField DataField="orderDateTime" HeaderText="Order Time" SortExpression="orderDateTime" />
                 <asp:BoundField DataField="Column1" HeaderText="Delivery Time" ReadOnly="True" SortExpression="Column1" />
+                <asp:BoundField DataField="slot" HeaderText="Time Slot" SortExpression="slot" />
                 <asp:BoundField DataField="deliveryAddress" HeaderText="Delivery Address" SortExpression="deliveryAddress" />
                 <asp:BoundField DataField="deliveryDistrict" HeaderText="Delivery District" SortExpression="deliveryDistrict" />
-                <asp:BoundField DataField="timeSlotID" HeaderText="timeSlotID" SortExpression="timeSlotID" />
             </Columns>
             <EditRowStyle BackColor="#2461BF" />
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -40,7 +40,10 @@
             <SortedDescendingHeaderStyle BackColor="#4870BE" />
         </asp:GridView>
     <p>
-        <asp:DetailsView ID="DetailsView2" runat="server" AutoGenerateRows="False" CellPadding="4" DataKeyNames="orderNum" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="None" Height="88px" Width="161px">
+
+        
+        Please select to modify...<p>
+        <asp:DetailsView ID="DetailsView1" runat="server" AutoGenerateRows="False" CellPadding="4" DataKeyNames="orderNum" DataSourceID="SqlDataSource1" ForeColor="#333333" GridLines="None" Height="16px" Width="180px">
             <AlternatingRowStyle BackColor="White" />
             <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
             <EditRowStyle BackColor="#2461BF" />
@@ -79,7 +82,7 @@
         
        
         <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT [orderNum], [orderDateTime], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) , [deliveryAddress], [deliveryDistrict], [timeSlotID] FROM [Order] WHERE ([shipped] = @shipped) AND ([userName]) = @userName">
+            SelectCommand="SELECT [orderNum], [orderDateTime], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) , [deliveryAddress], [deliveryDistrict], TimeSlot.slot FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([shipped] = @shipped) AND ([userName]) = @userName">
             <SelectParameters>
                 <asp:Parameter DefaultValue="false" Name="shipped" Type="Boolean" />
                 <asp:Parameter Name="userName" />
