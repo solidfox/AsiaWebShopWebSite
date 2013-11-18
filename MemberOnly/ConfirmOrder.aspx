@@ -26,6 +26,10 @@
                 SortExpression="creditCardtype" />
         </Fields>
     </asp:DetailsView>
+    <br />
+    <asp:Button ID="Button1" runat="server" 
+        PostBackUrl="~/MemberOnly/DeliveryAndPayment.aspx" 
+        Text="Edit Delivery &amp; Payment Details" />
     <asp:SqlDataSource ID="orderDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
         SelectCommand="SELECT [Order].orderNum, DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS Date)) AS 'Delivery Date', TimeSlot.slot, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].userName = @userName) AND ([Order].confirmationNumber IS NULL)" 
