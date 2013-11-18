@@ -17,17 +17,6 @@ public class GenericQuery
 		//
 	}
 
-
-    protected static int GetCurrentHourID()
-    {
-        int hour = DateTime.Now.Hour;
-        int hourID = 0;
-        if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
-        else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
-        else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
-        else { hourID = 4; }//Time Slot 4
-        return hourID;
-    }
     #region DBOrderItem
     public static void RemoveFromDBOrderItem(string connectionString, string UPC, int OrderNum)
     {
@@ -187,6 +176,56 @@ public class GenericQuery
             command.Parameters.AddWithValue("@Price", discountPrice);
             command.Parameters.AddWithValue("@amountSaved", amountSavedForOne);
             command.Parameters.AddWithValue("@removed", 0);
+            // Open the connection, execute the UPDATE query and close the connection.
+            command.Connection.Open();
+            command.ExecuteNonQuery();
+            command.Connection.Close();
+        }
+
+    }
+
+    public static void CheckDelivered (string connectionString, string UserName)
+    {
+        string query = "SELECT [orderDateTime],[orderNum] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNum IS NOT NULL)";
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            command.Connection.Open();
+            // Execute the SELECT query and place the result in a DataReader.
+            SqlDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                // Iterate through the table to get the retrieved values.
+                reader.Read();
+                if (!reader.IsDBNull(0))
+                {
+                    DateTime NoMoreChange = reader.GetDateTime(0).AddDays(1);
+                    if (DateTime.Now > NoMoreChange)
+                    {
+                        PreForShippment(connectionString, reader.GetInt32(1));
+                    }
+                }
+
+
+                command.Connection.Close(); // Close the connection and the DataReader.
+                reader.Close();
+            }
+
+        }
+
+        return;
+    }
+
+    private static void PreForShippment(string connectionString, int OrderNum) 
+    {
+        string query = "UPDATE [Order] SET shipped=@SHIP" +
+                       "WHERE [orderNum]=@OrderNum";
+        // Create the connection and the SQL command.
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
+        using (SqlCommand command = new SqlCommand(query, connection))
+        {
+            // Define the UPDATE query parameters and their values.
+            command.Parameters.AddWithValue("@SHIP", 1);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();
