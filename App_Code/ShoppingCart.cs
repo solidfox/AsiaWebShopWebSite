@@ -319,13 +319,13 @@ public class ShoppingCart
 
     private string generateConfirmationNumber()
     {
-        const int firstConfirmationNumber = 999999;
+        const int firstConfirmationNumber = 999999 * 16 * 16;
 
-        int confirmationNumber = firstConfirmationNumber - this.getOrderNum();
-        
+        Int32 confirmationNumber = firstConfirmationNumber - this.getOrderNum();
+
         char letter1 = (char)(((confirmationNumber >> 24) & 15) + 65);
         char letter2 = (char)(((confirmationNumber >> 20) & 15) + 65);
-        int sixDigits = confirmationNumber >> 8;
+        Int32 sixDigits = (confirmationNumber << 12) >> 12;
         return letter1.ToString() + letter2.ToString() + sixDigits.ToString().PadLeft(6, '0');
     }
 
