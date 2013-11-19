@@ -186,7 +186,7 @@ public class GenericQuery
 
     public static void CheckDelivered (string connectionString, string UserName)
     {
-        string query = "SELECT [orderDateTime],[orderNum] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNumber IS NOT NULL)";
+        string query = "SELECT [orderDateTime],[orderNum],[deliveryDateOffset] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNumber IS NOT NULL)";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
@@ -199,8 +199,8 @@ public class GenericQuery
                 reader.Read();
                 if (!reader.IsDBNull(0))
                 {
-                    DateTime NoMoreChange = reader.GetDateTime(0).AddDays(1);
-                    if (DateTime.Now > NoMoreChange)
+                    DateTime NoMoreChange = reader.GetDateTime(0).AddDays(reader.GetByte(2) - 1);
+                    if (DateTime.Now >= NoMoreChange)
                     {
                         PreForShippment(connectionString, reader.GetInt32(1));
                     }
