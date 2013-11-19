@@ -20,7 +20,11 @@
         <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="orderNum" DataSourceID="SqlDataSource2" CellPadding="4" ForeColor="#333333" GridLines="None">
             <AlternatingRowStyle BackColor="White" />
             <Columns>
-                <asp:CommandField ShowSelectButton="True" />
+                <asp:TemplateField>
+                <ItemTemplate>
+                <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/EditDeliveryInfo.aspx?orderNum={0}", HttpUtility.UrlEncode(Eval("orderNum").ToString())) %>' Text="Edit Info."></asp:HyperLink>
+                </ItemTemplate>
+            </asp:TemplateField>
                 <asp:BoundField DataField="orderNum" HeaderText="Order Number" InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
                 <asp:BoundField DataField="orderDateTime" HeaderText="Order Time" SortExpression="orderDateTime" />
                 <asp:BoundField DataField="Column1" HeaderText="Delivery Time" ReadOnly="True" SortExpression="Column1" />

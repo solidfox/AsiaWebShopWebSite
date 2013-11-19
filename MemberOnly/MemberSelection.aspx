@@ -27,6 +27,10 @@
             NavigateUrl="~/MemberOnly/BrowseOwnPurchase.aspx">Browse Own Purchase</asp:HyperLink>
     </p>
     <p>
+        <asp:HyperLink ID="ListUnshippedOrderLink" runat="server" 
+            NavigateUrl="~/MemberOnly/ListUnshippedOrder.aspx">Edit Delievery Information of Orders</asp:HyperLink>
+    </p>
+    <p>
         &nbsp;</p>
 </asp:Content>
 
