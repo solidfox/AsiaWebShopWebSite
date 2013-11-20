@@ -120,72 +120,79 @@ public partial class ItemSearch : System.Web.UI.Page
     }
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
-        //Get the button that raised the event
-        LinkButton LinkButton1 = (LinkButton)sender;
-
-        //Get the row that contains this button
-        GridViewRow gvr = (GridViewRow)LinkButton1.NamingContainer;
-        string upc = gvItemSearchResult.DataKeys[gvr.RowIndex].Values["upc"].ToString();
-
-        // Check if the quantity is zero.
-        bool isZero = false;
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        if (userName != "")
         {
-            // Count how many existing records have the student id value.
-            connection.Open();
-            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
-            Int32 count = (Int32)command.ExecuteScalar();
-            connection.Close();
+            //Get the button that raised the event
+            LinkButton LinkButton1 = (LinkButton)sender;
 
-            // If the count is not zero the student id already exists, so cancel the insert.
-            if (count == 0)
-            {
-               isZero = true;
-            }
-        }
+            //Get the row that contains this button
+            GridViewRow gvr = (GridViewRow)LinkButton1.NamingContainer;
+            string upc = gvItemSearchResult.DataKeys[gvr.RowIndex].Values["upc"].ToString();
 
-        // Check if the email alert is already sent.
-        bool isAlert = false;
-        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
-        {
-            // Count how many existing records have the student id value.
-            connection.Open();
-            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
-            Int32 count = (Int32)command.ExecuteScalar();
-
-            if (count != 0)
-            {
-                SqlCommand test = new SqlCommand("SELECT isAlert FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
-                isAlert = (bool)test.ExecuteScalar();
-            }
-            connection.Close();
-        }
-       
-        if ((isZero == true) && (isAlert == false))
-        {
-            // Create the connection and the SQL command.
-            // Define the INSERT query with parameters.
-            string query = "INSERT INTO [WishListItem]([userName], [upc], [emailSent], [isAlert])" +
-                                   "VALUES (@userName, @upc, @emailSent, @isAlert)";
+            // Check if the quantity is zero.
+            bool isZero = false;
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
-            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                // Define the INSERT query parameters and their values.
-                command.Parameters.AddWithValue("@UserName", userName);
-                command.Parameters.AddWithValue("@upc", upc);
-                command.Parameters.AddWithValue("@emailSent", false);
-                command.Parameters.AddWithValue("@isAlert", true);
+                // Count how many existing records have the student id value.
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
+                Int32 count = (Int32)command.ExecuteScalar();
+                connection.Close();
 
-                // Open the connection, execute the INSERT query and close the connection.
-                command.Connection.Open();
-                command.ExecuteNonQuery();
-                command.Connection.Close();
+                // If the count is not zero the student id already exists, so cancel the insert.
+                if (count == 0)
+                {
+                    isZero = true;
+                }
             }
-            ShowPopUpMsg("Alert added.");
+
+            // Check if the email alert is already sent.
+            bool isAlert = false;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+            {
+                // Count how many existing records have the student id value.
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
+                Int32 count = (Int32)command.ExecuteScalar();
+
+                if (count != 0)
+                {
+                    SqlCommand test = new SqlCommand("SELECT isAlert FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
+                    isAlert = (bool)test.ExecuteScalar();
+                }
+                connection.Close();
+            }
+
+            if ((isZero == true) && (isAlert == false))
+            {
+                // Create the connection and the SQL command.
+                // Define the INSERT query with parameters.
+                string query = "INSERT INTO [WishListItem]([userName], [upc], [emailSent], [isAlert])" +
+                                       "VALUES (@userName, @upc, @emailSent, @isAlert)";
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Define the INSERT query parameters and their values.
+                    command.Parameters.AddWithValue("@UserName", userName);
+                    command.Parameters.AddWithValue("@upc", upc);
+                    command.Parameters.AddWithValue("@emailSent", false);
+                    command.Parameters.AddWithValue("@isAlert", true);
+
+                    // Open the connection, execute the INSERT query and close the connection.
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    command.Connection.Close();
+                }
+                ShowPopUpMsg("Alert added.");
+            }
+            else
+            {
+                ShowPopUpMsg("Alert cannot be added." + "   isZero: " + isZero + "  isAlert:" + isAlert);
+            }
         }
         else
         {
-            ShowPopUpMsg("Alert cannot be added." + "   isZero: " + isZero + "  isAlert:" + isAlert);
+            Response.Redirect("Account/Login.aspx");
         }
     }
     private void ShowPopUpMsg(string msg)
