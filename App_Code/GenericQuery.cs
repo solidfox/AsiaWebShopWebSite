@@ -218,14 +218,15 @@ public class GenericQuery
 
     private static void PreForShippment(string connectionString, int OrderNum) 
     {
-        string query = "UPDATE [Order] SET shipped=@SHIP" +
+        string query = "UPDATE [Order] SET shipped=@SHIP " +
                        "WHERE [orderNum]=@OrderNum";
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
             // Define the UPDATE query parameters and their values.
-            command.Parameters.AddWithValue("@SHIP", 1);
+            command.Parameters.AddWithValue("@SHIP", true);
+            command.Parameters.AddWithValue("@OrderNum", OrderNum);
             // Open the connection, execute the UPDATE query and close the connection.
             command.Connection.Open();
             command.ExecuteNonQuery();

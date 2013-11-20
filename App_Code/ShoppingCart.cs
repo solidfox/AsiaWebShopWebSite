@@ -323,7 +323,7 @@ public class ShoppingCart
 
         int confirmationNumber = firstConfirmationNumber - this.getOrderNum();
         
-        char letter1 = (char)((confirmationNumber >> 24) & 15) + 65);
+        char letter1 = (char)(((confirmationNumber >> 24) & 15) + 65);
         char letter2 = (char)(((confirmationNumber >> 20) & 15) + 65);
         int sixDigits = confirmationNumber >> 8;
         return letter1.ToString() + letter2.ToString() + sixDigits.ToString().PadLeft(6, '0');
