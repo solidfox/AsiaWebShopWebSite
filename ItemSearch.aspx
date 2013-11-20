@@ -69,7 +69,8 @@
     <br />
     <asp:GridView ID="gvItemSearchResult" runat="server" 
         AutoGenerateColumns="False" CellPadding="4" DataKeyNames="upc" 
-        DataSourceID="AsiaWebShopDBSqlDataSource" ForeColor="#333333" GridLines="None">
+        DataSourceID="AsiaWebShopDBSqlDataSource" ForeColor="#333333" 
+        GridLines="None" >
         <AlternatingRowStyle BackColor="White" />
         <Columns>
             <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
@@ -96,6 +97,12 @@
             <asp:TemplateField>
                 <ItemTemplate>
                     <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}&normalPrice={3}&quantityAvailable={4}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString()), HttpUtility.UrlEncode(Eval("normalPrice").ToString()), HttpUtility.UrlEncode(Eval("quantityAvailable").ToString())) %>' Text="Add to cart"></asp:HyperLink>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField ShowHeader="False">
+                <ItemTemplate>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" 
+                        CommandName="" onclick="LinkButton1_Click" Text="Add to Alert List"></asp:LinkButton>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
