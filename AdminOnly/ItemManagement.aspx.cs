@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Text;
 
 public partial class ItemManagement : System.Web.UI.Page
 {
@@ -47,7 +48,62 @@ public partial class ItemManagement : System.Web.UI.Page
             }
         }
 
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+            Label UPC = (Label)dvItem.FindControl("EditUPC");
+            connection.Open();
+            SqlCommand quanNum = new SqlCommand("SELECT quantityAvailable FROM [item] WHERE ([upc] = N'" + UPC.Text + "')", connection);
+            Int32 num = (Int32)quanNum.ExecuteScalar();
+            connection.Close();
+            if (num != 0)
+                sendEmail(UPC.Text);
+        }
+
         gvItem.DataBind();
+    }
+
+    protected bool sendEmail(string upc)
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+            // start to connect sql server
+            connection.Open();
+
+            Int32 count = 0;
+            int emailSentNum = 0;
+            do
+            {
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "'))", connection);
+                count = (Int32)command.ExecuteScalar();
+
+                if (count != 0)
+                {
+                    SqlCommand test = new SqlCommand("SELECT userName FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "'))", connection);
+                    String customerName = test.ExecuteScalar().ToString().Trim();
+                    SqlCommand name = new SqlCommand("SELECT name FROM [Item] WHERE (([upc] = N'" + upc + "'))", connection);
+                    String itemName = name.ExecuteScalar().ToString().Trim();
+
+                    EmailAlert instance = new EmailAlert();
+                    bool isEmailSent = instance.sendEmail("mycheungac@cse.ust.hk", itemName + " is now availiable. Come to AisaWebShop.", "Dear customer " + customerName + ":\n\n  "
+                        + itemName + " is now on stock. Visit our website and You will find products you want are all in our shop.\n\nBest wishes, \nASiaWebShop");
+                    if (isEmailSent == true)
+                    {
+                        SqlCommand alertEmailSent = new SqlCommand("UPDATE [WishListItem] SET [emailSent]= N'" + true + "' WHERE (([upc] = N'" + upc + "') AND ([userName] = N'" + customerName + "'))", connection);
+                        alertEmailSent.ExecuteScalar();
+                        emailSentNum++;
+                    }
+                    else
+                    {
+                        ShowPopUpMsg("False");
+                    }
+                }
+            } while (count != 0);
+
+            ShowPopUpMsg(emailSentNum + " is sent");
+            connection.Close();
+
+        }
+        return true;
     }
 
     protected void cvInsertUPC_ServerValidate(object source, ServerValidateEventArgs args)
@@ -127,5 +183,12 @@ public partial class ItemManagement : System.Web.UI.Page
         }
         
     }
-
+    private void ShowPopUpMsg(string msg)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("alert('");
+        sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"));
+        sb.Append("');");
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "showalert", sb.ToString(), true);
+    }
 }
