@@ -82,9 +82,12 @@ public partial class ItemManagement : System.Web.UI.Page
                     String customerName = test.ExecuteScalar().ToString().Trim();
                     SqlCommand name = new SqlCommand("SELECT name FROM [Item] WHERE (([upc] = N'" + upc + "'))", connection);
                     String itemName = name.ExecuteScalar().ToString().Trim();
+                    SqlCommand userEmail = new SqlCommand("SELECT email FROM [member] WHERE (([userName] = N'" + customerName + "'))", connection);
+                    String email = userEmail.ExecuteScalar().ToString().Trim();
+
 
                     EmailAlert instance = new EmailAlert();
-                    bool isEmailSent = instance.sendEmail("mycheungac@cse.ust.hk", itemName + " is now availiable. Come to AisaWebShop.", "Dear customer " + customerName + ":\n\n  "
+                    bool isEmailSent = instance.sendEmail(email, itemName + " is now availiable. Come to AisaWebShop.", "Dear customer " + customerName + ":\n\n  "
                         + itemName + " is now on stock. Visit our website and You will find products you want are all in our shop.\n\nBest wishes, \nASiaWebShop");
                     if (isEmailSent == true)
                     {
