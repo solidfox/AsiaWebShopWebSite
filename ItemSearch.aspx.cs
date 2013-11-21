@@ -135,15 +135,16 @@ public partial class ItemSearch : System.Web.UI.Page
             {
                 // Count how many existing records have the student id value.
                 connection.Open();
-                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [item] WHERE ([upc] = N'" + upc + "')", connection);
                 Int32 count = (Int32)command.ExecuteScalar();
-                connection.Close();
 
-                // If the count is not zero the student id already exists, so cancel the insert.
-                if (count == 0)
+                if (count != 0)
                 {
-                    isZero = true;
+                    SqlCommand test = new SqlCommand("SELECT quantityAvailable FROM [item] WHERE ([upc] = N'" + upc + "')", connection);
+                    if ((Int32)test.ExecuteScalar() == 0)
+                        isZero = true;
                 }
+                connection.Close();
             }
 
             // Check if the email alert is already sent.
@@ -183,7 +184,7 @@ public partial class ItemSearch : System.Web.UI.Page
                     command.ExecuteNonQuery();
                     command.Connection.Close();
                 }
-                ShowPopUpMsg("Alert added.");
+                ShowPopUpMsg("Alert added."+ "   isZero: " + isZero + "  isAlert:" + isAlert);
             }
             else
             {
