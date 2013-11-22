@@ -263,7 +263,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && (currentHour >= selectedTime || currentHour == 4))
+        if (selectedDate == 1 && currentHour >= selectedTime)
         {
             args.IsValid = false;
         }
@@ -275,7 +275,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && (currentHour >= selectedTime || currentHour == 4))
+        if (selectedDate == 1 && currentHour >= selectedTime)
         {
             args.IsValid = false;
         }
@@ -287,7 +287,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         if (hour >= 9 && hour < 12) { hourID = 1; }//Time Slot 1
         else if (hour >= 12 && hour < 15) { hourID = 2; }//Time Slot 2
         else if (hour >= 15 && hour < 18) { hourID = 3; }//Time Slot 3
-        else { hourID = 4; }//Time Slot 4
+        else if (hour >= 18 && hour < 24) { hourID = 4; }//Time Slot 4
+        else { hourID = 0; }
         return hourID;
     }
     protected void btnSubmit_Click(object sender, EventArgs e)
