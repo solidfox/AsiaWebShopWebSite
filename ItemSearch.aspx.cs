@@ -30,19 +30,13 @@ public partial class ItemSearch : System.Web.UI.Page
     }
     protected void Generate_Item_List()
     {
+        // Code to add inside btnSearch_Click event handler.
+        // -----------------------------------------------
+
         // Get the search string and the category from the search page.
         string itemSearchCondition = "";
-        string category = Request.QueryString["category"];
-        string searchString = "";
-        if (Page.IsPostBack) {
-            searchString = txtSearchString.Text.Trim();
-            category = categoryDropDownList.SelectedValue.Trim();
-        }
-
-        if (category == "All Categories")
-        {
-            category = null;
-        }
+        string searchString = txtSearchString.Text.Trim();
+        string category = categoryDropDownList.SelectedValue.Trim();
 
         // Construct the basic SELECT statement for searching; only visible items should be displayed.
         string SQLCmd = "SELECT [upc], [name], [picture], [normalPrice], [discountPrice], [quantityAvailable] FROM [Item] WHERE (([visible] = 'true')";
@@ -62,7 +56,7 @@ public partial class ItemSearch : System.Web.UI.Page
         // SELECT statement to search only in the specified category.
         if (searchString == "")
         {
-            if (category != null)
+            if (category != "All Categories")
             {
                 SQLCmd = SQLCmd + " AND ([category] = N'" + category + "')";
             }
@@ -116,6 +110,7 @@ public partial class ItemSearch : System.Web.UI.Page
             lblSearchResultMessage.Text = "The following records match your query." + lblSearchResultMessage.Text;
             lblSearchResultMessage.Visible = true;
         }
+
 
     }
     protected void LinkButton1_Click(object sender, EventArgs e)
