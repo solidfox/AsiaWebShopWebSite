@@ -64,4 +64,26 @@ public partial class MemberOnly_ManageCreditCard_ManageCreditCard : System.Web.U
     {
 
     }
+    protected void cvExpire_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        Int16 month = Convert.ToInt16((((DropDownList)dvCreditCard.FindControl("insMonthDDL")).SelectedValue.Trim()));
+        Int16 year = Convert.ToInt16((((DropDownList)dvCreditCard.FindControl("insYearDDL")).SelectedValue.Trim()));
+        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        {
+            args.IsValid = false;
+        }
+        else
+            args.IsValid = true;
+    }
+    protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        Int16 month = Convert.ToInt16((((DropDownList)dvCreditCard.FindControl("editExpiryMonth")).SelectedValue.Trim()));
+        Int16 year = Convert.ToInt16((((DropDownList)dvCreditCard.FindControl("editExpiryYear")).SelectedValue.Trim()));
+        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        {
+            args.IsValid = false;
+        }
+        else
+            args.IsValid = true;
+    }
 }

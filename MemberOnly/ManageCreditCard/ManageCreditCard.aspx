@@ -72,7 +72,7 @@
                             ErrorMessage="Credit Card Number is requirement." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="revInsertNumber" runat="server" 
                             ControlToValidate="InsertNumber" Display="Dynamic" EnableClientScript="False" 
-                            ErrorMessage="Credit Card Number shoud be 16 digit." ForeColor="#CC0000" 
+                            ErrorMessage="Credit Card Number shoud be 14 - 16 digit." ForeColor="#CC0000" 
                             ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
@@ -141,7 +141,7 @@
                         </asp:DropDownList>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:DropDownList ID="DropDownList1" runat="server" 
+                        <asp:DropDownList ID="insMonthDDL" runat="server" 
                             SelectedValue='<%# Bind("expiryMonth") %>'>
                             <asp:ListItem>01</asp:ListItem>
                             <asp:ListItem>02</asp:ListItem>
@@ -163,7 +163,7 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="expiryYear" SortExpression="expiryYear">
                     <EditItemTemplate>
-                        <asp:DropDownList ID="DropDownList2" runat="server" 
+                        <asp:DropDownList ID="editExpiryYear" runat="server" 
                             SelectedValue='<%# Bind("expiryYear") %>'>
                             <asp:ListItem>2013</asp:ListItem>
                             <asp:ListItem>2014</asp:ListItem>
@@ -176,9 +176,13 @@
                             <asp:ListItem>2021</asp:ListItem>
                             <asp:ListItem>2022</asp:ListItem>
                         </asp:DropDownList>
+                        <asp:CustomValidator ID="CustomValidator1" runat="server" 
+                            ControlToValidate="editExpiryYear" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="This credit card is expiried." ForeColor="#CC0000" 
+                            onservervalidate="CustomValidator1_ServerValidate">*</asp:CustomValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
-                        <asp:DropDownList ID="DropDownList5" runat="server" 
+                        <asp:DropDownList ID="insYearDDL" runat="server" 
                             SelectedValue='<%# Bind("expiryYear") %>'>
                             <asp:ListItem>2013</asp:ListItem>
                             <asp:ListItem>2014</asp:ListItem>
@@ -191,6 +195,10 @@
                             <asp:ListItem>2021</asp:ListItem>
                             <asp:ListItem>2022</asp:ListItem>
                         </asp:DropDownList>
+                        <asp:CustomValidator ID="cvExpire" runat="server" 
+                            ControlToValidate="insYearDDL" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="This credit card is expired." ForeColor="#CC0000" 
+                            onservervalidate="cvExpire_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label6" runat="server" Text='<%# Bind("expiryYear") %>'></asp:Label>
