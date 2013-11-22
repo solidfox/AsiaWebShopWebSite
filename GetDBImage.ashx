@@ -12,7 +12,7 @@ public class GetDBImage : IHttpHandler {
     public void ProcessRequest (HttpContext context) {
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
         {
-            SqlCommand command = new SqlCommand("Select [picture] from [Item] where [upc] = '" + context.Request.QueryString["upc"] + "'", connection);
+            SqlCommand command = new SqlCommand("Select [picture] from [Item] where [upc] = N'" + context.Request.QueryString["upc"] + "'", connection);
 
             connection.Open();
             SqlDataReader dr = command.ExecuteReader(CommandBehavior.CloseConnection);
