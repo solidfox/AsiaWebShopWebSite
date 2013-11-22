@@ -24,6 +24,7 @@ using System.Net.Mail;  // Add the System.Net.Mail namespace to the project to a
                 mail.To.Add(receiver);
                 mail.Subject = subject;
                 mail.Body = body;
+                mail.IsBodyHtml = true;
 
                 // Send the message.
                 emailServer.Send(mail);
