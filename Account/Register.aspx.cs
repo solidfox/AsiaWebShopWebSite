@@ -169,15 +169,18 @@ public partial class Account_Register : System.Web.UI.Page
             ((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).Items.Add(year.ToString());
         }
     }
-    
+
+
     protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
         Int16 month = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("MonthDropDownList")).SelectedValue.Trim()));
         Int16 year = Convert.ToInt16((((DropDownList)RegisterUserWizardStep.ContentTemplateContainer.FindControl("YearDropDownList")).SelectedValue.Trim()));
         if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
         {
-        args.IsValid = false;
+            args.IsValid = false;
         }
+        else
+            args.IsValid = true;
     }
     
 }

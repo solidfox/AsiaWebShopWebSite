@@ -298,4 +298,17 @@ public partial class _Default : System.Web.UI.Page
 
         Response.Redirect("MemberSelection.aspx");
     }
+
+    protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        Int16 month = Convert.ToInt16(MonthDropDownList.SelectedValue.Trim());
+        Int16 year = Convert.ToInt16(YearDropDownList.SelectedValue.Trim());
+        if ((month < DateTime.Now.Month) & (year <= DateTime.Now.Year))
+        {
+            args.IsValid = false;
+        }
+        else
+            args.IsValid = true;
+    }
+
 }

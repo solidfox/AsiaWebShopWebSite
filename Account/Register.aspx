@@ -70,9 +70,14 @@
                                 <td class="style8">
                                     <asp:TextBox ID="UserName" runat="server" MaxLength="10"></asp:TextBox>
                                     <asp:RequiredFieldValidator ID="rfvUserName" runat="server" 
+                                        ControlToValidate="UserName" CssClass="style28" Display="Dynamic" 
+                                        EnableClientScript="False" ErrorMessage="User Name is required." 
+                                        ForeColor="Red" ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="revUserName" runat="server" 
                                         ControlToValidate="UserName" Display="Dynamic" EnableClientScript="False" 
-                                        ErrorMessage="User Name is required." ForeColor="Red" 
-                                        ValidationGroup="RegisterUserValidationGroup">*</asp:RequiredFieldValidator>
+                                        ErrorMessage="User Name must be alphanumeric and between 6 and 10 characters." 
+                                        ForeColor="Red" ValidationGroup="RegisterUserValidationGroup" 
+                                        ValidationExpression="^[A-Za-z\d]{6,10}$">*</asp:RegularExpressionValidator>
                                 </td>
                                 <td align="right" class="style5">
                                     Email Address:</td>

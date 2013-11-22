@@ -27,6 +27,10 @@
                 <asp:RequiredFieldValidator ID="rfvEmail" runat="server" 
                     ControlToValidate="Email" CssClass="failureNotification" Display="Dynamic" 
                     EnableClientScript="False" ErrorMessage="Email Address is required">*</asp:RequiredFieldValidator>
+                <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
+                    ControlToValidate="Email" CssClass="footer" Display="Dynamic" EnableClientScript="False" 
+                    ErrorMessage="Please input valid Email address" 
+                    ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*">*</asp:RegularExpressionValidator>
             </td>
         </tr>
         <tr>
@@ -176,6 +180,10 @@
                     ControlToValidate="YearDropDownList" CssClass="failureNotification" Display="Dynamic" 
                     EnableClientScript="False" ErrorMessage="Please select a year" 
                     InitialValue="Year">*</asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="cvExpiryDate" runat="server" 
+                    ControlToValidate="MonthDropDownList" Display="Dynamic" 
+                    EnableClientScript="False" ErrorMessage="Credit card is expired. " 
+                    ForeColor="Red" onservervalidate="cvExpiryDate_ServerValidate">*</asp:CustomValidator>
             </td>
         </tr>
     </table>
