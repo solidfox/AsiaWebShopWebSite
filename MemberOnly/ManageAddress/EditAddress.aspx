@@ -164,7 +164,7 @@
         <asp:SqlDataSource ID="SelectedDeliveryAddress" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
             SelectCommand="SELECT userName, nickname, buildingAddress, streetAddress, district FROM Address WHERE (userName = @userName) AND (nickname = @nickname)" 
-        DeleteCommand="DELETE FROM [Address] WHERE [userName] = @userName AND [nickname] = @nickname" 
+        DeleteCommand="DELETE FROM [Address] WHERE [userName] = @userName AND [nickname] = @nickname AND [userName] IN (SELECT [userName] FROM [Address] GROUP BY [userName] HAVING COUNT(*) > 1)" 
         InsertCommand="INSERT INTO [Address] ([userName], [nickname], [buildingAddress], [streetAddress], [district]) VALUES (@userName, @nickname, @buildingAddress, @streetAddress, @district)" 
         
         UpdateCommand="UPDATE [Address] SET [buildingAddress] = @buildingAddress, [streetAddress] = @streetAddress, [district] = @district WHERE [userName] = @userName AND [nickname] = @nickname">

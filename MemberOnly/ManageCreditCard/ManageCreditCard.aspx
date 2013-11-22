@@ -228,7 +228,7 @@
         </asp:SqlDataSource>
         <asp:SqlDataSource ID="SelectedCreditCard" runat="server" 
             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            DeleteCommand="DELETE FROM [CreditCard] WHERE [userName] = @userName AND [number] = @number" 
+            DeleteCommand="DELETE FROM [CreditCard] WHERE [userName] = @userName AND [number] = @number AND [userName] IN (SELECT [userName] FROM [CreditCard] GROUP BY [userName] HAVING COUNT(*) > 1)" 
             InsertCommand="INSERT INTO [CreditCard] ([userName], [number], [type], [cardHolderName], [expiryMonth], [expiryYear]) VALUES (@userName, @number, @type, @cardHolderName, @expiryMonth, @expiryYear)" 
             SelectCommand="SELECT * FROM [CreditCard] WHERE (([userName] = @userName) AND ([number] = @number))" 
             UpdateCommand="UPDATE [CreditCard] SET [type] = @type, [cardHolderName] = @cardHolderName, [expiryMonth] = @expiryMonth, [expiryYear] = @expiryYear WHERE [userName] = @userName AND [number] = @number">
