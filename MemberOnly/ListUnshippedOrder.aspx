@@ -26,8 +26,8 @@
                 </ItemTemplate>
             </asp:TemplateField>
                 <asp:BoundField DataField="orderNum" HeaderText="Order Number" InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
-                <asp:BoundField DataField="orderDateTime" HeaderText="Order Time" SortExpression="orderDateTime" />
-                <asp:BoundField DataField="Column1" HeaderText="Delivery Time" ReadOnly="True" SortExpression="Column1" />
+                <asp:BoundField DataField="orderDateTime" HeaderText="Order Date" SortExpression="orderDateTime" DataFormatString="{0:d}" />
+                <asp:BoundField DataField="Column1" HeaderText="Delivery Date" ReadOnly="True" SortExpression="Column1" DataFormatString="{0:d}" />
                 <asp:BoundField DataField="slot" HeaderText="Time Slot" SortExpression="slot" />
                 <asp:BoundField DataField="deliveryAddress" HeaderText="Delivery Address" SortExpression="deliveryAddress" />
                 <asp:BoundField DataField="deliveryDistrict" HeaderText="Delivery District" SortExpression="deliveryDistrict" />
@@ -86,7 +86,7 @@
         
        
         <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-            SelectCommand="SELECT [orderNum], [orderDateTime], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) , [deliveryAddress], [deliveryDistrict], TimeSlot.slot FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([shipped] = @shipped) AND ([userName]) = @userName">
+            SelectCommand="SELECT [orderNum], [orderDateTime], DATEADD(day, [Order].deliveryDateOffset, [Order].orderDateTime) , [deliveryAddress], [deliveryDistrict], TimeSlot.slot FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([shipped] = @shipped) AND ([userName]) = @userName">
             <SelectParameters>
                 <asp:Parameter DefaultValue="false" Name="shipped" Type="Boolean" />
                 <asp:Parameter Name="userName" />
