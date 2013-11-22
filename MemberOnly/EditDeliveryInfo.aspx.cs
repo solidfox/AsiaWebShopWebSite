@@ -27,7 +27,10 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             PopulateDropdownList(connectionString, orderNum);
             PopulateDistrictDropDownList();
         }
-        SelectAddress_SelectedIndexChanged(sender, e);
+        if (Request.Form["ctl00$MainContent$btnSubmit"] == null)
+        {
+            SelectAddress_SelectedIndexChanged(sender, e);
+        }
     }
     private void GetMemberData(string connectionString, string userName)
     {

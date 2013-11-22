@@ -176,7 +176,7 @@
                 </asp:DropDownList>
                 <asp:RequiredFieldValidator ID="rfvCardTypeDropDownList" runat="server" 
                     ControlToValidate="CardTypeDropDownList" CssClass="failureNotification" Display="Dynamic" 
-                    EnableClientScript="False" ErrorMessage="Please select a credit card" 
+                    EnableClientScript="False" ErrorMessage="Please select a credit card type." 
                     InitialValue="-- Select credit card --">*</asp:RequiredFieldValidator>
             </td>
         </tr>

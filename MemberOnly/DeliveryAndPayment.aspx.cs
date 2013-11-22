@@ -8,9 +8,11 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.Text;
 
 public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 {
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         //DB connection
@@ -24,11 +26,18 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             PopulateMemberCreditCard(connectionString, userName);
             PopulateDropdownList();
             PopulateDistrictDropDownList();
+
         }
 
-        SelectAddress_SelectedIndexChanged(sender, e);
-        SelectCreditCard_SelectedIndexChanged(sender, e);
+
+        if (Request.Form["ctl00$MainContent$btnSubmit"] == null)
+        { 
+            
+            SelectAddress_SelectedIndexChanged(sender, e); 
+            SelectCreditCard_SelectedIndexChanged(sender, e);
+        } 
     }
+
     private void GetMemberData(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's personal data.
@@ -321,7 +330,8 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
         string selectedTime = SelectTime.SelectedValue;
         string cardType = CardTypeDropDownList.SelectedValue;
         string cardNum = CardNumber.Text.Trim();
-        int orderNum = GenericQuery.GetOrderNumber(connectionString, userName);
+        int orderNum = GenericQuery.GetOrderNumber(connectionString,userName);
+        
 
         //Update DB
         /*InsertDeliveryAddress(connectionString, userName, selectedAddress);*/
