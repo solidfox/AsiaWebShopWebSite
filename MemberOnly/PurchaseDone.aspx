@@ -13,13 +13,15 @@
     <p>
         <asp:Label ID="ConfirmationNumberLabel" runat="server" Text="Label"></asp:Label>
     </p>
-    <div id="email">
+    <div id="email"  style="display:none;" runat="server">
         <asp:DetailsView ID="orderDetailsView" runat="server" Height="50px" Width="461px" 
-        AutoGenerateRows="False" DataKeyNames="Order Number" 
+        AutoGenerateRows="False" 
         DataSourceID="orderDataSource">
         <Fields>
-            <asp:BoundField DataField="Order Number" HeaderText="Order Number" 
-                InsertVisible="False" ReadOnly="True" SortExpression="Order Number" />
+            <asp:BoundField DataField="Confirmation number" 
+                HeaderText="Confirmation number" SortExpression="Confirmation number" />
+            <asp:BoundField DataField="Authorization code" HeaderText="Authorization code" 
+                SortExpression="Authorization code" />
             <asp:BoundField DataField="Delivery Date" HeaderText="Delivery Date" 
                 SortExpression="Delivery Date" ReadOnly="True" />
             <asp:BoundField DataField="Delivery Time Slot" HeaderText="Delivery Time Slot" 
@@ -29,14 +31,16 @@
             <asp:BoundField DataField="District" HeaderText="District" 
                 SortExpression="District" />
             <asp:BoundField DataField="Card Number" HeaderText="Card Number" 
-                SortExpression="Card Number" />
+                SortExpression="Card Number" ReadOnly="True" />
             <asp:BoundField DataField="Card Type" HeaderText="Card Type" 
                 SortExpression="Card Type" />
+            <asp:BoundField DataField="Savings" HeaderText="Savings" ReadOnly="True" 
+                SortExpression="Savings" />
         </Fields>
     </asp:DetailsView>
     <asp:SqlDataSource ID="orderDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT [Order].orderNum AS 'Order Number', DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot AS 'Delivery Time Slot', [Order].deliveryAddress AS 'Delivery Address', [Order].deliveryDistrict AS 'District', [Order].creditCardNumber AS 'Card Number', [Order].creditCardtype AS 'Card Type' FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].confirmationNumber = @confirmationNumber)" 
+        SelectCommand="SELECT [Order].confirmationNumber AS [Confirmation number], [Order].code AS [Authorization code], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot AS 'Delivery Time Slot', [Order].deliveryAddress AS 'Delivery Address', [Order].deliveryDistrict AS 'District', { fn CONCAT('**** **** **** ', RIGHT ([Order].creditCardNumber, 4)) } AS 'Card Number', [Order].creditCardtype AS 'Card Type', (SELECT SUM(Item.normalPrice) - SUM(Item.discountPrice) AS 'savings' FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE ([Order].orderNum = [Order].orderNum)) AS 'Savings' FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].confirmationNumber = @confirmationNumber)" 
         onselecting="orderDataSource_Selecting">
         <SelectParameters>
             <asp:Parameter Name="confirmationNumber" Type="String" />

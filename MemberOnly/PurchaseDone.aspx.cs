@@ -7,6 +7,8 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Text;
+using System.IO;
 
 public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
 {
@@ -14,11 +16,28 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
     private static String confirmationNumber;
     protected void Page_Load(object sender, EventArgs e)
     {
-        username = User.Identity.Name;
-        confirmationNumber = ShoppingCart.GetShoppingCart(User.Identity.Name).checkOut();
-        ConfirmationNumberLabel.Text = confirmationNumber;
+        if (!Page.IsPostBack) {
+            username = User.Identity.Name;
+            confirmationNumber = ShoppingCart.GetShoppingCart(User.Identity.Name).checkOut();
+            ConfirmationNumberLabel.Text = confirmationNumber;
+            sendReceipt();
+        }
     }
+    public override void VerifyRenderingInServerForm(Control control)
+    {
+        //base.VerifyRenderingInServerForm(control);
+    }
+    private void sendReceipt()
+    {
+        var message = new StringBuilder();
+        email.RenderControl(new HtmlTextWriter(new StringWriter(message)));
+        
+        string s = message.ToString();
 
+        EmailAlert alerter = new EmailAlert();
+
+        alerter.sendEmail(GenericQuery.getUserEmail(User.Identity.Name), "Web Shop Receipt", s);
+    }
     protected void orderDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
     {
         e.Command.Parameters[0].Value = confirmationNumber;
