@@ -9,7 +9,7 @@ using System.Net.Mail;  // Add the System.Net.Mail namespace to the project to a
 
     public class EmailAlert
     {
-        public bool sendEmail(string rec, string sub, string body)
+        public bool sendEmail(string receiver, string subject, string body)
         {
             try
             {
@@ -21,8 +21,8 @@ using System.Net.Mail;  // Add the System.Net.Mail namespace to the project to a
 
                 // Set the sender (From), receiver (To), subject and message body fields of the mail message.
                 mail.From = new MailAddress("mycheungac@cse.ust.hk", "AsiaWebShop");
-                mail.To.Add(rec);
-                mail.Subject = sub;
+                mail.To.Add(receiver);
+                mail.Subject = subject;
                 mail.Body = body;
 
                 // Send the message.
