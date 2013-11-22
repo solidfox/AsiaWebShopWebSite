@@ -10,8 +10,36 @@ using System.Data;
 
 public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
 {
+    public static String username;
+    private static String confirmationNumber;
     protected void Page_Load(object sender, EventArgs e)
     {
-        ConfirmationNumberLabel.Text = ShoppingCart.GetShoppingCart(User.Identity.Name).checkOut();
+        username = User.Identity.Name;
+        confirmationNumber = ShoppingCart.GetShoppingCart(User.Identity.Name).checkOut();
+        ConfirmationNumberLabel.Text = confirmationNumber;
+    }
+
+    protected void orderDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
+    {
+        e.Command.Parameters[0].Value = confirmationNumber;
+    }
+    protected void orderItemsDataSource_Selecting(object sender, SqlDataSourceSelectingEventArgs e)
+    {
+        e.Command.Parameters[0].Value = confirmationNumber;
+    }
+    protected String total()
+    {
+        string userName = username;
+        string connectionString = "AsiaWebShopDBConnectionString";
+        string query = "SELECT  SUM(OrderItem.quantity * OrderItem.PriceWhenAdded) AS Total " +
+                        "FROM   OrderItem INNER JOIN [Order] ON OrderItem.orderNum = [Order].orderNum " +
+                        "WHERE  ([Order].confirmationNumber = N'" + confirmationNumber + "') ";
+
+        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString);
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Connection.Open();
+        String total = command.ExecuteScalar().ToString();
+        command.Connection.Close();
+        return total;
     }
 }
