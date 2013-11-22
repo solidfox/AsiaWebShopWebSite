@@ -331,7 +331,7 @@ public class ShoppingCart
 
     public Int32 getOrderNum()
     {
-        string query = "SELECT [orderNum] FROM [Order] WHERE ([username] =N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
+        string query = "SELECT [orderNum] FROM [Order] WHERE ([username] = N'" + this.userName + "' AND [confirmationNumber] IS NULL)";
         int OrderNum = 0;
         // Create the connection and the SQL command.
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
