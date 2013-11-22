@@ -7,23 +7,23 @@
     <h2>
         Confirm order details</h2>
     <asp:DetailsView ID="orderDetailsView" runat="server" Height="50px" Width="461px" 
-        AutoGenerateRows="False" DataKeyNames="orderNum" 
+        AutoGenerateRows="False" DataKeyNames="Order Number" 
         DataSourceID="orderDataSource">
         <Fields>
-            <asp:BoundField DataField="orderNum" HeaderText="orderNum" 
-                InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
+            <asp:BoundField DataField="Order Number" HeaderText="Order Number" 
+                InsertVisible="False" ReadOnly="True" SortExpression="Order Number" />
             <asp:BoundField DataField="Delivery Date" HeaderText="Delivery Date" 
-                SortExpression="Delivery Date" DataFormatString="{0:d}" ReadOnly="True" />
-            <asp:BoundField DataField="slot" HeaderText="slot" 
-                SortExpression="slot" />
-            <asp:BoundField DataField="deliveryAddress" HeaderText="deliveryAddress" 
-                SortExpression="deliveryAddress" />
-            <asp:BoundField DataField="deliveryDistrict" HeaderText="deliveryDistrict" 
-                SortExpression="deliveryDistrict" />
-            <asp:BoundField DataField="creditCardNumber" HeaderText="creditCardNumber" 
-                SortExpression="creditCardNumber" />
-            <asp:BoundField DataField="creditCardtype" HeaderText="creditCardtype" 
-                SortExpression="creditCardtype" />
+                SortExpression="Delivery Date" ReadOnly="True" />
+            <asp:BoundField DataField="Delivery Time Slot" HeaderText="Delivery Time Slot" 
+                SortExpression="Delivery Time Slot" />
+            <asp:BoundField DataField="Delivery Address" HeaderText="Delivery Address" 
+                SortExpression="Delivery Address" />
+            <asp:BoundField DataField="District" HeaderText="District" 
+                SortExpression="District" />
+            <asp:BoundField DataField="Card Number" HeaderText="Card Number" 
+                SortExpression="Card Number" />
+            <asp:BoundField DataField="Card Type" HeaderText="Card Type" 
+                SortExpression="Card Type" />
         </Fields>
     </asp:DetailsView>
     <br />
@@ -32,7 +32,7 @@
         Text="Edit Delivery &amp; Payment Details" />
     <asp:SqlDataSource ID="orderDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT [Order].orderNum, DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].userName = @userName) AND ([Order].confirmationNumber IS NULL)" 
+        SelectCommand="SELECT [Order].orderNum AS 'Order Number', DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot AS 'Delivery Time Slot', [Order].deliveryAddress AS 'Delivery Address', [Order].deliveryDistrict AS 'District', [Order].creditCardNumber AS 'Card Number', [Order].creditCardtype AS 'Card Type' FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].userName = @userName) AND ([Order].confirmationNumber IS NULL)" 
         onselecting="orderDataSource_Selecting">
         <SelectParameters>
             <asp:Parameter Name="userName" Type="String" />
