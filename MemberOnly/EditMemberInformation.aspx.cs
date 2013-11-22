@@ -295,5 +295,7 @@ public partial class _Default : System.Web.UI.Page
             CardHolderName.Text.Trim(),
             MonthDropDownList.SelectedItem.Text.Trim(),
             YearDropDownList.SelectedItem.Text.Trim());
+
+        Response.Redirect("MemberSelection.aspx");
     }
 }
