@@ -10,6 +10,7 @@ using System.Web;
 /// </summary>
 public class GenericQuery
 {
+    private static string connectionString = "AsiaWebShopDBConnectionString";
 	public GenericQuery()
 	{
 		//
@@ -319,6 +320,17 @@ public class GenericQuery
             command.ExecuteNonQuery();
             command.Connection.Close();
         }
+    }
+
+    public static string getUserEmail(string userName)
+    {
+        string query = "SELECT [email] FROM [Member] WHERE ([userName] = N'" + userName + "')";
+        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString);
+        SqlCommand command = new SqlCommand(query, connection);
+        command.Connection.Open();
+        Object raw = command.ExecuteScalar();
+        if (raw == null) { return null; }
+        return raw.ToString();
     }
 
     public static void CheckOutOfTime(string connectionString, string UserName)
