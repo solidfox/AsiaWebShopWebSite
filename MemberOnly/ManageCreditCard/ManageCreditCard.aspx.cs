@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Text;
 
 public partial class MemberOnly_ManageCreditCard_ManageCreditCard : System.Web.UI.Page
 {
@@ -25,5 +26,42 @@ public partial class MemberOnly_ManageCreditCard_ManageCreditCard : System.Web.U
     protected void dvCreditCard_ItemUpdated(object sender, EventArgs e)
     {
         gvCreditCard.DataBind();
+    }
+    protected void cvCreditCard_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        String creditCardList = (String)dvCreditCard.FindControl("creditCardType").ToString().Trim();
+        if (creditCardList == "American Express")
+        {
+            ShowPopUpMsg("1");
+        }
+        if (creditCardList == "Diners Club")
+        {
+            ShowPopUpMsg("2");
+        }
+        if (creditCardList == "Discover")
+        {
+            ShowPopUpMsg("3");
+        }
+        if (creditCardList == "MasterCard")
+        {
+            ShowPopUpMsg("4");
+        }
+        if (creditCardList == "Visa")
+        {
+            ShowPopUpMsg("5");
+        }
+        args.IsValid = false;
+    }
+    private void ShowPopUpMsg(string msg)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("alert('");
+        sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"));
+        sb.Append("');");
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "showalert", sb.ToString(), true);
+    }
+    protected void creditCardType_TextChanged(object sender, EventArgs e)
+    {
+
     }
 }
