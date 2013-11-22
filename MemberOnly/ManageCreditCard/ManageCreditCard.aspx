@@ -73,7 +73,7 @@
                         <asp:RegularExpressionValidator ID="revInsertNumber" runat="server" 
                             ControlToValidate="InsertNumber" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Credit Card Number shoud be 16 digit." ForeColor="#CC0000" 
-                            ValidationExpression="\d{16}">*</asp:RegularExpressionValidator>
+                            ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label2" runat="server" Text='<%# Bind("number") %>'></asp:Label>
@@ -81,14 +81,11 @@
                 </asp:TemplateField>
                 <asp:TemplateField HeaderText="type" SortExpression="type">
                     <EditItemTemplate>
-                        <asp:DropDownList ID="DropDownList3" runat="server" 
-                            SelectedValue='<%# Bind("type") %>'>
-                            <asp:ListItem>American Express</asp:ListItem>
-                            <asp:ListItem>Diners Club</asp:ListItem>
-                            <asp:ListItem>Discover</asp:ListItem>
-                            <asp:ListItem>MasterCard</asp:ListItem>
-                            <asp:ListItem>Visa</asp:ListItem>
-                        </asp:DropDownList>
+                        <asp:TextBox ID="creditCardType" runat="server" 
+                            ontextchanged="creditCardType_TextChanged" Text='<%# Bind("Type") %>'></asp:TextBox>
+                        <asp:RegularExpressionValidator ID="rfvCreditCardList" runat="server" 
+                            ControlToValidate="creditCardType" ErrorMessage="Wrong Credit card type" 
+                            ValidationExpression="^((American Express)|(Diners Club)|(Discover)|(MasterCard)|(Visa))\s*$">*</asp:RegularExpressionValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:DropDownList ID="DropDownList4" runat="server" 

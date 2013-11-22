@@ -108,28 +108,11 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="district" SortExpression="district">
                 <EditItemTemplate>
-                    <asp:DropDownList ID="edDistrict" runat="server" 
-                        SelectedValue='<%# Bind("district") %>' AppendDataBoundItems="True" 
-                        AutoPostBack="True">
-                        <asp:ListItem>Central and Western</asp:ListItem>
-                        <asp:ListItem>Eastern</asp:ListItem>
-                        <asp:ListItem>Islands</asp:ListItem>
-                        <asp:ListItem>Kowloon City</asp:ListItem>
-                        <asp:ListItem>Kwai Tsing</asp:ListItem>
-                        <asp:ListItem>Kwun Tong</asp:ListItem>
-                        <asp:ListItem>North</asp:ListItem>
-                        <asp:ListItem>Sai Kung</asp:ListItem>
-                        <asp:ListItem>Sha Tin</asp:ListItem>
-                        <asp:ListItem>Sham Shui Po</asp:ListItem>
-                        <asp:ListItem>Southern</asp:ListItem>
-                        <asp:ListItem>Tai Po</asp:ListItem>
-                        <asp:ListItem>Tsuen Wan</asp:ListItem>
-                        <asp:ListItem>Tuen Mun</asp:ListItem>
-                        <asp:ListItem>Wan Chai</asp:ListItem>
-                        <asp:ListItem>Wong Tai Sin</asp:ListItem>
-                        <asp:ListItem>Yau Tsim Mong</asp:ListItem>
-                        <asp:ListItem>Yuen Long</asp:ListItem>
-                    </asp:DropDownList>
+                    <asp:TextBox ID="ddlDistrict" runat="server" Text='<%# Bind("district") %>'></asp:TextBox>
+                    <asp:RegularExpressionValidator ID="rfvDistrict" runat="server" 
+                        ControlToValidate="ddlDistrict" Display="Dynamic" 
+                        ErrorMessage="Wrong District Type" ForeColor="#CC0000" 
+                        ValidationExpression="^(Central and Western|Eastern|Islands|Kowloon City|Kwai Tsing|Kwun Tong|North|Sai Kung|Sha Tin|Sham Shui Po|Southern|Tai Po|Tsuen Wan|Tuen Mun|Wan Chai|Wong Tai Sin|Yau Tsim Mong|Yuen Long)\s*$">*</asp:RegularExpressionValidator>
                 </EditItemTemplate>
                 <InsertItemTemplate>
                     <asp:DropDownList ID="InsertDistrict" runat="server" 
