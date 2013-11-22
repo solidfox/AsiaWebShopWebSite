@@ -97,12 +97,12 @@ public partial class ItemManagement : System.Web.UI.Page
                     }
                     else
                     {
-                        ShowPopUpMsg("False");
+                        ShowPopUpMsg("Email can't be sent");
                     }
                 }
             } while (count != 0);
 
-            ShowPopUpMsg(emailSentNum + " is sent");
+            ShowPopUpMsg(emailSentNum + "email(s) are sent");
             connection.Close();
 
         }

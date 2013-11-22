@@ -113,6 +113,9 @@
                         ControlToValidate="ddlDistrict" Display="Dynamic" 
                         ErrorMessage="Wrong District Type" ForeColor="#CC0000" 
                         ValidationExpression="^(Central and Western|Eastern|Islands|Kowloon City|Kwai Tsing|Kwun Tong|North|Sai Kung|Sha Tin|Sham Shui Po|Southern|Tai Po|Tsuen Wan|Tuen Mun|Wan Chai|Wong Tai Sin|Yau Tsim Mong|Yuen Long)\s*$">*</asp:RegularExpressionValidator>
+                    <asp:RequiredFieldValidator ID="rfvDistrictNull" runat="server" 
+                        ControlToValidate="ddlDistrict" Display="Dynamic" EnableClientScript="False" 
+                        ErrorMessage="District is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
                 </EditItemTemplate>
                 <InsertItemTemplate>
                     <asp:DropDownList ID="InsertDistrict" runat="server" 

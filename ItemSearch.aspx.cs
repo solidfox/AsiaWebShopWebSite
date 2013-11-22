@@ -179,11 +179,11 @@ public partial class ItemSearch : System.Web.UI.Page
                     command.ExecuteNonQuery();
                     command.Connection.Close();
                 }
-                ShowPopUpMsg("Alert added."+ "   isZero: " + isZero + "  isAlert:" + isAlert);
+                ShowPopUpMsg("Alert added.");
             }
             else
             {
-                ShowPopUpMsg("Alert cannot be added." + "   isZero: " + isZero + "  isAlert:" + isAlert);
+                ShowPopUpMsg("Alert cannot be added.");
             }
         }
         else

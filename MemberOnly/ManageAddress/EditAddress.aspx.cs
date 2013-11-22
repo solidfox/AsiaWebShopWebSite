@@ -54,4 +54,12 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
             }
         }
     }
+    private void ShowPopUpMsg(string msg)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("alert('");
+        sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"));
+        sb.Append("');");
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "showalert", sb.ToString(), true);
+    }
 }

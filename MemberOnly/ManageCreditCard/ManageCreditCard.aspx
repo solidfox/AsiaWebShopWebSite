@@ -85,7 +85,12 @@
                             ontextchanged="creditCardType_TextChanged" Text='<%# Bind("Type") %>'></asp:TextBox>
                         <asp:RegularExpressionValidator ID="rfvCreditCardList" runat="server" 
                             ControlToValidate="creditCardType" ErrorMessage="Wrong Credit card type" 
-                            ValidationExpression="^((American Express)|(Diners Club)|(Discover)|(MasterCard)|(Visa))\s*$">*</asp:RegularExpressionValidator>
+                            
+                            ValidationExpression="^((American Express)|(Diners Club)|(Discover)|(MasterCard)|(Visa))\s*$" 
+                            ForeColor="#CC0000">*</asp:RegularExpressionValidator>
+                        <asp:RequiredFieldValidator ID="rfvCreditCardNull" runat="server" 
+                            ControlToValidate="creditCardType" Display="Dynamic" EnableClientScript="False" 
+                            ErrorMessage="Credit Card Type is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:DropDownList ID="DropDownList4" runat="server" 
