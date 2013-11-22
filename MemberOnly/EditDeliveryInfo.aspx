@@ -129,7 +129,7 @@
                 </asp:DropDownList>
                 <asp:CustomValidator ID="cvDeliveryDate" runat="server" 
                     ControlToValidate="SelectDate" Display="Dynamic" EnableClientScript="False" 
-                    ErrorMessage="The earliest delivery time-slot must be at least 24 hours after the purchase time." 
+                    ErrorMessage="Date: The earliest delivery time-slot must be at least 24 hours after the purchase time." 
                     ForeColor="Red" onservervalidate="cvDeliveryDate_ServerValidate1">*</asp:CustomValidator>
             </td>
             <td class="style14">
@@ -139,7 +139,7 @@
                 </asp:DropDownList>
                 <asp:CustomValidator ID="cvDeliveryTime" runat="server" 
                     ControlToValidate="SelectTime" Display="Dynamic" EnableClientScript="False" 
-                    ErrorMessage="The earliest delivery time-slot must be at least 24 hours after the purchase time." 
+                    ErrorMessage="Time: The earliest delivery time-slot must be at least 24 hours after the purchase time." 
                     ForeColor="Red" onservervalidate="cvDeliveryDate_ServerValidate">*</asp:CustomValidator>
             </td>
         </tr>

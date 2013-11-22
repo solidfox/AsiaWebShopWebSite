@@ -24,9 +24,10 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             PopulateMemberCreditCard(connectionString, userName);
             PopulateDropdownList();
             PopulateDistrictDropDownList();
-            SelectAddress_SelectedIndexChanged(sender, e);
-            SelectCreditCard_SelectedIndexChanged(sender, e);
         }
+
+        SelectAddress_SelectedIndexChanged(sender, e);
+        SelectCreditCard_SelectedIndexChanged(sender, e);
     }
     private void GetMemberData(string connectionString, string userName)
     {
@@ -273,7 +274,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && (currentHour > selectedTime || currentHour == 4))
+        if (selectedDate == 1 && (currentHour >= selectedTime || currentHour == 4))
         {
             args.IsValid = false;
         }
@@ -285,7 +286,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
 
         int currentHour = GetCurrentHourID();
 
-        if (selectedDate == 1 && (currentHour > selectedTime || currentHour == 4))
+        if (selectedDate == 1 && (currentHour >= selectedTime || currentHour == 4))
         {
             args.IsValid = false;
         }
