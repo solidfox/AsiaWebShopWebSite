@@ -91,7 +91,7 @@
                         <asp:DropDownList ID="DropDownList4" runat="server" 
                             SelectedValue='<%# Bind("type") %>'>
                             <asp:ListItem>American Express</asp:ListItem>
-                            <asp:ListItem>Dinner Club</asp:ListItem>
+                            <asp:ListItem>Diners Club</asp:ListItem>
                             <asp:ListItem>Discover</asp:ListItem>
                             <asp:ListItem>MasterCard</asp:ListItem>
                             <asp:ListItem>Visa</asp:ListItem>
