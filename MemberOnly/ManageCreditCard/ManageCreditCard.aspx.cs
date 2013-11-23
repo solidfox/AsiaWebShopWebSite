@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
 
 public partial class MemberOnly_ManageCreditCard_ManageCreditCard : System.Web.UI.Page
 {
@@ -85,5 +88,28 @@ public partial class MemberOnly_ManageCreditCard_ManageCreditCard : System.Web.U
         }
         else
             args.IsValid = true;
+    }
+
+
+
+    protected void InsertNumber_ServerValidate(object source, ServerValidateEventArgs args)
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
+        {
+            // Get the value of the new student id from the DetailsView control.
+            TextBox CreditCardNumber = (TextBox)dvCreditCard.FindControl("InsertNumber");
+
+            // Count how many existing records have the student id value.
+            connection.Open();
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [CreditCard] WHERE (([number] = N'" + CreditCardNumber.Text.Trim() + "') AND ([userName] = N'" + userName + "'))", connection);
+            Int32 count = (Int32)command.ExecuteScalar();
+            connection.Close();
+
+            // If the count is not zero the student id already exists, so cancel the insert.
+            if (count != 0)
+            {
+                args.IsValid = false;
+            }
+        }
     }
 }

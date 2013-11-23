@@ -61,7 +61,8 @@
                     <asp:Label ID="Label2" runat="server" Text='<%# Eval("nickname") %>'></asp:Label>
                 </EditItemTemplate>
                 <InsertItemTemplate>
-                    <asp:TextBox ID="InsertNickName" runat="server" Text='<%# Bind("nickname") %>'></asp:TextBox>
+                    <asp:TextBox ID="InsertNickName" runat="server" Text='<%# Bind("nickname") %>' 
+                        MaxLength="10"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rvInsertNickName" runat="server" 
                         ControlToValidate="InsertNickName" Display="Dynamic" EnableClientScript="False" 
                         ErrorMessage="NickName is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
@@ -69,6 +70,10 @@
                         ControlToValidate="InsertNickName" Display="Dynamic" 
                         ErrorMessage="NickName must be unique." ForeColor="#CC0000" 
                         onservervalidate="CustomValidator1_ServerValidate">*</asp:CustomValidator>
+                    <asp:RegularExpressionValidator ID="revInsertNickname" runat="server" 
+                        ControlToValidate="InsertNickName" Display="Dynamic" EnableClientScript="False" 
+                        ErrorMessage="NickName should be  alphanumeric." ForeColor="#CC0000" 
+                        ValidationExpression="^[a-zA-Z0-9]*$">*</asp:RegularExpressionValidator>
                 </InsertItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label2" runat="server" Text='<%# Bind("nickname") %>'></asp:Label>
@@ -77,10 +82,12 @@
             <asp:TemplateField HeaderText="buildingAddress" 
                 SortExpression="buildingAddress">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("buildingAddress") %>'></asp:TextBox>
+                    <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("buildingAddress") %>' 
+                        MaxLength="30"></asp:TextBox>
                 </EditItemTemplate>
                 <InsertItemTemplate>
-                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("buildingAddress") %>'></asp:TextBox>
+                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("buildingAddress") %>' 
+                        MaxLength="30"></asp:TextBox>
                 </InsertItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label3" runat="server" Text='<%# Bind("buildingAddress") %>'></asp:Label>
@@ -89,14 +96,14 @@
             <asp:TemplateField HeaderText="streetAddress" SortExpression="streetAddress">
                 <EditItemTemplate>
                     <asp:TextBox ID="edStreetAdress" runat="server" 
-                        Text='<%# Bind("streetAddress") %>'></asp:TextBox>
+                        Text='<%# Bind("streetAddress") %>' MaxLength="30"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rvStreetAddress" runat="server" 
                         ControlToValidate="edStreetAdress" Display="Dynamic" EnableClientScript="False" 
                         ErrorMessage="Street Address is required." ForeColor="#CC0000">*</asp:RequiredFieldValidator>
                 </EditItemTemplate>
                 <InsertItemTemplate>
                     <asp:TextBox ID="InsertStreetAdress" runat="server" 
-                        Text='<%# Bind("streetAddress") %>'></asp:TextBox>
+                        Text='<%# Bind("streetAddress") %>' MaxLength="30"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rvStreetAdress" runat="server" 
                         ControlToValidate="InsertStreetAdress" Display="Dynamic" 
                         EnableClientScript="False" ErrorMessage="Street Adress is required." 

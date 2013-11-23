@@ -74,6 +74,10 @@
                             ControlToValidate="InsertNumber" Display="Dynamic" EnableClientScript="False" 
                             ErrorMessage="Credit Card Number shoud be 14 - 16 digit." ForeColor="#CC0000" 
                             ValidationExpression="^\d{14,16}$">*</asp:RegularExpressionValidator>
+                        <asp:CustomValidator ID="cvInsertNumber" runat="server" 
+                            ControlToValidate="InsertNumber" Display="Dynamic" 
+                            ErrorMessage="CreditCardNumber must be unique." ForeColor="#CC0000" 
+                            onservervalidate="InsertNumber_ServerValidate">*</asp:CustomValidator>
                     </InsertItemTemplate>
                     <ItemTemplate>
                         <asp:Label ID="Label2" runat="server" Text='<%# Bind("number") %>'></asp:Label>
@@ -109,7 +113,7 @@
                 <asp:TemplateField HeaderText="cardHolderName" SortExpression="cardHolderName">
                     <EditItemTemplate>
                         <asp:TextBox ID="editCardHolderName" runat="server" 
-                            Text='<%# Bind("cardHolderName") %>'></asp:TextBox>
+                            Text='<%# Bind("cardHolderName") %>' MaxLength="50"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rvCardHolderName" runat="server" 
                             ControlToValidate="editCardHolderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Card Holder Name is requirement." 
@@ -117,7 +121,7 @@
                     </EditItemTemplate>
                     <InsertItemTemplate>
                         <asp:TextBox ID="insertCardHolderName" runat="server" 
-                            Text='<%# Bind("cardHolderName") %>'></asp:TextBox>
+                            Text='<%# Bind("cardHolderName") %>' MaxLength="50"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rvInsertCardHolderName" runat="server" 
                             ControlToValidate="insertCardHolderName" Display="Dynamic" 
                             EnableClientScript="False" ErrorMessage="Card Holder Name is required." 
