@@ -13,7 +13,7 @@
             <asp:BoundField DataField="Order Number" HeaderText="Order Number" 
                 InsertVisible="False" ReadOnly="True" SortExpression="Order Number" />
             <asp:BoundField DataField="Delivery Date" HeaderText="Delivery Date" 
-                SortExpression="Delivery Date" ReadOnly="True" />
+                SortExpression="Delivery Date" ReadOnly="True" DataFormatString="{0:d}" />
             <asp:BoundField DataField="Delivery Time Slot" HeaderText="Delivery Time Slot" 
                 SortExpression="Delivery Time Slot" />
             <asp:BoundField DataField="Delivery Address" HeaderText="Delivery Address" 
