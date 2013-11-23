@@ -261,7 +261,7 @@
                 </asp:TemplateField>
                 <asp:CheckBoxField DataField="visible" HeaderText="visible" 
                     SortExpression="visible" />
-                <asp:CommandField ShowDeleteButton="True" ShowEditButton="True" 
+                <asp:CommandField ShowEditButton="True" 
                     ShowInsertButton="True" />
             </Fields>
             <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
