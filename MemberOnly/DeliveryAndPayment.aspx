@@ -224,6 +224,11 @@
                     ControlToValidate="YearDropDownList" CssClass="failureNotification" Display="Dynamic" 
                     EnableClientScript="False" ErrorMessage="Please select a year" 
                     InitialValue="Year">*</asp:RequiredFieldValidator>
+                <asp:CustomValidator ID="cvExpiryDate" runat="server" 
+                                        ControlToValidate="MonthDropDownList" Display="Dynamic" 
+                                        EnableClientScript="False" ErrorMessage="Credit card is expired. " 
+                                        ForeColor="Red" 
+                    onservervalidate="cvExpiryDate_ServerValidate" CssClass="failureNotification">*</asp:CustomValidator>
             </td>
         </tr>
     </table>
