@@ -15,6 +15,11 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!Page.IsPostBack)
+        {
+            StartDayTextBox.Text = DateTime.Now.ToShortDateString();
+            EndDayTextBox.Text = DateTime.Now.ToShortDateString();
+        }
     }
 
     protected void btnGenerate_Click(object sender, EventArgs e)
@@ -31,20 +36,21 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
         userNameQuery = "AND ( [Order].userName =N'"+User.Identity.Name + "')";
        
     
-        if (StartDayTextBox.Text != "")
+        if (StartDayTextBox.Text.Trim() != "")
         {
-            dateRangQuery = "AND (([Order].orderDateTime >= CAST('" + StartDayTextBox.Text.Trim() + "' AS SMALLDATETIME)))";
-
+            dateRangQuery += " AND (DATEDIFF(day,CAST('" + StartDayTextBox.Text.Trim() + "' AS SMALLDATETIME),[Order].orderDateTime) >=0 ) ";
+            //SELECT DATEDIFF(day,'2008-12-29','2008-12-30') AS DiffDate  =>   DiffDate=1     orderDateTime >= StartDay
         }
 
-        if (EndDayTextBox.Text != "")
+        if (EndDayTextBox.Text.Trim() != "")
         {
-            dateRangQuery += "AND (([Order].orderDateTime <= CAST('" + EndDayTextBox.Text.Trim() + "' AS SMALLDATETIME)))";
+            dateRangQuery += " AND (DATEDIFF(day,CAST('" + EndDayTextBox.Text.Trim() + "' AS SMALLDATETIME),[Order].orderDateTime) <=0 ) ";
+            //SELECT DATEDIFF(day,'2008-12-30','2008-12-29') AS DiffDate  =>   DiffDate=-1     orderDateTime <= EndDay
         }
 
 
 
-        string SQLCmd = " SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].confirmationNumber, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)"
+        string SQLCmd = " SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].code, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)"
                         + userNameQuery+ dateRangQuery;
          
         MemberSqlDataSource.SelectCommand = SQLCmd;

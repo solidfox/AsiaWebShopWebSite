@@ -15,6 +15,11 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (!Page.IsPostBack)
+        {
+            StartDayTextBox.Text = DateTime.Now.ToShortDateString();
+            EndDayTextBox.Text = DateTime.Now.ToShortDateString();
+        }
     }
    
     protected void MemberCustomValidator_ServerValidate(object source, ServerValidateEventArgs args)
@@ -81,15 +86,16 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
             }
 
         }
-        if (StartDayTextBox.Text != "")
+        if (StartDayTextBox.Text.Trim() != "")
         {
-            dateRangQuery = "AND (([Order].orderDateTime >= CAST('" + StartDayTextBox.Text.Trim() + "' AS SMALLDATETIME)))";
-           
+            dateRangQuery += " AND (DATEDIFF(day,CAST('" + StartDayTextBox.Text.Trim() + "' AS SMALLDATETIME),[Order].orderDateTime) >=0 ) ";
+            //SELECT DATEDIFF(day,'2008-12-29','2008-12-30') AS DiffDate  =>   DiffDate=1     orderDateTime >= StartDay
         }
-       
-        if (EndDayTextBox.Text != "")
+
+        if (EndDayTextBox.Text.Trim() != "")
         {
-            dateRangQuery += "AND (([Order].orderDateTime <= CAST('" + EndDayTextBox.Text.Trim() + "' AS SMALLDATETIME)))"; 
+            dateRangQuery += " AND (DATEDIFF(day,CAST('" + EndDayTextBox.Text.Trim() + "' AS SMALLDATETIME),[Order].orderDateTime) <=0 ) ";
+            //SELECT DATEDIFF(day,'2008-12-30','2008-12-29') AS DiffDate  =>   DiffDate=-1     orderDateTime <= EndDay
         }
 
         string SQLCmd = "SELECT Result1.userName, Result1.firstName, Result1.lastName, Result1.district, SUM(OrderItem.quantity * OrderItem.PriceWhenAdded) AS TotalAmount FROM OrderItem INNER JOIN (SELECT Result0.userName, Result0.firstName, Result0.lastName, [Order].orderNum, Result0.district FROM [Order] INNER JOIN (SELECT Member.userName, Member.firstName, Member.lastName, Address.district FROM Member INNER JOIN Address ON Member.userName = Address.userName WHERE (Address.nickname = N'Mailing') " +

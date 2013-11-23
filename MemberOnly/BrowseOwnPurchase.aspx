@@ -8,14 +8,6 @@
             color: #000000;
             font-size: medium;
         }
-        .style6
-        {
-            width: 180px;
-        }
-        .style5
-        {
-            width: 222px;
-        }
         .style10
         {
             width: 313px;
@@ -42,6 +34,43 @@
         .style8
         {
             width: 355px;
+        }
+        .style17
+        {
+            width: 100%;
+            border-style: solid;
+            border-width: 2px;
+        }
+        .style21
+        {
+            height: 21px;
+            width: 164px;
+        }
+        .style23
+        {
+            width: 287px;
+            height: 21px;
+        }
+        .style24
+        {
+            width: 127px;
+        }
+        .style25
+        {
+            height: 21px;
+            width: 147px;
+        }
+        .style27
+        {
+            width: 164px;
+        }
+        .style28
+        {
+            width: 287px;
+        }
+        .style29
+        {
+            width: 147px;
         }
     </style>
     </asp:Content>
@@ -122,54 +151,101 @@
     <br />
                 <asp:DataList ID="DataList1" runat="server" DataKeyField="orderNum" 
                     DataSourceID="MemberSqlDataSource" CellPadding="4" 
-        ForeColor="#333333" GridLines="Both" Visible="False">
+        ForeColor="#333333" GridLines="Both" Visible="False" Width="828px">
                     <AlternatingItemStyle BackColor="White" />
                     <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
                     <HeaderStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
                     <ItemStyle BackColor="#E3EAEB" />
                     <ItemTemplate>
-                        firstName:
-                        <asp:Label ID="firstNameLabel" runat="server" Text='<%# Eval("firstName") %>' />
-                        &nbsp;lastName:
-                        <asp:Label ID="lastNameLabel" runat="server" Text='<%# Eval("lastName") %>' />
-                        &nbsp;email:
-                        <asp:Label ID="emailLabel" runat="server" Text='<%# Eval("email") %>' />
-                        &nbsp;phoneNumber:
-                        <asp:Label ID="phoneNumberLabel" runat="server" 
-                            Text='<%# Eval("phoneNumber") %>' />
-                        <br />
-                        deliveryAddress:
-                        <asp:Label ID="deliveryAddressLabel" runat="server" 
-                            Text='<%# Eval("deliveryAddress") %>' />
-                        &nbsp;deliveryDistrict:
-                        <asp:Label ID="deliveryDistrictLabel" runat="server" 
-                            Text='<%# Eval("deliveryDistrict") %>' />
-                        <asp:Label ID="orderNumLabel" runat="server" Text='<%# Eval("orderNum") %>' 
-                            Visible="False" />
-                        <br />
-                        creditCardNumber:
-                        <asp:Label ID="creditCardNumberLabel" runat="server" 
-                            Text='<%# Eval("creditCardNumber") %>' />
-                        &nbsp;creditCardtype:
-                        <asp:Label ID="creditCardtypeLabel" runat="server" 
-                            Text='<%# Eval("creditCardtype") %>' />
-                        &nbsp;confirmationNumber:
-                        <asp:Label ID="confirmationNumberLabel" runat="server" 
-                            Text='<%# Eval("confirmationNumber") %>' />
+                        <table border="2" class="style17">
+                            <tr>
+                                <td class="style27">
+                                    firstName:
+                                </td>
+                                <td class="style28">
+                                    <asp:Label ID="firstNameLabel" runat="server" Text='<%# Eval("firstName") %>' />
+                                </td>
+                                <td class="style29">
+                                    lastName:
+                                </td>
+                                <td>
+                                    <asp:Label ID="lastNameLabel" runat="server" Text='<%# Eval("lastName") %>' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style27">
+                                    email:
+                                </td>
+                                <td class="style28">
+                                    <asp:Label ID="emailLabel" runat="server" Text='<%# Eval("email") %>' />
+                                </td>
+                                <td class="style29">
+                                    phoneNumber:
+                                </td>
+                                <td>
+                                    <asp:Label ID="phoneNumberLabel" runat="server" 
+                                        Text='<%# Eval("phoneNumber") %>' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style27">
+                                    deliveryAddress:</td>
+                                <td class="style28">
+                                    <asp:Label ID="deliveryAddressLabel" runat="server" 
+                                        Text='<%# Eval("deliveryAddress") %>' />
+                                </td>
+                                <td class="style29">
+                                    deliveryDistrict:
+                                </td>
+                                <td>
+                                    <asp:Label ID="deliveryDistrictLabel" runat="server" 
+                                        Text='<%# Eval("deliveryDistrict") %>' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style27">
+                                    creditCardNumber:
+                                </td>
+                                <td class="style28">
+                                    <asp:Label ID="creditCardNumberLabel" runat="server" 
+                                        Text='<%# Eval("creditCardNumber") %>' />
+                                </td>
+                                <td class="style29">
+                                    creditCardtype:
+                                </td>
+                                <td>
+                                    <asp:Label ID="creditCardtypeLabel" runat="server" 
+                                        Text='<%# Eval("creditCardtype") %>' />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style21">
+                                    orderNum:
+                                </td>
+                                <td class="style23">
+                                    <asp:Label ID="orderNumLabel" runat="server" Text='<%# Eval("orderNum") %>' />
+                                </td>
+                                <td class="style25">
+                                    code:
+                                </td>
+                                <td class="style14">
+                                    <asp:Label ID="codeLabel" runat="server" Text='<%# Eval("code") %>' />
+                                </td>
+                            </tr>
+                        </table>
                         <asp:GridView ID="TotalAmountGridView" runat="server" 
                             AutoGenerateColumns="False" CellPadding="4" 
                             DataSourceID="OrderItemSqlDataSource" ForeColor="#333333" 
-                            style="margin-right: 11px">
+                            style="margin-right: 11px" Width="806px">
                             <AlternatingRowStyle BackColor="White" />
                             <Columns>
                                 <asp:BoundField DataField="category" HeaderText="category" 
                                     SortExpression="category" />
-                                <asp:BoundField DataField="name" HeaderText="name" 
-                                    SortExpression="name" />
+                                <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
                                 <asp:BoundField DataField="quantity" HeaderText="quantity" 
                                     SortExpression="quantity" />
                                 <asp:BoundField DataField="TotalPurchasePrice" HeaderText="TotalPurchasePrice" 
-                                    SortExpression="TotalPurchasePrice" ReadOnly="True" />
+                                    ReadOnly="True" SortExpression="TotalPurchasePrice" />
                                 <asp:BoundField DataField="TotalAmountSaved" HeaderText="TotalAmountSaved" 
                                     ReadOnly="True" SortExpression="TotalAmountSaved" />
                             </Columns>
@@ -186,8 +262,6 @@
                         </asp:GridView>
                         <asp:SqlDataSource ID="OrderItemSqlDataSource" runat="server" 
                             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-                            
-                            
                             SelectCommand="SELECT Item.category, Item.name, OrderItem.quantity, OrderItem.quantity * OrderItem.PriceWhenAdded AS TotalPurchasePrice, OrderItem.quantity * OrderItem.amountSavedForOne AS TotalAmountSaved FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = @orderNum) ORDER BY Item.category, Item.name">
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="orderNumLabel" Name="orderNum" 
@@ -206,7 +280,7 @@
         
             
             
-            SelectCommand="SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].confirmationNumber, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)" 
+            SelectCommand="SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].code, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)" 
            >
         </asp:SqlDataSource>
       
