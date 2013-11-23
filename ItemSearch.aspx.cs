@@ -35,8 +35,13 @@ public partial class ItemSearch : System.Web.UI.Page
 
         // Get the search string and the category from the search page.
         string itemSearchCondition = "";
-        string searchString = txtSearchString.Text.Trim();
-        string category = categoryDropDownList.SelectedValue.Trim();
+        string searchString = "";
+        string category = Request.QueryString["category"];
+        if (Page.IsPostBack)
+        {
+            searchString = txtSearchString.Text.Trim();
+            category = categoryDropDownList.SelectedValue.Trim();
+        }
 
         // Construct the basic SELECT statement for searching; only visible items should be displayed.
         string SQLCmd = "SELECT [upc], [name], [picture], [normalPrice], [discountPrice], [quantityAvailable] FROM [Item] WHERE (([visible] = 'true')";
