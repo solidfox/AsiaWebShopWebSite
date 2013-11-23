@@ -26,7 +26,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
                 <asp:BoundField DataField="orderNum" HeaderText="Order Number" InsertVisible="False" ReadOnly="True" SortExpression="orderNum" />
-                <asp:BoundField DataField="orderDateTime" HeaderText="Order Date" SortExpression="orderDateTime" DataFormatString="{0:d}" />
+                <asp:BoundField DataField="orderDateTime" HeaderText="Order Date Time" SortExpression="orderDateTime" />
                 <asp:BoundField DataField="Column1" HeaderText="Delivery Date" ReadOnly="True" SortExpression="Column1" DataFormatString="{0:d}" />
                 <asp:BoundField DataField="slot" HeaderText="Time Slot" SortExpression="slot" />
                 <asp:BoundField DataField="deliveryAddress" HeaderText="Delivery Address" SortExpression="deliveryAddress" />
