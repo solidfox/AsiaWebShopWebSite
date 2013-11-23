@@ -12,11 +12,13 @@
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <h2>
         Your account</h2>
-    <a href="EditMemberInformation.aspx">Edit my information</a><br />
+    <a href="EditMemberInformation.aspx">Edit Member information</a><br />
     <a href="../Account/ChangePassword.aspx">Change password</a><br />
     <a href="ManageAddress/EditAddress.aspx">Manage delivery address List</a><br />
     <a href="ManageCreditCard/ManageCreditCard.aspx">Manage credit card List</a><br />
-&nbsp;<h3>Member Information</h3>
+    <br />
+    Edit Member&#39;s Address and Credit Card. Please Edit in Credit Card List and 
+    Delivery List respectively. <h3>Member Information</h3>
     <table>
         <tr>
             <td>

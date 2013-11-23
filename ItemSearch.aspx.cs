@@ -61,7 +61,7 @@ public partial class ItemSearch : System.Web.UI.Page
         // SELECT statement to search only in the specified category.
         if (searchString == "")
         {
-            if (category != "All Categories")
+            if (category != "All Categories" && category != null)
             {
                 SQLCmd = SQLCmd + " AND ([category] = N'" + category + "')";
             }
@@ -87,7 +87,7 @@ public partial class ItemSearch : System.Web.UI.Page
             {
                 itemSearchCondition = " AND (([name] LIKE N'%" + searchString + "%') OR ([description] LIKE N'%" + searchString + "%'))";
             }
-            if (category == "All Categories")
+            if (category == "All Categories" || category == null)
             {
                 SQLCmd = SQLCmd + itemSearchCondition;
             }
