@@ -187,7 +187,8 @@ public class GenericQuery
 
     public static void CheckDelivered (string connectionString, string UserName)
     {
-        string query = "SELECT [orderDateTime],[orderNum],[deliveryDateOffset] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNumber IS NOT NULL)";
+        int test;
+        string query = "SELECT [orderDateTime],[orderNum],[deliveryDateOffset],[timeSlotID] FROM [Order] WHERE ([userName] = N'" + UserName + "') AND ( [Order].confirmationNumber IS NOT NULL)";
         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connectionString].ConnectionString))
         using (SqlCommand command = new SqlCommand(query, connection))
         {
@@ -197,10 +198,26 @@ public class GenericQuery
             if (reader.HasRows)
             {
                 // Iterate through the table to get the retrieved values.
-                reader.Read();
-                if (!reader.IsDBNull(0))
+                while(reader.Read())
                 {
-                    DateTime NoMoreChange = reader.GetDateTime(0).AddDays(reader.GetByte(2) - 1);
+                    test = reader.GetInt32(3);
+                    DateTime NoMoreChange = reader.GetDateTime(0).Date.AddDays(reader.GetByte(2) - 1);
+                    switch (reader.GetInt32(3))
+                    {
+                        case 1:
+                            NoMoreChange = NoMoreChange.AddHours(9);
+                            break;
+                        case 2:
+                            NoMoreChange = NoMoreChange.AddHours(12);
+                            break;
+                        case 3:
+                            NoMoreChange = NoMoreChange.AddHours(15);
+                            break;
+                        case 4:
+                            NoMoreChange = NoMoreChange.AddHours(18);
+                            break;
+                    }
+
                     if (DateTime.Now >= NoMoreChange)
                     {
                         PreForShippment(connectionString, reader.GetInt32(1));

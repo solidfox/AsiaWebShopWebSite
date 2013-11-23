@@ -242,12 +242,12 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             reader.Close();
         }
 
-        TimeSpan difference = DateTime.Now.Date.AddDays(1) - orderDateTime;
+        TimeSpan difference = DateTime.Now.AddDays(1) - orderDateTime;
 
         //Populate the SelectDate dropdown list 7 days from current day
         for (int count = difference.Days; count <= 7; count++)
         {
-            SelectDate.Items.Add(new ListItem(DateTime.Now.Date.AddDays(count).ToShortDateString(), count.ToString()));
+            SelectDate.Items.Add(new ListItem(DateTime.Now.AddDays(count).ToShortDateString(), count.ToString()));
         }
         //Populate the SelectDate dropdown list
         SelectTime.Items.Add(new ListItem("09:00-12:00", "1"));
@@ -358,7 +358,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Parameters.AddWithValue("@OrderNum", orderNum);
             command.Parameters.AddWithValue("@DeliveryDateOffset", Convert.ToInt32(selectedDate));
             command.Parameters.AddWithValue("@TimeSlotID", Convert.ToInt32(selectedTime));
-            command.Parameters.AddWithValue("@OrderDateTime", DateTime.Now.Date);
+            command.Parameters.AddWithValue("@OrderDateTime", DateTime.Now);
             
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();

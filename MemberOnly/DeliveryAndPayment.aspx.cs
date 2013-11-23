@@ -421,7 +421,7 @@ public partial class MemberOnly_DeliveryAndPayment : System.Web.UI.Page
             command.Parameters.AddWithValue("@OrderNum", orderNum);
             command.Parameters.AddWithValue("@DeliveryDateOffset", Convert.ToInt32(selectedDate));
             command.Parameters.AddWithValue("@TimeSlotID", Convert.ToInt32(selectedTime));
-            command.Parameters.AddWithValue("@OrderDateTime", DateTime.Now.Date);
+            command.Parameters.AddWithValue("@OrderDateTime", DateTime.Now);
             
             // Open the connection, execute the INSERT query and close the connection.
             command.Connection.Open();
