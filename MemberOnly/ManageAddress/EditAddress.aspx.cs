@@ -43,7 +43,7 @@ public partial class MemberOnly_ManageDeliveryAddress_EditAddress : System.Web.U
 
             // Count how many existing records have the student id value.
             connection.Open();
-            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE (([nickname] = N'" + AddressList.Text + "') AND ([userName] = N'" + userName + "'))", connection);
+            SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [Address] WHERE (([nickname] = N'" + AddressList.Text.Trim() + "') AND ([userName] = N'" + userName + "'))", connection);
             Int32 count = (Int32)command.ExecuteScalar();
             connection.Close();
 
