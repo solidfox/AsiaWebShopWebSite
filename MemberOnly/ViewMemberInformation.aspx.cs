@@ -15,8 +15,8 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
         string connectionString = "AsiaWebShopDBConnectionString";
         string userName = User.Identity.Name;
         GetMemberData(connectionString, userName);
-        GetMemberAddress(connectionString, userName);
-        GetMemberCreditCard(connectionString, userName);
+       // GetMemberAddress(connectionString, userName);
+       // GetMemberCreditCard(connectionString, userName);
     }
 
     private void GetMemberData(string connectionString, string userName)
@@ -53,7 +53,7 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
             reader.Close();
         }
     }
-
+    /*
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
@@ -118,5 +118,5 @@ public partial class MemberOnly_ViewMemberInformation : System.Web.UI.Page
             command.Connection.Close();
             reader.Close();
         }
-    }
+    }*/
 }

@@ -55,60 +55,11 @@
         </tr>
         <tr>
             <td>
-                Address:</td>
-            <td colspan="3">
-                <asp:Label ID="Address" runat="server"></asp:Label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Street:</td>
-            <td>
-                <asp:Label ID="Street" runat="server"></asp:Label>
-            </td>
-            <td>
-                District</td>
-            <td>
-                <asp:Label ID="District" runat="server">
-                </asp:Label>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 Renewal Date:</td>
             <td colspan="3">
                 <asp:Label ID="RenewalDate" runat="server"></asp:Label>
             </td>
         </tr>
     </table>
-    <h3>Credit Card Information</h3>
-    <table>
-        <tr>
-            <td>
-                Cardholder Name:</td>
-            <td>
-                <asp:Label ID="CardHolderName" runat="server"></asp:Label>
-            </td>
-            <td>
-                Card Type:</td>
-            <td>
-                <asp:Label ID="CardType" runat="server">
-                </asp:Label>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Card Number:</td>
-            <td style="margin-left: 40px">
-                <asp:Label ID="CardNumber" runat="server"></asp:Label>
-&nbsp;</td>
-            <td>
-                Expiry Date:</td>
-            <td>
-                <asp:Label ID="Month" runat="server"> </asp:Label>
-                /<asp:Label ID="Year" runat="server">
-                </asp:Label>
-            </td>
-        </tr>
-    </table>
+    <br />
     </asp:Content>

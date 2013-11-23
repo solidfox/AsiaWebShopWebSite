@@ -41,7 +41,8 @@
         ForeColor="#333333" GridLines="None" Height="50px" Width="297px"
         OnItemInserted="dvAddress_ItemInserted" 
         OnItemUpdated="dvAddress_ItemUpdated" 
-        OnItemDeleted="dvAddress_ItemDeleted" >
+        OnItemDeleted="dvAddress_ItemDeleted" 
+         >
         <AlternatingRowStyle BackColor="White" />
         <CommandRowStyle BackColor="#D1DDF1" Font-Bold="True" />
         <EditRowStyle BackColor="#2461BF" />

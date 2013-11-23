@@ -20,20 +20,20 @@ public partial class _Default : System.Web.UI.Page
 
         if (!Page.IsPostBack)
         {
-            PopulateDistrictDropDownList();
+           /* PopulateDistrictDropDownList();
             // Populate the YearDropDownList from current year to plus 10 years.
             YearDropDownList.Items.Add("Year");
             for (int year = DateTime.Now.Year; year <= DateTime.Now.Year + 10; year++)
             {
                 YearDropDownList.Items.Add(year.ToString());
-            }
+            }*/
             
             GetMemberData(connectionString, userName);
-            GetMemberAddress(connectionString, userName);
-            GetMemberCreditCard(connectionString, userName);
+            //GetMemberAddress(connectionString, userName);
+            //GetMemberCreditCard(connectionString, userName);
         }
     }
-
+/*
     private void PopulateDistrictDropDownList()
     {
         DistrictDropDownList.Items.Add("-- Select district --");
@@ -56,6 +56,7 @@ public partial class _Default : System.Web.UI.Page
         DistrictDropDownList.Items.Add("Yau Tsim Mong");
         DistrictDropDownList.Items.Add("Yuen Long");
     }
+    */
 
     private void GetMemberData(string connectionString, string userName)
     {
@@ -90,7 +91,7 @@ public partial class _Default : System.Web.UI.Page
             reader.Close();
         }
     }
-
+/*
     private void GetMemberAddress(string connectionString, string userName)
     {
         // Define the SELECT query to get the member's address.
@@ -190,7 +191,7 @@ public partial class _Default : System.Web.UI.Page
             reader.Close();
         }
     }
-
+    */
     protected void UpdateMember(string connectionString, string userName, string email, string firstName, string lastName, string phoneNumber)
     {
         // Define the UPDATE query with parameters.
@@ -214,7 +215,7 @@ public partial class _Default : System.Web.UI.Page
             command.Connection.Close();
         }
     }
-
+/*
     protected void UpdateAddress(string connectionString, string userName, string buildingAddress, string streetAddress, string district)
     {
         // Define the UPDATE query with parameters.
@@ -261,7 +262,8 @@ public partial class _Default : System.Web.UI.Page
             command.ExecuteNonQuery();
             command.Connection.Close();
         }
-    }
+    }*/
+
     protected void Register_Click(object sender, EventArgs e)
     {
         if (!Page.IsValid) {
@@ -278,7 +280,7 @@ public partial class _Default : System.Web.UI.Page
             PhoneNumber.Text.Trim());
 
         // After the registration information is validated, add the address data into the database.
-        UpdateAddress(connectionString,
+       /* UpdateAddress(connectionString,
             userName,
             (Building.Text.Trim() + " " +
             Floor.Text.Trim() + " " +
@@ -295,10 +297,10 @@ public partial class _Default : System.Web.UI.Page
             CardHolderName.Text.Trim(),
             MonthDropDownList.SelectedItem.Text.Trim(),
             YearDropDownList.SelectedItem.Text.Trim());
-
+        */
         Response.Redirect("MemberSelection.aspx");
     }
-
+    /*
     protected void cvExpiryDate_ServerValidate(object source, ServerValidateEventArgs args)
     {
         Int16 month = Convert.ToInt16(MonthDropDownList.SelectedValue.Trim());
@@ -309,6 +311,6 @@ public partial class _Default : System.Web.UI.Page
         }
         else
             args.IsValid = true;
-    }
+    }*/
 
 }
