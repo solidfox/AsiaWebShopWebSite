@@ -260,6 +260,7 @@ public class ShoppingCart
                 // Iterate through the table to get the retrieved values.
                 reader.Read();
                 name = reader.GetString(0);
+                
                 if (reader.GetDecimal(1) < price)
                 {
                     _price = reader.GetDecimal(1);
@@ -273,6 +274,7 @@ public class ShoppingCart
                     }
 
                 }
+                
 
             }
             command.Connection.Close();

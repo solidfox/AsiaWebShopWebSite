@@ -58,8 +58,8 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         viewCart.Columns.Add("upc", typeof(String));
         viewCart.Columns.Add("name", typeof(String));
         viewCart.Columns.Add("quantity", typeof(Int32));
-        viewCart.Columns.Add("discountPrice", typeof(Int32));
-        viewCart.Columns.Add("totalPrice", typeof(Int32));
+        viewCart.Columns.Add("discountPrice", typeof(Double));
+        viewCart.Columns.Add("totalPrice", typeof(Double));
 
         // Populate the DataTable from the shopping cart.
         ShoppingCart cart = ShoppingCart.GetShoppingCart(userName);
