@@ -51,7 +51,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
 
 
         string SQLCmd = " SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, "+
-            " { fn REPEAT('#', LEN([Order].creditCardNumber) - 4) } + RIGHT (LTRIM(RTRIM([Order].creditCardNumber)), 4) AS creditCardNumber,"
+            " { fn REPEAT('*', LEN([Order].creditCardNumber) - 4) } + RIGHT (LTRIM(RTRIM([Order].creditCardNumber)), 4) AS creditCardNumber,"
             +" [Order].creditCardtype, [Order].code, [Order].orderNum FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)"
                         + userNameQuery+ dateRangQuery;
          
