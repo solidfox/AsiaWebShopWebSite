@@ -26,6 +26,9 @@
         <strong style="font-size: large; color: #000080;">TOTAL AMOUNT PURCHASE </strong></p>
     <p>
         <strong style="color: #FF0000">No username, search all members.</strong></p>
+    <p>
+        <strong style="color: #FF0000">No date range is specified, then search all 
+        dates.</strong></p>
     <p class="style7">
         <asp:Label ID="Label1" runat="server" 
             Text="Date Format : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" 

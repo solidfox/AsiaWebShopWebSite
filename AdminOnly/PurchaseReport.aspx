@@ -68,6 +68,9 @@
         <strong style="font-size: large; color: #000080;">PURCHASE REPORT</strong></p>
     <p>
         <strong style="color: #FF0000">No username, search all members.</strong></p>
+    <p>
+        <strong style="color: #FF0000">No date range is specified, then search all 
+        dates.</strong></p>
     <p class="style7">
         <asp:Label ID="Label1" runat="server" 
             Text="Date Format : MM/DD/YYYY&nbsp; ,M =month,D=day, Y=year" 
@@ -153,12 +156,12 @@
         ForeColor="Red" style="color: #0000FF"></asp:Label>
     <br />
                 <asp:DataList ID="DataList1" runat="server" DataKeyField="orderNum" 
-                    DataSourceID="MemberSqlDataSource" CellPadding="4" 
-        ForeColor="#333333" GridLines="Both" Visible="False">
-                    <AlternatingItemStyle BackColor="White" />
-                    <FooterStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
-                    <HeaderStyle BackColor="#1C5E55" Font-Bold="True" ForeColor="White" />
-                    <ItemStyle BackColor="#E3EAEB" />
+                    DataSourceID="MemberSqlDataSource" CellPadding="3" 
+        ForeColor="Black" GridLines="Both" Visible="False" BackColor="White" 
+        BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px">
+                    <AlternatingItemStyle BackColor="#CCCCCC" />
+                    <FooterStyle BackColor="#CCCCCC" />
+                    <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
                     <ItemTemplate>
                         <table border="2" class="style17">
                             <tr>
@@ -272,7 +275,7 @@
                             </SelectParameters>
                         </asp:SqlDataSource>
                     </ItemTemplate>
-                    <SelectedItemStyle BackColor="#C5BBAF" Font-Bold="True" ForeColor="#333333" />
+                    <SelectedItemStyle BackColor="#000099" Font-Bold="True" ForeColor="White" />
                 </asp:DataList>
     
     <p>
@@ -283,7 +286,7 @@
         
             
             
-            SelectCommand="SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, [Order].creditCardNumber, [Order].creditCardtype, [Order].orderNum, [Order].code FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)" 
+            SelectCommand="SELECT Member.firstName, Member.lastName, Member.email, Member.phoneNumber, [Order].deliveryAddress, [Order].deliveryDistrict, { fn REPEAT('#', LEN([Order].creditCardNumber) - 4) } + RIGHT (LTRIM(RTRIM([Order].creditCardNumber)), 4) AS creditCardNumber, [Order].creditCardtype, [Order].orderNum, [Order].code FROM Member INNER JOIN [Order] ON Member.userName = [Order].userName WHERE ([Order].confirmationNumber IS NOT NULL)" 
            >
         </asp:SqlDataSource>
       

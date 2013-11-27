@@ -25,7 +25,7 @@
             <asp:BoundField DataField="Authorization code" HeaderText="Authorization code" 
                 SortExpression="Authorization code" />
             <asp:BoundField DataField="Delivery Date" HeaderText="Delivery Date" 
-                SortExpression="Delivery Date" ReadOnly="True" />
+                SortExpression="Delivery Date" ReadOnly="True" DataFormatString="{0:d}" />
             <asp:BoundField DataField="Delivery Time Slot" HeaderText="Delivery Time Slot" 
                 SortExpression="Delivery Time Slot" />
             <asp:BoundField DataField="Delivery Address" HeaderText="Delivery Address" 
@@ -44,7 +44,7 @@
     </asp:DetailsView>
     <asp:SqlDataSource ID="orderDataSource" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT [Order].confirmationNumber AS [Confirmation number], [Order].code AS [Authorization code], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot AS 'Delivery Time Slot', [Order].deliveryAddress AS 'Delivery Address', [Order].deliveryDistrict AS 'District', { fn CONCAT('**** **** **** ', RIGHT ([Order].creditCardNumber, 4)) } AS 'Card Number', [Order].creditCardtype AS 'Card Type', (SELECT SUM((Item.normalPrice - Item.discountPrice) * OrderItem.quantity) AS 'savings' FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = [Order].orderNum)) AS 'Savings', (SELECT SUM(Item_1.discountPrice * OrderItem_1.quantity) AS 'total' FROM OrderItem AS OrderItem_1 INNER JOIN Item AS Item_1 ON OrderItem_1.upc = Item_1.upc WHERE (OrderItem_1.orderNum = [Order].orderNum)) AS 'Order Total' FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].confirmationNumber = @confirmationNumber)" 
+        SelectCommand="SELECT [Order].confirmationNumber AS [Confirmation number], [Order].code AS [Authorization code], DATEADD(day, [Order].deliveryDateOffset, CAST([Order].orderDateTime AS smalldatetime)) AS 'Delivery Date', TimeSlot.slot AS 'Delivery Time Slot', [Order].deliveryAddress AS 'Delivery Address', [Order].deliveryDistrict AS 'District', { fn REPEAT('#', LEN([Order].creditCardNumber) - 4) } + RIGHT (LTRIM(RTRIM([Order].creditCardNumber)), 4) AS 'Card Number', [Order].creditCardtype AS 'Card Type', (SELECT SUM((Item.normalPrice - Item.discountPrice) * OrderItem.quantity) AS 'savings' FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = [Order].orderNum)) AS 'Savings', (SELECT SUM(Item_1.discountPrice * OrderItem_1.quantity) AS 'total' FROM OrderItem AS OrderItem_1 INNER JOIN Item AS Item_1 ON OrderItem_1.upc = Item_1.upc WHERE (OrderItem_1.orderNum = [Order].orderNum)) AS 'Order Total' FROM [Order] INNER JOIN TimeSlot ON [Order].timeSlotID = TimeSlot.id WHERE ([Order].confirmationNumber = @confirmationNumber)" 
         onselecting="orderDataSource_Selecting">
         <SelectParameters>
             <asp:Parameter Name="confirmationNumber" Type="String" />
