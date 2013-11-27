@@ -75,6 +75,7 @@ public partial class AdminOnly_MemberReport : System.Web.UI.Page
             {   
                 TotalAmountGridView.Columns[0].Visible = false;
             }
+
             switch (OrderRadioButtonList.SelectedIndex)
             {
                 case 0:

@@ -242,6 +242,10 @@
                                 <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
                                 <asp:BoundField DataField="quantity" HeaderText="quantity" 
                                     SortExpression="quantity" />
+                                <asp:BoundField DataField="UnitPrice" HeaderText="UnitPrice" 
+                                    SortExpression="UnitPrice" />
+                                <asp:BoundField DataField="UnitSavings" HeaderText="UnitSavings" 
+                                    SortExpression="UnitSavings" />
                                 <asp:BoundField DataField="TotalPurchasePrice" HeaderText="TotalPurchasePrice" 
                                     ReadOnly="True" SortExpression="TotalPurchasePrice" />
                                 <asp:BoundField DataField="TotalAmountSaved" HeaderText="TotalAmountSaved" 
@@ -260,7 +264,8 @@
                         </asp:GridView>
                         <asp:SqlDataSource ID="OrderItemSqlDataSource" runat="server" 
                             ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-                            SelectCommand="SELECT Item.category, Item.name, OrderItem.quantity, OrderItem.quantity * OrderItem.PriceWhenAdded AS TotalPurchasePrice, OrderItem.quantity * OrderItem.amountSavedForOne AS TotalAmountSaved FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = @orderNum) ORDER BY Item.category, Item.name">
+                            
+                            SelectCommand="SELECT Item.category, Item.name, OrderItem.quantity, OrderItem.PriceWhenAdded AS UnitPrice, OrderItem.amountSavedForOne AS UnitSavings, OrderItem.quantity * OrderItem.PriceWhenAdded AS TotalPurchasePrice, OrderItem.quantity * OrderItem.amountSavedForOne AS TotalAmountSaved FROM OrderItem INNER JOIN Item ON OrderItem.upc = Item.upc WHERE (OrderItem.orderNum = @orderNum) ORDER BY Item.category, Item.name">
                             <SelectParameters>
                                 <asp:ControlParameter ControlID="orderNumLabel" Name="orderNum" 
                                     PropertyName="Text" />
