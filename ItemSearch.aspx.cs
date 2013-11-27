@@ -164,7 +164,7 @@ public partial class ItemSearch : System.Web.UI.Page
                 connection.Close();
             }
 
-            if ((isZero == true) && (isAlert == false))
+            if (isAlert == false)
             {
                 // Create the connection and the SQL command.
                 // Define the INSERT query with parameters.
@@ -184,7 +184,8 @@ public partial class ItemSearch : System.Web.UI.Page
                     command.ExecuteNonQuery();
                     command.Connection.Close();
                 }
-                ShowPopUpMsg("Alert added.");
+                //ShowPopUpMsg("Alert added.");
+                Response.Redirect("MemberOnly/WishList/WishListPage.aspx");
             }
             else
             {

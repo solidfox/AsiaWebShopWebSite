@@ -102,7 +102,7 @@
             <asp:TemplateField ShowHeader="False">
                 <ItemTemplate>
                     <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" 
-                        CommandName="" onclick="LinkButton1_Click" Text="Add to Alert List"></asp:LinkButton>
+                        CommandName="" onclick="LinkButton1_Click" Text="Add to Wish List"></asp:LinkButton>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
