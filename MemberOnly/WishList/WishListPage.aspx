@@ -17,32 +17,28 @@
         ForeColor="#333333" GridLines="None" AutoGenerateEditButton="True">
         <AlternatingRowStyle BackColor="White" />
         <Columns>
-            <asp:TemplateField HeaderText="userName" SortExpression="userName" 
-                Visible="False">
-                <EditItemTemplate>
-                    <asp:Label ID="Label1" runat="server" Text='<%# Eval("userName") %>'></asp:Label>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Image ID="Image1" runat="server" Height="60px" 
-                        ImageUrl='<%# Eval("upc", "GetDBImage.ashx?upc={0}") %>' Width="60px" />
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:BoundField DataField="upc" HeaderText="upc" ReadOnly="True" 
-                SortExpression="upc" Visible="False" />
-            <asp:BoundField DataField="name" HeaderText="Product" SortExpression="name" />
-            <asp:TemplateField HeaderText="Picture">
-                <EditItemTemplate>
-                    <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
-                </EditItemTemplate>
-                <ItemTemplate>
-                    <asp:Image ID="Image2" runat="server" Height="60px" Width="60px" 
-                        ImageUrl='<%# Eval("upc", "GetDBImage.ashx?upc={0}") %>' />
-                </ItemTemplate>
-            </asp:TemplateField>
+            <asp:BoundField DataField="userName" HeaderText="userName" ReadOnly="True" 
+                SortExpression="userName" Visible="False" />
+            <asp:BoundField DataField="upc" HeaderText="upc" SortExpression="upc" 
+                ReadOnly="True" Visible="False" />
+            <asp:BoundField DataField="name" HeaderText="name" 
+                SortExpression="name" ReadOnly="True" />
+            <asp:BoundField DataField="discountPrice" HeaderText="discountPrice" 
+                ReadOnly="True" SortExpression="discountPrice" />
+            <asp:BoundField DataField="quantityAvailable" HeaderText="quantityAvailable" 
+                ReadOnly="True" SortExpression="quantityAvailable" />
             <asp:BoundField DataField="comment" HeaderText="comment" 
                 SortExpression="comment" />
-            <asp:CheckBoxField DataField="emailSent" HeaderText="emailSent" 
-                SortExpression="emailSent" />
+            <asp:TemplateField HeaderText="emailSent" SortExpression="emailSent">
+                <EditItemTemplate>
+                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("emailSent") %>' 
+                        />
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("emailSent") %>' 
+                        Enabled="false" />
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
         <EditRowStyle BackColor="#2461BF" />
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
@@ -58,10 +54,11 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, WishListItem.comment, WishListItem.emailSent, Item.name, Item.picture FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
+        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.quantityAvailable, WishListItem.comment, WishListItem.emailSent FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
         
         
-        UpdateCommand="UPDATE [WishListItem] SET [userName] = @userName, [upc] = @upc, [comment] = @comment, [emailSent] = @emailSent WHERE [userName] = @userName AND [upc] = @upc" >
+        
+        UpdateCommand="UPDATE [WishListItem] SET [comment] = @comment, [emailSent] = @emailSent WHERE [userName] = @userName AND [upc] = @upc" >
         <SelectParameters>
             <asp:Parameter Name="userName" Type="String" />
         </SelectParameters>
