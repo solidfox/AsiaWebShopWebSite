@@ -33,17 +33,25 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" ReadOnly="True" />
-            <asp:BoundField DataField="comment" HeaderText="Annotation" 
-                SortExpression="comment" />
-            <asp:TemplateField HeaderText="Stock Back Email Alert" SortExpression="emailSent">
+            <asp:TemplateField HeaderText="Annotation" SortExpression="comment">
                 <EditItemTemplate>
-                    <asp:CheckBox ID="CheckBox2" runat="server" Checked='<%# Bind("emailSent") %>' 
-                         OnCheckedChanged="CheckBox2_CheckedChanged"/>
+                    <asp:TextBox ID="TextBox1" runat="server" MaxLength="140" 
+                        Text='<%# Bind("comment") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("emailSent") %>' 
-                        Enabled="false"/>
+                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("comment") %>'></asp:Label>
                 </ItemTemplate>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Stock Back Email Alert" 
+                SortExpression="emailSent">
+                <ItemTemplate>
+                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("emailSent") %>' 
+                        Enabled="false" />
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:CheckBox ID="CheckBox2" runat="server" Checked='<%# Bind("emailSent") %>' 
+                        OnCheckedChanged="CheckBox2_CheckedChanged" />
+                </EditItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField>
                 <ItemTemplate>
