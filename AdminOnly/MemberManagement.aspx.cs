@@ -67,7 +67,7 @@ public partial class AdminOnly_MemberManagement : System.Web.UI.Page
                             + itemName + " is now on stock. Visit our website and You will find products you want are all in our shop.\n\nBest wishes, \nASiaWebShop");
                         if (isEmailSent == true)
                         {
-                            SqlCommand alertEmailSent = new SqlCommand("UPDATE [WishListItem] SET [emailSent]= N'" + true + "' WHERE (([upc] = N'" + upcNum + "') AND ([userName] = N'" + UserName.Text.Trim() + "'))", connection);
+                            SqlCommand alertEmailSent = new SqlCommand("UPDATE [WishListItem] SET [isAlert]=N'" + false + "' AND [emailSent]= N'" + true + "' WHERE (([upc] = N'" + upcNum + "') AND ([userName] = N'" + UserName.Text.Trim() + "'))", connection);
                             alertEmailSent.ExecuteScalar();
                             emailSentNum++;
                         }
