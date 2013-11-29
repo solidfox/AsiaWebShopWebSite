@@ -32,6 +32,11 @@
                     <asp:Label ID="ItemQuantity" runat="server" Text='<%# Eval("quantityAvailable") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
+            <asp:TemplateField HeaderText="Reserved">
+                <ItemTemplate>
+                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("Reserved", "{0:d}") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
             <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" ReadOnly="True" />
             <asp:TemplateField HeaderText="Annotation" SortExpression="comment">
                 <EditItemTemplate>
@@ -74,11 +79,12 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice,Item.quantityAvailable, WishListItem.comment, WishListItem.IsAlert,(select count(*) from WishListItem where [upc] = Item.upc) AS WishListed FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
+        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice, Item.quantityAvailable as quantityAvailable, (SELECT quantity FROM OrderItem WHERE (OrderItem.upc = WishListItem.upc AND orderNum = @orderNum)) AS Reserved , WishListItem.comment, WishListItem.IsAlert,(select count(*) from WishListItem where [upc] = Item.upc) AS WishListed FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
         UpdateCommand="UPDATE [WishListItem] SET [comment] = @comment, [IsAlert] = @IsAlert WHERE [userName] = @userName AND [upc] = @upc" 
         DeleteCommand="DELETE FROM [WishListItem] WHERE [upc] = @upc AND [userName] = @userName"  >
         <SelectParameters>
             <asp:Parameter Name="userName" Type="String" />
+            <asp:Parameter Name="orderNum" Type="String" />
         </SelectParameters>
         <UpdateParameters>
                 <asp:Parameter Name="userName" Type="String" />
