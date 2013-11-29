@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -15,7 +17,6 @@ public partial class MemberOnly_WishList_WishListPage : System.Web.UI.Page
         userName = User.Identity.Name;
         SqlDataSource1.SelectParameters["userName"].DefaultValue = User.Identity.Name;
         SqlDataSource1.SelectParameters["orderNum"].DefaultValue = GenericQuery.GetOrderNumber(connectionstring, userName).ToString().Trim();
-        
     }
 
     private void ShowPopUpMsg(string msg)

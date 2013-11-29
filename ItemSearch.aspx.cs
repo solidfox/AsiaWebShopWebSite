@@ -21,6 +21,11 @@ public partial class ItemSearch : System.Web.UI.Page
                 ShowPopUpMsg("Stock not enough, cannot add to shopping cart !");
                 UserNotify.clearadd();
             }
+            else if (UserNotify.add == "Wish")
+            {
+                ShowPopUpMsg("Already in the wish list !");
+                UserNotify.clearadd();
+            }
         }
         Generate_Item_List();
     }
@@ -122,6 +127,7 @@ public partial class ItemSearch : System.Web.UI.Page
 
 
     }
+    
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
         if (userName != "" && userName != "employee")
@@ -134,6 +140,7 @@ public partial class ItemSearch : System.Web.UI.Page
             string upc = gvItemSearchResult.DataKeys[gvr.RowIndex].Values["upc"].ToString();
 
             // Check if the quantity is zero.
+            /*
             bool isZero = false;
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
             {
@@ -150,6 +157,8 @@ public partial class ItemSearch : System.Web.UI.Page
                 }
                 connection.Close();
             }
+             * */
+
 
             // Check if the email alert is already sent.
             bool check = true;

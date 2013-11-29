@@ -99,10 +99,9 @@
                     <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}&normalPrice={3}&quantityAvailable={4}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString()), HttpUtility.UrlEncode(Eval("normalPrice").ToString()), HttpUtility.UrlEncode(Eval("quantityAvailable").ToString())) %>' Text="Add to cart"></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField ShowHeader="False">
+            <asp:TemplateField>
                 <ItemTemplate>
-                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="false" 
-                        CommandName="" onclick="LinkButton1_Click" Text="Add to Wish List"></asp:LinkButton>
+                    <asp:HyperLink ID="LinkButton1" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/WishList/AddToWishList.aspx?upc={0}", HttpUtility.UrlEncode(Eval("upc").ToString())) %>' Text="Add to Wish List" ></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>

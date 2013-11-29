@@ -47,7 +47,7 @@
                     <asp:Label ID="Label1" runat="server" Text='<%# Bind("comment") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Stock Back Email Alert" 
+            <asp:TemplateField HeaderText="Email Alert" 
                 SortExpression="IsAlert" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="10px">
                 <ItemTemplate>
                     <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("IsAlert") %>' 
