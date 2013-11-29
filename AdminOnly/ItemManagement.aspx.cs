@@ -102,7 +102,8 @@ public partial class ItemManagement : System.Web.UI.Page
                 }
             } while (count != 0);
 
-            ShowPopUpMsg(emailSentNum + " email(s) are sent");
+            if (emailSentNum != 0)
+                ShowPopUpMsg(emailSentNum + " email(s) are sent");
             connection.Close();
 
         }
