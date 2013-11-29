@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -16,7 +17,13 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         if (!IsPostBack)
         {
             PopulateShoppingCart();
-            this.InformUser.Text = UserNotify.Inform;
+            //this.InformUser.Text = UserNotify.Inform;
+            if (UserNotify.item != "")
+            {
+                string delete = UserNotify.item + " DELETED FROM SHOPPING CART, OUT OF STOCK !!";
+                ShowPopUpMsg(delete);
+                UserNotify.clearitem();
+            }
         }
     }
     protected void btnUpdateCart_Click(object sender, EventArgs e)
@@ -48,7 +55,24 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
         // Display the updated quantities.
         PopulateShoppingCart();
 
+        if (UserNotify.item != "")
+        {
+            string combine = UserNotify.item + " EXCEED OUR STOCK";
+            ShowPopUpMsg(combine);
+            UserNotify.clearitem();
+        }
+
     }
+
+    private void ShowPopUpMsg(string msg)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("alert('");
+        sb.Append(msg.Replace("\n", "\\n").Replace("\r", "").Replace("'", "\\'"));
+        sb.Append("');");
+        ScriptManager.RegisterStartupScript(this.Page, this.GetType(), "showalert", sb.ToString(), true);
+    }
+
 
     protected void PopulateShoppingCart()
     {

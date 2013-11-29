@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
+using System.Web.UI;
 
 /*
  * The ShoppingCart class
@@ -101,8 +103,9 @@ public class ShoppingCart
         else
         {
             // Inform the user the quantity is alreadt exceed the stock
-            msg += "The item " + name + " is deleted from your shopping cart.";
-            UserNotify test = new UserNotify(msg);
+            //msg += "The item " + name + " is deleted from your shopping cart.";
+            //UserNotify test = new UserNotify(msg);
+            UserNotify.outstock(name.Trim());
             GenericQuery.RemoveFromDBOrderItem(connectionString, upc, GenericQuery.GetOrderNumber(connectionString, userName));
             return;
         }
@@ -132,13 +135,18 @@ public class ShoppingCart
         foreach (CartItem item in Items)
         {
             int test = quantity - item.Quantity;
-            if (item.Equals(updatedItem) && GenericQuery.CheckItemStock (connectionString, updatedItem, test - 1))
+            if (item.Equals(updatedItem) && GenericQuery.CheckItemStock(connectionString, updatedItem, test - 1))
             {
                 GenericQuery.SubUpdateOrderItem(connectionString, OrderNum, upc, quantity, item.DiscountPrice);
                 int difference = item.Quantity - quantity;
                 item.Quantity = quantity;
                 GenericQuery.UpdateDBItem(connectionString, upc, difference);
                 return;
+            }
+
+            else if (item.Equals(updatedItem) && !GenericQuery.CheckItemStock(connectionString, updatedItem, test - 1))
+            {
+                UserNotify.outstock(item.ItemName.Trim());
             }
         }
             // Inform the user the quantity is alreadt exceed the stock
@@ -366,6 +374,7 @@ public class ShoppingCart
             cartTotal += item.TotalPrice;
         return cartTotal;
     }
+
 #endregion
 }
 

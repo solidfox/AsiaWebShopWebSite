@@ -32,9 +32,10 @@
                     <asp:Label ID="ItemQuantity" runat="server" Text='<%# Eval("quantityAvailable") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
+            <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" />
             <asp:BoundField DataField="comment" HeaderText="Annotation" 
                 SortExpression="comment" />
-            <asp:TemplateField HeaderText="Stock Email Alert" SortExpression="emailSent">
+            <asp:TemplateField HeaderText="Stock Back Email Alert" SortExpression="emailSent">
                 <EditItemTemplate>
                     <asp:CheckBox ID="CheckBox2" runat="server" Checked='<%# Bind("emailSent") %>' 
                          OnCheckedChanged="CheckBox2_CheckedChanged"/>
@@ -65,7 +66,7 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice,Item.quantityAvailable, WishListItem.comment, WishListItem.emailSent FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
+        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice,Item.quantityAvailable, WishListItem.comment, WishListItem.emailSent,(select count(*) from WishListItem where [upc] = Item.upc) AS WishListed FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
         UpdateCommand="UPDATE [WishListItem] SET [comment] = @comment, [emailSent] = @emailSent WHERE [userName] = @userName AND [upc] = @upc" 
         DeleteCommand="DELETE FROM [WishListItem] WHERE [upc] = @upc AND [userName] = @userName"  >
         <SelectParameters>

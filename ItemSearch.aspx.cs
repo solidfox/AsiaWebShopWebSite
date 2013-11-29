@@ -189,7 +189,7 @@ public partial class ItemSearch : System.Web.UI.Page
             }
             else
             {
-                ShowPopUpMsg("Alert cannot be added.");
+                ShowPopUpMsg("Already in WishList");
             }
         }
         else
