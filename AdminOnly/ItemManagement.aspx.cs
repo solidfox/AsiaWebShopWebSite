@@ -91,7 +91,7 @@ public partial class ItemManagement : System.Web.UI.Page
                         + itemName + " is now on stock. Visit our website and You will find products you want are all in our shop.\n\nBest wishes, \nASiaWebShop");
                     if (isEmailSent == true)
                     {
-                        SqlCommand alertEmailSent = new SqlCommand("UPDATE [WishListItem] SET [isAlert]= N'" + false + "' [emailSent]= N'" + true + "' WHERE (([upc] = N'" + upc + "') AND ([userName] = N'" + customerName + "'))", connection);
+                        SqlCommand alertEmailSent = new SqlCommand("UPDATE [WishListItem] SET [isAlert]= N'" + false + "', [emailSent]= N'" + true + "' WHERE (([upc] = N'" + upc + "') AND ([userName] = N'" + customerName + "'))", connection);
                         alertEmailSent.ExecuteScalar();
                         emailSentNum++;
                     }
