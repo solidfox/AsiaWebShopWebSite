@@ -73,12 +73,12 @@ public partial class ItemManagement : System.Web.UI.Page
             int emailSentNum = 0;
             do
             {
-                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "'))", connection);
+                SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "') AND ([userName] in (SELECT userName FROM [member] WHERE [active] = N'" + true + "')))", connection);
                 count = (Int32)command.ExecuteScalar();
 
                 if (count != 0)
                 {
-                    SqlCommand test = new SqlCommand("SELECT userName FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "'))", connection);
+                    SqlCommand test = new SqlCommand("SELECT userName FROM [WishListItem] WHERE (([upc] = N'" + upc + "') AND ([emailSent] = N'" + false + "')  AND ([isAlert] = N'" + true + "') AND ([userName] in (SELECT userName FROM [member] WHERE [active] = N'" + true + "')))", connection);
                     String customerName = test.ExecuteScalar().ToString().Trim();
                     SqlCommand name = new SqlCommand("SELECT name FROM [Item] WHERE (([upc] = N'" + upc + "'))", connection);
                     String itemName = name.ExecuteScalar().ToString().Trim();

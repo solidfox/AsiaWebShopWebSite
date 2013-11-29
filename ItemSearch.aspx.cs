@@ -124,7 +124,7 @@ public partial class ItemSearch : System.Web.UI.Page
     }
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
-        if (userName != "")
+        if (userName != "" && userName != "employee")
         {
             //Get the button that raised the event
             LinkButton LinkButton1 = (LinkButton)sender;
