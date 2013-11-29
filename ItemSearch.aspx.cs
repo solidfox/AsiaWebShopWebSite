@@ -16,7 +16,11 @@ public partial class ItemSearch : System.Web.UI.Page
         userName = User.Identity.Name;
         if (!Page.IsPostBack)
         {
-
+            if (UserNotify.add == "no")
+            {
+                ShowPopUpMsg("Stock not enough, cannot add to shopping cart !");
+                UserNotify.clearadd();
+            }
         }
         Generate_Item_List();
     }

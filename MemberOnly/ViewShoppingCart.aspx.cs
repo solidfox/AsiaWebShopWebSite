@@ -24,6 +24,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
                 ShowPopUpMsg(delete);
                 UserNotify.clearitem();
             }
+            
         }
     }
     protected void btnUpdateCart_Click(object sender, EventArgs e)

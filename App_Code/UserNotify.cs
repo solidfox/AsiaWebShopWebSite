@@ -12,6 +12,7 @@ public class UserNotify
 {
     public static string Inform = "Have Fun!!";
     public static string item = "";
+    public static string add = "";
     public UserNotify(string Msg) 
     {
         Inform = Msg;
@@ -30,6 +31,10 @@ public class UserNotify
     public static void clearitem()
     {
         item = "";
+    }
+    public static void clearadd()
+    {
+        add = "";
     }
    
 

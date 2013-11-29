@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
@@ -33,10 +34,18 @@ public partial class AddToCart : System.Web.UI.Page
             {
                 cart.AddItem(upc, name, discountPrice, 1, false);
                 GenericQuery.InsertToShoppingCart(connectionString, 1, OrderNum, upc, name, discountPrice, amountSavedForOne);
+                HttpContext.Current.Session["MyShoppingCart"] = cart;
+                // View the shopping cart.
+                Response.Redirect("~/MemberOnly/ViewShoppingCart.aspx");
+            }
+            else 
+            {
+                UserNotify.add = "no";
+                Response.Redirect("~/ItemSearch.aspx");
             }
             ///TODO: Add the item to the shopping cart in the database.
             // Save the shopping cart in the Session variable "MyShoppingCart".
-            HttpContext.Current.Session["MyShoppingCart"] = cart;
+            
         }
              
         else
@@ -44,9 +53,6 @@ public partial class AddToCart : System.Web.UI.Page
             Debug.Fail("ERROR : We should never get to AddToCart.aspx without a UPC.");
             throw new Exception("ERROR : It is illegal to load AddToCart.aspx without setting a UPC.");
         }
-
-        // View the shopping cart.
-        Response.Redirect("~/MemberOnly/ViewShoppingCart.aspx");
 
     }
 
