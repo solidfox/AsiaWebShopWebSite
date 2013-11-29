@@ -58,7 +58,7 @@ public partial class MemberOnly_ShoppingCart : System.Web.UI.Page
 
         if (UserNotify.item != "")
         {
-            string combine = UserNotify.item + " EXCEED OUR STOCK";
+            string combine = "QUANTITY OF " + UserNotify.item + " EXCEED OUR STOCK";
             ShowPopUpMsg(combine);
             UserNotify.clearitem();
         }
