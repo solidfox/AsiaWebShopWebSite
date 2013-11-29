@@ -32,7 +32,7 @@
                     <asp:Label ID="ItemQuantity" runat="server" Text='<%# Eval("quantityAvailable") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" />
+            <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" ReadOnly="True" />
             <asp:BoundField DataField="comment" HeaderText="Annotation" 
                 SortExpression="comment" />
             <asp:TemplateField HeaderText="Stock Back Email Alert" SortExpression="emailSent">
@@ -47,12 +47,12 @@
             </asp:TemplateField>
             <asp:TemplateField>
                 <ItemTemplate>
-                    <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}&normalPrice={3}&quantityAvailable={4}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString()), HttpUtility.UrlEncode(Eval("normalPrice").ToString()), HttpUtility.UrlEncode(Eval("quantityAvailable").ToString())) %>' Text="Add to cart"></asp:HyperLink>
+                    <asp:HyperLink ID="AddItemLink" runat="server" NavigateUrl='<%# string.Format("~/MemberOnly/AddToCart.aspx?upc={0}&name={1}&discountPrice={2}&normalPrice={3}&quantityAvailable={4}", HttpUtility.UrlEncode(Eval("upc").ToString()), HttpUtility.UrlEncode(Eval("name").ToString()), HttpUtility.UrlEncode(Eval("discountPrice").ToString()), HttpUtility.UrlEncode(Eval("normalPrice").ToString()), HttpUtility.UrlEncode(Eval("quantityAvailable").ToString())) %>' Text="Add to cart" ForeColor="Black"></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:CommandField ShowDeleteButton="True" DeleteText="Remove" />
         </Columns>
-        <EditRowStyle BackColor="#2461BF" />
+        <EditRowStyle BackColor="#EFF3FB" />
         <FooterStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
         <PagerStyle BackColor="#2461BF" ForeColor="White" HorizontalAlign="Center" />
