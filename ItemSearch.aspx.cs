@@ -152,7 +152,7 @@ public partial class ItemSearch : System.Web.UI.Page
             }
 
             // Check if the email alert is already sent.
-            bool isAlert = false;
+            bool check = true;
             using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
             {
                 // Count how many existing records have the student id value.
@@ -162,26 +162,26 @@ public partial class ItemSearch : System.Web.UI.Page
 
                 if (count != 0)
                 {
-                    SqlCommand test = new SqlCommand("SELECT isAlert FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
-                    isAlert = (bool)test.ExecuteScalar();
+                    //SqlCommand test = new SqlCommand("SELECT isAlert FROM [WishListItem] WHERE (([userName] = N'" + userName + "') AND ([upc] = N'" + upc + "'))", connection);
+                    check = false;
                 }
                 connection.Close();
             }
 
-            if (isAlert == false)
-            {
+           if (check)
+           {
                 // Create the connection and the SQL command.
                 // Define the INSERT query with parameters.
-                string query = "INSERT INTO [WishListItem]([userName], [upc], [emailSent], [isAlert])" +
-                                       "VALUES (@userName, @upc, @emailSent, @isAlert)";
+                string query = "INSERT INTO [WishListItem]([userName], [upc])" +
+                                       "VALUES (@userName, @upc)";
                 using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["AsiaWebShopDBConnectionString"].ConnectionString))
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     // Define the INSERT query parameters and their values.
                     command.Parameters.AddWithValue("@UserName", userName);
                     command.Parameters.AddWithValue("@upc", upc);
-                    command.Parameters.AddWithValue("@emailSent", false);
-                    command.Parameters.AddWithValue("@isAlert", true);
+                    //command.Parameters.AddWithValue("@emailSent", false);
+                    //command.Parameters.AddWithValue("@isAlert", false);
 
                     // Open the connection, execute the INSERT query and close the connection.
                     command.Connection.Open();

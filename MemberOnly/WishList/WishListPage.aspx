@@ -43,13 +43,13 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Stock Back Email Alert" 
-                SortExpression="emailSent">
+                SortExpression="IsAlert">
                 <ItemTemplate>
-                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("emailSent") %>' 
+                    <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("IsAlert") %>' 
                         Enabled="false" />
                 </ItemTemplate>
                 <EditItemTemplate>
-                    <asp:CheckBox ID="CheckBox2" runat="server" Checked='<%# Bind("emailSent") %>' 
+                    <asp:CheckBox ID="CheckBox2" runat="server" Checked='<%# Bind("IsAlert") %>' 
                         OnCheckedChanged="CheckBox2_CheckedChanged" />
                 </EditItemTemplate>
             </asp:TemplateField>
@@ -74,8 +74,8 @@
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:AsiaWebShopDBConnectionString %>" 
-        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice,Item.quantityAvailable, WishListItem.comment, WishListItem.emailSent,(select count(*) from WishListItem where [upc] = Item.upc) AS WishListed FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
-        UpdateCommand="UPDATE [WishListItem] SET [comment] = @comment, [emailSent] = @emailSent WHERE [userName] = @userName AND [upc] = @upc" 
+        SelectCommand="SELECT WishListItem.userName, WishListItem.upc, Item.name, Item.discountPrice, Item.normalPrice,Item.quantityAvailable, WishListItem.comment, WishListItem.IsAlert,(select count(*) from WishListItem where [upc] = Item.upc) AS WishListed FROM WishListItem INNER JOIN Item ON WishListItem.upc = Item.upc WHERE (WishListItem.userName = @userName)"
+        UpdateCommand="UPDATE [WishListItem] SET [comment] = @comment, [IsAlert] = @IsAlert WHERE [userName] = @userName AND [upc] = @upc" 
         DeleteCommand="DELETE FROM [WishListItem] WHERE [upc] = @upc AND [userName] = @userName"  >
         <SelectParameters>
             <asp:Parameter Name="userName" Type="String" />
@@ -84,7 +84,7 @@
                 <asp:Parameter Name="userName" Type="String" />
                 <asp:Parameter Name="upc" Type="String" />
                 <asp:Parameter Name="comment" Type="String" />
-                <asp:Parameter Name="emailSent" Type="String" />
+                <asp:Parameter Name="IsAlert" Type="String" />
             </UpdateParameters>
     </asp:SqlDataSource>
 </asp:Content>
