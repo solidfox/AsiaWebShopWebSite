@@ -22,7 +22,7 @@ public class UserNotify
     {
         if(item != "")
         {
-            item += " and ";
+            item += " AND ";
         }
 
         item += msg;

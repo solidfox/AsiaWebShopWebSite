@@ -15,7 +15,7 @@
     <asp:GridView ID="gvWishList" runat="server" AutoGenerateColumns="False" 
         CellPadding="4" DataKeyNames="userName,upc" DataSourceID="SqlDataSource1" 
         ForeColor="#333333" GridLines="None" AutoGenerateEditButton="True">
-        <AlternatingRowStyle BackColor="White" />
+        <AlternatingRowStyle BackColor="White"/>
         <Columns>
             <asp:BoundField DataField="userName" HeaderText="userName" ReadOnly="True" 
                 SortExpression="userName" Visible="False" />
@@ -24,20 +24,20 @@
             <asp:BoundField DataField="name" HeaderText="Product Name" 
                 SortExpression="name" ReadOnly="True" />
             <asp:BoundField DataField="normalPrice" HeaderText="Normal Price" 
-                SortExpression="normalPrice" ReadOnly="True" />
+                SortExpression="normalPrice" ReadOnly="True" ItemStyle-HorizontalAlign="Center"/>
             <asp:BoundField DataField="discountPrice" HeaderText="Discount Price" 
-                ReadOnly="True" SortExpression="discountPrice" />
-            <asp:TemplateField HeaderText="Quantity" SortExpression="quantityAvailable">
+                ReadOnly="True" SortExpression="discountPrice" ItemStyle-HorizontalAlign="Center"/>
+            <asp:TemplateField HeaderText="Quantity" SortExpression="quantityAvailable" ItemStyle-HorizontalAlign="Center">
                 <ItemTemplate>
                     <asp:Label ID="ItemQuantity" runat="server" Text='<%# Eval("quantityAvailable") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Reserved">
+            <asp:TemplateField HeaderText="Reserved" ItemStyle-HorizontalAlign="Center">
                 <ItemTemplate>
                     <asp:Label ID="Label2" runat="server" Text='<%# Bind("Reserved", "{0:d}") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" ReadOnly="True" />
+            <asp:BoundField DataField="WishListed" HeaderText="Wish Listed" ReadOnly="True"  ItemStyle-Width="10px" ItemStyle-HorizontalAlign="Center"/>
             <asp:TemplateField HeaderText="Annotation" SortExpression="comment">
                 <EditItemTemplate>
                     <asp:TextBox ID="TextBox1" runat="server" MaxLength="140" 
@@ -48,7 +48,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Stock Back Email Alert" 
-                SortExpression="IsAlert">
+                SortExpression="IsAlert" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="10px">
                 <ItemTemplate>
                     <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Bind("IsAlert") %>' 
                         Enabled="false" />
